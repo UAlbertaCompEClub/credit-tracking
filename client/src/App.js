@@ -11,7 +11,7 @@ function App() {
   const [page,setPage] = useState("ClubDashboard")
   const [token, setToken] = useState("")
   const [ isLoggedIn,setisLoggedIn] = useState(false) 
-
+  const [CustomerCCid, setCustomerCcid] = useState("")
 
   return (
     <Container maxWidth = "sm">
