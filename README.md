@@ -1,2 +1,7 @@
-# credit-tracking
-The CompE club's credit tracking system
+NOTE THAT NPM START WILL START THE SERVER ON PORT 3001 NOT 3000
+
+API calls
+
+Auth Component
+
+    Check user
