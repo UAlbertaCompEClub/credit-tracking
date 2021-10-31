@@ -1,5 +1,9 @@
 import {Button, FormControl, Input, InputLabel, FormHelperText,Stack, Typography, Alert} from '@mui/material/'
 import {useState} from 'react'
+
+let path = "http://localhost:3000/"
+
+
 function Auth(){
 
     //state vars
@@ -34,7 +38,11 @@ function Auth(){
         setPassword("")
     }
     function customerLogin(){
+        //attemp to login customer
         console.log("logging in as customer...")
+        fetch(path)
+
+        
     }
 
     function Execlogin(){
@@ -49,6 +57,7 @@ function Auth(){
 
         //set this value from the server
         let status = ccid
+        // let status = fetch(path + "checkUser"+"?ccid="+ccid)
 
         //open PW if you are an exec
         if( status == 1){ 
