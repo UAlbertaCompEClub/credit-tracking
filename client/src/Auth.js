@@ -1,7 +1,7 @@
 import {Button, FormControl, Input, InputLabel, FormHelperText,Stack, Typography, Alert} from '@mui/material/'
 import {useState} from 'react'
 
-let path = "http://localhost:3000/"
+let path = process.env.REACT_APP_SERVER
 
 
 function Auth(){

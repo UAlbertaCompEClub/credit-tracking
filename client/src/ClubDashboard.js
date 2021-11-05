@@ -7,16 +7,16 @@ function ClubDashboard(){
     const [ccid, setCcid] = useState("")
 
     //Table Logic
-    function createData(name, calories, fat, carbs, protein) {
-        return { name, calories, fat, carbs, protein };
+    function createData(name, calories) {
+        return { name, calories };
       }
       
     const rows = [
-        createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-        createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-        createData('Eclair', 262, 16.0, 24, 6.0),
-        createData('Cupcake', 305, 3.7, 67, 4.3),
-        createData('Gingerbread', 356, 16.0,),
+        createData('Frozen yoghurt', 159 ),
+        createData('Ice cream sandwich', 237),
+        createData('Eclair', 262),
+        createData('Cupcake', 305),
+        createData('Gingerbread', 356),
       ];
     const table = <TableContainer component={Paper}>
     <Table sx={{ minWidth: 650 }} aria-label="simple table">

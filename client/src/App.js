@@ -7,8 +7,9 @@ import ClubDashboard from './ClubDashboard';
 import UserProfile from './UserProfile';
 
 function App() {
-  
-  const [page,setPage] = useState("ClubDashboard")
+  console.log(process.env.REACT_APP_TEST)
+
+  const [page,setPage] = useState("UserProfile")
   const [token, setToken] = useState("")
   const [ isLoggedIn,setisLoggedIn] = useState(false) 
   const [CustomerCCid, setCustomerCcid] = useState("")
