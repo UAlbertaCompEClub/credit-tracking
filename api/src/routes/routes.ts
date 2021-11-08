@@ -6,10 +6,10 @@ export const router = express.Router();
 
 
 // GET REQUESTS
-router.get('/say-something', (req, res) => {
-        res.send('did the json send?');
-        middleWare.saySomething;
-    });
+// router.get('/say-something', (req, res) => {
+//         res.send('did the json send?');
+//         middleWare.saySomething;
+//     });
 
 router.get('/test', (req: Request, res: Response) => {
     res.send('Hello World!')
