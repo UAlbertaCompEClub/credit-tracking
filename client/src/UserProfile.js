@@ -4,83 +4,118 @@ import {Button, FormControl, MenuItem, Input, Select, InputLabel, Container, For
 let path = process.env.REACT_APP_SERVER
 
 
-function UserProfile(){
+function UserProfile(props){
     // Show user information and allows transaction adding if the user is logged in
     const [userName, setName]  = useState("Name")
+    const [clubs, setClubs] = useState({
+      //default Info, REMOVE LATER
+      club1:{
+        transactions:  [
+          createData('Nov 1 2021', "Payed $5" ),
+          createData('Dec 2 2020', "Billed $1"),
+          createData('Mar 20 2019', "Payed $5"),
+          createData('Jan 1 2001', "Billed $20"),
+          createData('Dec 4 1985', "Payed $20"),
+        ],
+        balance: 50
+      }
+     ,
+      club2:{
+        transactions:  [
+          createData('Nov 1 2021', "Billed $5" ),
+          createData('Dec 2 2020', "Billed $1"),
+          createData('Mar 20 2019', "Billed $5"),
+          createData('Jan 1 2001', "Billed $20"),
+          createData('Dec 4 1985', "Billed $20"),
+        ],
+        balance: -20
+      }})
     const [userTransactions, setTransactions]  = useState("{}")
     const [userBalances, setBalances]  = useState({club1:50,club2:-25})
     const [club, setClub] = useState("club1")
+    const [isExecView, setIsExecView] = useState(true)
 
-    const clubs = ["club1","club2"] // should be all clubs the user has balances in
+      //create the combined clubs data
+      // function getNetBalance(){
+      //   let total = 0
+      //   for( club of clubs){
+      //     total += clubs[club].balance
+      //   }
+      //   return total;
+      // }
+      // setClubs((clubs)=>{
+      //   return { ...clubs, "All Clubs":{
+      //       transactions:[
+
+      //       ],
+      //       balance: getNetBalance()
+      //   } }
+      // })
+
+
+    //Get and set user information #TO DO
+
+
+
 
     //Table Logic
-    function createData(name, calories) {
-        return { name, calories };
-      }
+    function createData(date, amount) {
+        return { date, amount };
+    }
       
-    const rows = [
-        createData('Frozen yoghurt', 159 ),
-        createData('Ice cream sandwich', 237),
-        createData('Eclair', 262),
-        createData('Cupcake', 305),
-        createData('Gingerbread', 356),
-      ];
     const table = <TableContainer component={Paper}>
-    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-      <TableHead>
-        <TableRow>
-          <TableCell>Name</TableCell>
-          <TableCell align="right">Transactions</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {rows.map((row) => (
-          <TableRow
-            key={row.name}
-            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-          >
-            <TableCell component="th" scope="row">
-              {row.name}
-            </TableCell>
-            <TableCell align="right">{row.calories}</TableCell>
-            <TableCell align="right">{row.fat}</TableCell>
-            <TableCell align="right">{row.carbs}</TableCell>
-            <TableCell align="right">{row.protein}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
+      <Table  aria-label="simple table">
+
+          <TableHead>
+            <TableRow>
+              <TableCell>Date</TableCell>
+              <TableCell >Amount</TableCell>
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {clubs[club].transactions.map((row) => (
+              <TableRow key={row.date+row.amount} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+
+                <TableCell component="th" scope="row"> {row.date} </TableCell>
+                <TableCell >{row.amount}</TableCell>
+                
+              </TableRow>
+            ))}
+          </TableBody>
+          
       </Table>
-     </TableContainer>
+      </TableContainer>
 
-
-    function setTestData(){
-
-    } 
-
-    function getUserInfo(){
+    function getclubs(){
         fetch(`${path}user?token`)
     }
 
-    function balanceMessage(club){
-        const balance = Math.abs(userBalances[club])
+    function balanceMessage(){
+        const balance = clubs[club].balance
 
-        if (userBalances[club] < 0){
+        if (balance < 0){
             //user owes money
-            return "You owe: $" + balance
+            return "You owe: $" + Math.abs(balance)
         }else{
             //user has money or owes no money
-            return "You have: $" + balance
+            return "You have: $" + Math.abs(balance)
         }
     }
 
     function changeClub(event){
         setClub(event.target.value)
     }
+    
+    function closeUser(){
+      props.setPage("ClubDashboard")
+    }
 
     return (
         <Stack >
+            { isExecView && <Button onClick = {closeUser} >Close</Button>}
             <Typography variant = "h1">{userName}</Typography>
-            <Typography variant = "h2">{balanceMessage(club)}</Typography>
+            <Typography variant = "h2">{balanceMessage()}</Typography>
             <Typography variant = "p">For</Typography>
             <FormControl>
                 <InputLabel id="club">club</InputLabel>
@@ -90,13 +125,14 @@ function UserProfile(){
                     value={club}
                     label="club"
                     onChange={changeClub}>
-                    {clubs.map( clubName => <MenuItem value={clubName}>{clubName}</MenuItem>)}
+                    {[...(Object.keys(clubs))].map( clubName => <MenuItem value={clubName}>{clubName}</MenuItem>)}
                 </Select>
             </FormControl>
             {table}
 
 
-            <AddTransaction></AddTransaction>
+            {isExecView && <AddTransaction getclubs = {getclubs}></AddTransaction>}
+            {/* Only show the add transaction if current user is an exec */}
         </Stack>
         
         

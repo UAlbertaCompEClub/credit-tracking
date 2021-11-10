@@ -37,12 +37,11 @@ function Auth(){
         setCcid("")
         setPassword("")
     }
+
     function customerLogin(){
         //attemp to login customer
         console.log("logging in as customer...")
         fetch(path)
-
-        
     }
 
     function Execlogin(){

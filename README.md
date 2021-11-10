@@ -11,14 +11,14 @@ Auth Component
         Endpoint: domain.com/checkUser
 
     loginCustomer
-        Type: Post
+        Type: GET
         Inputs: query string with ccid=ccidValue
         Return: Transaction history of user, user name, user balances
         (Format currently unkown,needs to be seperated by club)
         Endpoint: domain.com/loginCustomer
 
     loginExec
-        Type: Post
+        Type: GET
         Inputs: object in body with {ccid:value, password:value}
         Return: Token and expiration time milliseconds
         Endpoint: domain.com/loginExec
