@@ -7,7 +7,7 @@ import dotenv from 'dotenv'
 import routes from './routes/routes';
 import middleware from './controllers/middleware';
 
-import query1 from './controllers/db/queries';
+// import query1 from './controllers/db/queries';
 
 const router = express();
 const port = process.env.PORT || "8000";
