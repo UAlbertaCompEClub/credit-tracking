@@ -39,7 +39,7 @@ router.get('/club-balance', (req: Request, res: Response) => {
 });
 
 router.get ('/checkCcid', (req:Request,res:Response) =>{
-    res.sent()
+    res.send()
 })
 
 

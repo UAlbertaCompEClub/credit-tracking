@@ -23,7 +23,10 @@ function Auth(){
         console.log(ccid +" "+ password) 
         fetch(path+"/test")
         .then(res =>{
-            console.log(res)
+            res.json().then((body)=>[
+                console.log(body)
+            ])
+            
         })
 
 
