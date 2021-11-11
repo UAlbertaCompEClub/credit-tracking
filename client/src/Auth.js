@@ -17,10 +17,15 @@ function Auth(){
     function submitHandler(input){
         //checks if ccid is valid and prompts for PW if they are execs
         //if user is identified as an exec already attempt to login exec
+        
 
         input.preventDefault()
         console.log(ccid +" "+ password) 
-    
+        fetch(path+"/test")
+        .then(res =>{
+            console.log(res)
+        })
+
 
         if(isExec){
             //we have verified they are an exec so try exec login

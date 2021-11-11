@@ -12,7 +12,10 @@ export const router = express.Router();
 //     });
 
 router.get('/test', (req: Request, res: Response) => {
-    res.send('Hello World!')
+    // res.send('Hello World!')
+    res.status(200).json({
+        body: 'Hello from the server!'
+    });
 });
 
 router.get('/get-users', (req: Request, res: Response) => {
@@ -34,6 +37,10 @@ router.get('/user', (req: Request, res: Response) => {
 router.get('/club-balance', (req: Request, res: Response) => {
     res.send('Hello World!')
 });
+
+router.get ('/checkCcid', (req:Request,res:Response) =>{
+    res.sent()
+})
 
 
 // POST REQUESTS
