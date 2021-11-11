@@ -31,7 +31,6 @@ router.use(middleware.cors_call());
 router.use('/api/v1', routes);
 router.get('/add-entry', (req: Request, res: Response) => {
     res.send('Hello World!')
-    query1();
 });
 
 
