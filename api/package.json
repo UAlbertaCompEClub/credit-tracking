@@ -2,7 +2,7 @@
   "name": "credit-tracking-backend",
   "main": "src/server.ts",
   "scripts": {
-    "start": "node src/server.ts",
+    "start": "tsnd src/server.ts",
     "start:dev": "npx nodemon --exec ts-node --files src/server.ts",
     "start:dev1": "tsnd src/server.ts",
     "build": "npm run clean && tsc",

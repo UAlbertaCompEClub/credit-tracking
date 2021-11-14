@@ -7,7 +7,16 @@ import dotenv from 'dotenv'
 import routes from './routes/routes';
 import middleware from './controllers/middleware';
 
-// import query1 from './controllers/db/queries';
+require('dotenv').config({ path: 'db.env' });
+
+console.log("DB ACCESS:")
+console.log("USER", process.env.PGUSER);
+console.log("HOST", process.env.PGHOST);
+console.log("PASS", process.env.PGPASSWORD);
+console.log("DB_NAME", process.env.PGDATABASE);
+console.log("PORT", process.env.PGPORT);
+
+import { makeTransaction, clubBalances } from './controllers/db/queries';
 
 const router = express();
 const port = process.env.PORT || "8000";

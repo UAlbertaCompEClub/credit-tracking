@@ -16,6 +16,7 @@ function clubBalances(queryParams: { club: String; amount: Number; }) {
 }
 
 
-export default {
-    makeTransaction
+export {
+    makeTransaction,
+    clubBalances
 };
