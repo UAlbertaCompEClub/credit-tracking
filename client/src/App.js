@@ -18,7 +18,7 @@ function App() {
   const [CustomerCCid, setCustomerCcid] = useState("")
   const [user,setUser] = useState(null)
 
-  fetch(path + "/",{method:"POST",body:{
+  fetch(path + "/test-json",{method:"POST",body:{
     name: 'test-name',
     attribute1: 'test-att'
  }})
