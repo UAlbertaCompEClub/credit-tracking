@@ -5,6 +5,24 @@ function ClubDashboard(props){
 
     const [clubName, setClubName] = useState("Club Name")
     const [ccid, setCcid] = useState("")
+    const [users, setUsers] = useState([
+      createData('Barry', "bsda", "+1, -20, +5 ..." ),
+      createData('Daryl',"bsda","+1, -20, +5 ..."),
+      createData('Charlotte',"bsda", "+1, -20, +5 ..."),
+      createData('Amelia',"bsda","+1, -20, +5 ..."),
+      createData('Bingus', "bsda","+1, -20, +5 ..."),
+  ])
+    console.log(users)
+    let shownUsers = users
+
+    let userSearchTerms = new Set()
+    for (let user of users){
+      userSearchTerms.add(user.ccid);
+      userSearchTerms.add(user.name);
+    }
+    console.log(userSearchTerms)
+
+    //get users based on Exec's club(s)
 
     //Table Logic
     function createData(name, ccid, transactions) {
@@ -19,17 +37,13 @@ function ClubDashboard(props){
       //Open a user's page
       props.openUser(ccid)
     }
+
+    function search(){
+      //Search users and return matches to show users
+      shownUsers = []
       
-    const rows = [
-        createData('Barry', "bsda", "+1, -20, +5 ..." ),
-        createData('Daryl',"bsda","+1, -20, +5 ..."),
-        createData('Charlotte',"bsda", "+1, -20, +5 ..."),
-        createData('Amelia',"bsda","+1, -20, +5 ..."),
-        createData('Bingus', "bsda","+1, -20, +5 ..."),
-    ];
+    }
     
-
-
     const table = <TableContainer component={Paper}>
     <Table aria-label="simple table">
       <TableHead>
@@ -40,7 +54,7 @@ function ClubDashboard(props){
         </TableRow>
       </TableHead>
       <TableBody>
-        {rows.map((row) => (
+        {shownUsers.map((row) => (
           <TableRow
             key={row.name}
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

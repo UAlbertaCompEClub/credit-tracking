@@ -14,7 +14,7 @@ export const router = express.Router();
 router.get('/test', (req: Request, res: Response) => {
     // res.send('Hello World!')
     res.status(200).json({
-        body: 'Hello from the server!'
+        body: {message:'Hello from the server!'}
     });
 });
 
