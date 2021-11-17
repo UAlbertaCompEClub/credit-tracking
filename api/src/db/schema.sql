@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS transactions (
     id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
     club TEXT NOT NULL, 
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    amount REAL NOT NULL
+    amount REAL NOT NULL,
+    ccid TEXT NOT NULL
 );
 
 /* clubs table */

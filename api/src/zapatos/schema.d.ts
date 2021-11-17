@@ -271,6 +271,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       amount: number;
+      /**
+      * **transactions.ccid**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      ccid: string;
     }
     export interface JSONSelectable {
       /**
@@ -297,6 +303,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       amount: number;
+      /**
+      * **transactions.ccid**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      ccid: string;
     }
     export interface Whereable {
       /**
@@ -323,6 +335,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       amount?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **transactions.ccid**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      ccid?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
     }
     export interface Insertable {
       /**
@@ -349,6 +367,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       amount: number | db.Parameter<number> | db.SQLFragment;
+      /**
+      * **transactions.ccid**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      ccid: string | db.Parameter<string> | db.SQLFragment;
     }
     export interface Updatable {
       /**
@@ -375,6 +399,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       amount?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+      /**
+      * **transactions.ccid**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      ccid?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
     }
     export type UniqueIndex = 'transactions_pkey';
     export type Column = keyof Selectable;
