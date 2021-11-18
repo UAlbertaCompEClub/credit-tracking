@@ -1,41 +1,21 @@
 import AddTransaction from './AddTransaction'
 import {useState} from 'react'
 import {Button, FormControl, MenuItem, Input, Select, InputLabel, Container, FormHelperText,Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography} from '@mui/material'
-let path = process.env.REACT_APP_SERVER
+import {RequestService} from "./Services/RequestService"
 
 
 function UserProfile(props){
     // Show user information and allows transaction adding if the user is logged in
-    const [userName, setName]  = useState("Name")
-    const [clubs, setClubs] = useState({
-      //default Info, REMOVE LATER
-      club1:{
-        transactions:  [
-          createData('Nov 1 2021', "Payed $5" ),
-          createData('Dec 2 2020', "Billed $1"),
-          createData('Mar 20 2019', "Payed $5"),
-          createData('Jan 1 2001', "Billed $20"),
-          createData('Dec 4 1985', "Payed $20"),
-        ],
-        balance: 50
-      }
-     ,
-      club2:{
-        transactions:  [
-          createData('Nov 1 2021', "Billed $5" ),
-          createData('Dec 2 2020', "Billed $1"),
-          createData('Mar 20 2019', "Billed $5"),
-          createData('Jan 1 2001', "Billed $20"),
-          createData('Dec 4 1985', "Billed $20"),
-        ],
-        balance: -20
-      }})
-    const [userTransactions, setTransactions]  = useState("{}")
-    const [userBalances, setBalances]  = useState({club1:50,club2:-25})
-    const [club, setClub] = useState("club1")
+    const [user, setUser]  = useState(RequestService.userRequest(props.ccid,props.club))
+    let clubs =(user.clubs)
+    
+    const [club, setClub] = useState((Object.keys(clubs))[0])
     const [isExecView, setIsExecView] = useState(true)
+    
+   
+    
 
-      //create the combined clubs data
+      // TODO create the combined clubs data
       // function getNetBalance(){
       //   let total = 0
       //   for( club of clubs){
@@ -43,20 +23,18 @@ function UserProfile(props){
       //   }
       //   return total;
       // }
-      // setClubs((clubs)=>{
-      //   return { ...clubs, "All Clubs":{
+      // clubs = { ...clubs, "All Clubs":{
       //       transactions:[
 
       //       ],
       //       balance: getNetBalance()
-      //   } }
-      // })
-
-
-    //Get and set user information #TO DO
+      //   } 
 
 
 
+    function refresh(){
+      setUser(RequestService.userRequest(props.ccid,props.club))
+    }
 
     //Table Logic
     function createData(date, amount) {
@@ -87,10 +65,6 @@ function UserProfile(props){
       </Table>
       </TableContainer>
 
-    function getclubs(){
-        fetch(`${path}user?token`)
-    }
-
     function balanceMessage(){
         const balance = clubs[club].balance
 
@@ -114,7 +88,7 @@ function UserProfile(props){
     return (
         <Stack >
             { isExecView && <Button onClick = {closeUser} >Close</Button>}
-            <Typography variant = "h1">{userName}</Typography>
+            <Typography variant = "h1">{user.name}</Typography>
             <Typography variant = "h2">{balanceMessage()}</Typography>
             <Typography variant = "p">For</Typography>
             <FormControl>
@@ -131,7 +105,7 @@ function UserProfile(props){
             {table}
 
 
-            {isExecView && <AddTransaction getclubs = {getclubs}></AddTransaction>}
+            {isExecView && <AddTransaction refresh = {refresh}></AddTransaction>}
             {/* Only show the add transaction if current user is an exec */}
         </Stack>
         

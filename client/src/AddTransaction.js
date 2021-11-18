@@ -1,6 +1,6 @@
 import {Button, FormControl, InputAdornment, Input,Alert, InputLabel, FormHelperText,Stack,Typography} from '@mui/material'
 import {useState} from 'react'
-
+import {RequestService} from './Services/RequestService'
 function AddTransaction(props){
     const [amount,setAmount] = useState(0)
 
@@ -16,16 +16,21 @@ function AddTransaction(props){
     }
     function submitTransactionHandler(type){
         //Make a call to submit the transaction. 
-        //Should receive some sort of confirmation and the new balance
+        let realAmount
+        if(type == "charge"){
+            realAmount = amount*-1
+        }else{
+            realAmount = amount
+        }
 
-        const confirmation = "Test Value" //holds the new user balance if successful
+        const confirmation = RequestService.newTransaction(props.user, realAmount, props.token) //holds the new user balance if successful
 
         if(confirmation){
             //transaction succeded
             setAlertType("success")
             setAlertText("Transaction Success: for this club user now has a balance of: "+confirmation )
             setShowAlert(true)
-            props.getUserInfo() // refresh the transaction list and balance
+            props.refresh() // refresh the transaction list and balance
         }else{
             //transaction failed
             setAlertType("error")

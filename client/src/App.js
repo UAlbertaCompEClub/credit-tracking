@@ -1,42 +1,36 @@
 
-import './App.css';
 import Auth from './Auth'
 import {Stack,Container,ThemeProvider,CssBaseline} from '@mui/material'
 import {useState} from 'react'
 import ClubDashboard from './ClubDashboard';
 import UserProfile from './UserProfile';
 import { mainTheme } from './theme';
+import { RequestService } from './Services/RequestService'
 
-let path = process.env.REACT_APP_SERVER
+//TO DO: INPUT VERIFICATION
 
 function App() {
   console.log(process.env.REACT_APP_TEST)
 
   const [page,setPage] = useState("ClubDashboard")
-  const [token, setToken] = useState("")
   const [ isLoggedIn,setisLoggedIn] = useState(false) 
-  const [CustomerCCid, setCustomerCcid] = useState("")
-  const [user,setUser] = useState(null)
+  const [ExecInfo, setExecInfo] = useState({ccid:'abc1', token : 'token', club:"Club Name"})
+  const [customerCcid,setCustomerCcid] = useState(null)
 
-  fetch(path + "/test-json",{method:"POST",body:{
-    name: 'test-name',
-    attribute1: 'test-att'
- }})
-  .then((res)=>{
-    console.log(res)
-  }).catch(()=>{
-    console.log("request failed")
-  })
+  RequestService.testRequest()
 
   function openUser(ccid){
+    setCustomerCcid(ccid)
     setPage("UserProfile")
-
     //Get user info from Backend and set it
-    //setUser()
   }
 
   function logout(){
     setPage("Auth")
+    setExecInfo({})
+    setisLoggedIn(false)
+    setCustomerCcid(null)
+    //TODO Delete token from local storage
   }
 
 
@@ -47,21 +41,21 @@ function App() {
         <Container  maxWidth = "sm" >
           <Stack >
             {/* If page = Auth show auth data */}
-            {page == "Auth" && <Auth setPage = {setPage}/>}
-            {page == "ClubDashboard" && <ClubDashboard theme = {mainTheme} openUser = {openUser} logout = {logout} />}
-            {page == "UserProfile" && <UserProfile  user = {user} setPage = {setPage}/>}
+            {page == "Auth" && <Auth openUser ={openUser} setPage = {setPage}
+               customerCcid = {setCustomerCcid}
+               setExecInfo = {setExecInfo}/>}
+            {page == "ClubDashboard" && <ClubDashboard theme = {mainTheme}
+              club = {ExecInfo.club} token = {ExecInfo.token} exec = {ExecInfo.ccid} 
+              openUser = {openUser} logout = {logout} />}
+            {page == "UserProfile" && <UserProfile  token = {ExecInfo.token}
+              club = {ExecInfo.club} user = {customerCcid}
+              setPage = {setPage}/>}
           </Stack>
         </Container>
       </Container>
     </ThemeProvider>
-    
-    
-  
-    
-    
+
   );
 }
-
-
 
 export default App;

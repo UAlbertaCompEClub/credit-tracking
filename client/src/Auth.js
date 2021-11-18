@@ -1,10 +1,11 @@
 import {Button, FormControl, Input, InputLabel, FormHelperText,Stack, Typography, Alert} from '@mui/material/'
 import {useState} from 'react'
+import {RequestService} from './Services/RequestService'
 
 let path = process.env.REACT_APP_SERVER
 
 
-function Auth(){
+function Auth(props){
 
     //state vars
     const[isExec,setIsExec] = useState(false);
@@ -17,27 +18,15 @@ function Auth(){
     function submitHandler(input){
         //checks if ccid is valid and prompts for PW if they are execs
         //if user is identified as an exec already attempt to login exec
-        
-
         input.preventDefault()
-        console.log(ccid +" "+ password) 
-        fetch(path+"/test")
-        .then(res =>{
-            res.json().then((body)=>[
-                console.log(body)
-            ])
-            
-        })
-
 
         if(isExec){
             //we have verified they are an exec so try exec login
             Execlogin()
         }else{
             //check if they are execs and try logging in if they are customers
-            checkUser();
+            checkUser()
         }
-
     }
 
     function clearFields(){
@@ -46,15 +35,23 @@ function Auth(){
         setPassword("")
     }
 
-    function customerLogin(){
-        //attemp to login customer
-        console.log("logging in as customer...")
-        fetch(path)
-    }
-
     function Execlogin(){
-        //login user
-        console.log("logging in as exec...")
+        //Attemps login
+        const response = RequestService.execLogin(ccid,password)
+        if(response){
+            props.setExecInfo(response)
+            setShowAlert(true);
+            setAlertType("success")
+            setAlertText("Welcome! Logging in...")
+
+            //TODO save token to local storage
+
+            props.setPage('ClubDashboard')
+        }else{
+            setShowAlert(true);
+            setAlertType("error")
+            setAlertText("Your password is incorrect")
+        }
     }
 
     function checkUser(){
@@ -63,7 +60,7 @@ function Auth(){
         //server call returns 1 for EXEC, 0 for customer, -1 if they are not in the system.
 
         //set this value from the server
-        let status = ccid
+        let status = RequestService.ccidCheckReq(ccid)
         // let status = fetch(path + "checkUser"+"?ccid="+ccid)
 
         //open PW if you are an exec
@@ -76,20 +73,25 @@ function Auth(){
             
         }else if (status == 0){
             //ccid is customer
-            setIsExec(true);
             setShowAlert(true);
             setAlertType("success")
             setAlertText("Welcome! Logging in...")
             
             //attempt customer login
-            customerLogin()
+             props.openUser(ccid)
         }else{
             //ccid is not registered
-            setIsExec(true);
             setShowAlert(true);
             setAlertType("error")
-            setAlertText("You are not registered. Ask an executive to register!")
+            setAlertText("You are not registered or the ccid is incorrect. Ask an executive to register")
         }
+    }
+
+    function backHandler(){
+        //go back from exec login
+        setShowAlert(false)
+        clearFields()
+        setIsExec(false)
     }
 
     return (
@@ -121,7 +123,10 @@ function Auth(){
             </FormControl>
             }
 
-            <Button type = "submit">Submit</Button>
+            <Stack direction = 'row' justifyContent="space-evenly">
+                <Button type = "submit">Submit</Button>
+                {isExec && <Button onClick = {backHandler}>Back</Button>}
+            </Stack>
         </Stack>
 
     </form>
