@@ -86,17 +86,17 @@ export const RequestService = {
     //ClubDashboard.js
     clubRequest: ()=>{
       //The method...
-      function createData(name, ccid, transactions) {
+      function createUser(name, ccid, transactions) {
         return { name, ccid, transactions };
       }
 
       //TEST RETURN
       return[
-          createData('Barry', "bsda", "+1, -20, +5 ..." ),
-          createData('Daryl',"b1da","+1, -20, +5 ..."),
-          createData('Charlotte',"bsda", "+1, -20, +5 ..."),
-          createData('Amelia',"bsda","+1, -20, +5 ..."),
-          createData('Bingus', "bsda","+1, -20, +5 ..."),
+          createUser('Barry', "bsda", "+1, -20, +5 ..." ),
+          createUser('Daryl',"b1da","+1, -20, +5 ..."),
+          createUser('Charlotte',"bsda", "+1, -20, +5 ..."),
+          createUser('Amelia',"bsda","+1, -20, +5 ..."),
+          createUser('Bingus', "bsda","+1, -20, +5 ..."),
       ]
     },
     //Auth.js
