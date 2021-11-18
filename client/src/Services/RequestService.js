@@ -93,7 +93,7 @@ export const RequestService = {
       //TEST RETURN
       return[
           createData('Barry', "bsda", "+1, -20, +5 ..." ),
-          createData('Daryl',"bsda","+1, -20, +5 ..."),
+          createData('Daryl',"b1da","+1, -20, +5 ..."),
           createData('Charlotte',"bsda", "+1, -20, +5 ..."),
           createData('Amelia',"bsda","+1, -20, +5 ..."),
           createData('Bingus', "bsda","+1, -20, +5 ..."),

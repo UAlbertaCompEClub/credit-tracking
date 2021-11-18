@@ -1,5 +1,5 @@
 import {Button, FormControl, Input, InputLabel, Container, FormHelperText,Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography} from '@mui/material'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {RequestService} from "./Services/RequestService"
 import {AddUser} from './AddUser'
 function ClubDashboard(props){
@@ -8,26 +8,36 @@ function ClubDashboard(props){
     const [ccid, setCcid] = useState("")
     const [users, setUsers] = useState(RequestService.clubRequest(props.club,props.token))
     const [shownUsers,setShownUsers] = useState(users)
-    const [showAddUser,setShowAddUser] = useState(true)
-
-    let userSearchTerms = new Set()
-    for (let user of users){
-      userSearchTerms.add(user.ccid);
-      userSearchTerms.add(user.name);
-    }
-    console.log(userSearchTerms)
+    const [showAddUser,setShowAddUser] = useState(false)
+    
 
     function refresh(){
       //get updated list of users
       setUsers(RequestService.clubRequest(props.club,props.token))
     }
 
-    //get users based on Exec's club(s)
+    function searchUsers(ccidName){
+    
+      console.log(ccidName)
+      ccidName = ccidName.toLowerCase()
+      if(ccidName == ""){
+        setShownUsers(users)
+      }else{
+        let newUsers = []
+        for(let user of users){
+          if (user.ccid.toLowerCase().includes(ccidName) || user.name.toLowerCase().includes(ccidName)){
+            newUsers.push(user)
+          }
+        }
+        setShownUsers(newUsers)
+      }
+      
+    }
 
     //Table Logic
     function createData(name, ccid, transactions) {
         return { name, ccid, transactions };
-      }
+    }
 
     function fetchUsers(){
       //Get list of users from backend
@@ -85,8 +95,8 @@ function ClubDashboard(props){
             <Stack direction = "row" justifyContent = "space-between" width = "100%">
                 <Stack  direction = "row">
                     <FormControl>
-                        <InputLabel htmlFor = "ccid">ccid</InputLabel>
-                        <Input id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
+                        <InputLabel htmlFor = "ccid">ccid or name</InputLabel>
+                        <Input id = "ccid" value = {ccid} onChange= {(e) => {setCcid(e.target.value); searchUsers(e.target.value)}} />
                     
                     </FormControl>
                     <Button>Search</Button>
