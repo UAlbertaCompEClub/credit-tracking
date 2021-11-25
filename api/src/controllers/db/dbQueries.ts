@@ -17,9 +17,11 @@ const createTransaction = async (transactionParam: { ccid: string, club: string,
 const transactionsUser = async (transaction: { club: string, ccid: string}) => {
     const where: schema.transactions.Whereable = {};
     if (transaction.club !== 'any') {
+        where.ccid = transaction.ccid;
+    }
+    if (transaction.ccid !== 'any') {
         where.club = transaction.club;
     }
-    where.ccid = transaction.ccid;
     return db.select('transactions', where).run(connection);
 };
 
@@ -28,7 +30,7 @@ const transactionsAll = async () => {
     return db.select('transactions', where).run(connection);
 };
 
-const clubBalances = async (queryParams: { name: string; amount: Number; }) => {
+const clubBalance = async (queryParams: { name: string }) => {
     const where: schema.clubs.Whereable = {};
     if (queryParams.name !== 'any') {
         where.name = queryParams.name;
@@ -69,7 +71,7 @@ const getUsers = async (userParam: { club: string }) => {
 
 export {
     createTransaction,
-    clubBalances,
+    clubBalance,
     transactionsUser,
     getUser,
     getUsers,
