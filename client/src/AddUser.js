@@ -101,8 +101,8 @@ export function AddUser(props) {
             </FormControl>
 
             <Stack direction = 'row' justifyContent="space-evenly">
-                <Button class = "redText" type = "submit">Add</Button>
-                <CustomButton onClick = {(e)=>{props.setShowAddUser(false)}}>Close</CustomButton>
+                <Button class = "redText" type = "submit">Add</Button>      {/* bleed */}
+                <CustomButton onClick = {(e)=>{props.setShowAddUser(false)}}>Close</CustomButton> {/*custom button*/}
             </Stack>
             
         </Stack>
