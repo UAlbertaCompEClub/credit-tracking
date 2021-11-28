@@ -140,7 +140,7 @@ function ClubDashboard(props){
                 <Button onClick = {(e)=>{toggleAddPerson("Exec")}}> Add Exec</Button>
             </Stack>
 
-            {showAddUser && <AddUser setShowAddUser ={setShowAddUser} refresh = {refresh} />}
+            {showAddUser && <AddUser  setShowAddUser ={setShowAddUser} refresh = {refresh} />}
             {showAddExec && <AddExec setShowAddExec ={setShowAddExec} refresh = {refresh} />}
 
             {table}
