@@ -47,7 +47,7 @@ export const RequestService = {
 
         fetch(path + "/transactions")
         .then((res)=>{
-         
+          console.log("Server request Success.")
           printResponse(res)
         }).catch(()=>{
           console.log("Server request failed.")
@@ -84,20 +84,20 @@ export const RequestService = {
         return (amount)
     },
     //ClubDashboard.js
-    clubRequest: ()=>{
-      //The method...
-      function createUser(name, ccid, transactions) {
-        return { name, ccid, transactions };
-      }
+    clubRequest:(club,token)=>{
+      console.log(club)
 
-      //TEST RETURN
-      return[
-          createUser('Barry', "bsda", "+1, -20, +5 ..." ),
-          createUser('Daryl',"b1da","+1, -20, +5 ..."),
-          createUser('Charlotte',"bsda", "+1, -20, +5 ..."),
-          createUser('Amelia',"bsda","+1, -20, +5 ..."),
-          createUser('Bingus', "bsda","+1, -20, +5 ..."),
-      ]
+      fetch(path+"/club", {method:"get", headers:{'club':club,'token':token}})
+      .then((res)=>{ 
+        console.log("Club request success.")
+        res.json().then((res)=>{
+          console.log(res)
+        })
+      }).catch(()=>{
+        console.log("Club request Failed.")
+      })
+
+      return([{name:'bobby', ccid:"adp",transactions:"23, +123, 23 ..."}])
     },
     //Auth.js
     ccidCheckReq: (ccid)=>{

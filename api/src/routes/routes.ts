@@ -117,6 +117,56 @@ router.get('/club-balance', async (req: Request, res: Response) => {
     });
 });
 
+router.get('/club', async (req: Request, res: Response) => {
+    //returns all customers of a club in the format:
+    // [{name:string,ccid:string,transactions:string}]
+    //Headers should also contain exec token
+
+    
+    const club:any = req.get('club');
+    console.log("club in router.get = " + club)
+
+    const users:any = await queries.getUsersRobust({club:club});
+    console.log(users);
+    let usersArray:any = []
+
+    //Adding the transaction preview field. 
+    for (let user in users){
+        const userObj:any = users[user];
+        let transactions:string = "";
+        const allTrans:any = await queries.transactionsUser({club:club,ccid:userObj.ccid});
+        
+        //Get transaction priveiw string using first 3 transactions
+        let counter:number = 0;
+        for(let trans in allTrans){
+            //add + or - signs
+            const amount:number = allTrans[trans].amount
+            let amountString:string = '';
+            if(amount >= 0){
+                amountString = '+' + amount;
+            }else{
+                amountString = amount.toString();
+            }
+
+
+            transactions = transactions + amountString+ ", ";
+            if(counter == 2){
+                break;
+            }
+            counter++;
+        }
+        transactions = transactions + " ..."
+
+        //build element and add it to array
+        usersArray.push({name:userObj.full_name,ccid:userObj.ccid,transactions:transactions})
+    }
+
+
+    res.status(200).json({
+        body: usersArray
+    });
+});
+
 router.get ('/checkCcid', (req:Request,res:Response) =>{
     res.send()
 })

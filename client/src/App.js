@@ -10,11 +10,10 @@ import { RequestService } from './Services/RequestService'
 //TO DO: INPUT VERIFICATION
 
 function App() {
-  console.log(process.env.REACT_APP_TEST)
 
   const [page,setPage] = useState("ClubDashboard")
   const [ isLoggedIn,setisLoggedIn] = useState(false) 
-  const [ExecInfo, setExecInfo] = useState({ccid:'abc1', token : 'token', club:"Club Name"})
+  const [ExecInfo, setExecInfo] = useState({ccid:'abc1', token : 'token', club:"CompE"})
   const [customerCcid,setCustomerCcid] = useState(null)
   const [isExec,setIsExec] = useState(true) //TODO Change to false for production
   // RequestService.testRequest()

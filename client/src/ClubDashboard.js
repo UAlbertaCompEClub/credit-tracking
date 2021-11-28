@@ -8,10 +8,13 @@ function ClubDashboard(props){
 
     const [clubName, setClubName] = useState(props.club)
     const [ccid, setCcid] = useState("")
-    const [users, setUsers] = useState(RequestService.clubRequest(props.club,props.token))
+    const [users, setUsers] = useState(RequestService.clubRequest(clubName))
+    console.log(users)
     const [shownUsers,setShownUsers] = useState(users)
     const [showAddUser,setShowAddUser] = useState(false)
     const [showAddExec,setShowAddExec] = useState(false)
+
+    
 
     function refresh(){
       //get updated list of users
