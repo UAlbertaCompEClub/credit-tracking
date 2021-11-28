@@ -2,9 +2,10 @@ import {Button, FormControl,Alert, Input, InputLabel,Stack,Typography} from '@mu
 import {useState} from 'react'
 import {RequestService} from "./Services/RequestService"
 
-export function AddUser(props) {
+export function AddExec(props) {
     const[ccid,setCcid] = useState("")
     const[name,setName] = useState("")
+    const[password,setPassword] = useState("")
     const[alertType,setAlertType] = useState("error");
     const[alertText,setAlertText] = useState("You are not registered. Ask an executive to register!");
     const[showAlert,setShowAlert] = useState(false);
@@ -20,20 +21,20 @@ export function AddUser(props) {
             //ccid is registered already
             setShowAlert(true);
             setAlertType("error")
-            setAlertText("User already exists")
+            setAlertText("Exec already exists")
         }else{
-            const status = RequestService.addUser(ccid,name)
+            const status = RequestService.addExec(ccid,name)
             if(status === 0){
                 //req succeded
                 setShowAlert(true);
                 setAlertType("success")
-                setAlertText("User Added")
+                setAlertText("Exec Added")
                 props.refresh()
             }else{
                 //req failed
                 setShowAlert(true);
                 setAlertType("error")
-                setAlertText("User could not be added.")
+                setAlertText("Exec could not be added.")
             }
         }
 
@@ -43,7 +44,7 @@ export function AddUser(props) {
     return (
         <form onSubmit = {submitHandler}>
         <Stack>
-            <Typography variant = "p" >Add Customer</Typography>
+            <Typography variant = "p" >Add Exec</Typography>
              {/* show alert if showAlert is true */}
              {showAlert && <Alert severity = {alertType}> {alertText}!</Alert>} 
             <FormControl>
@@ -56,10 +57,15 @@ export function AddUser(props) {
                 <InputLabel htmlFor = "name">Name</InputLabel>
                 <Input id = "name" onChange = {(e) => setName(e.target.value)}/>
             </FormControl>
+            <FormControl>
+                {/* password */}
+                <InputLabel htmlFor = "password">Password</InputLabel>
+                <Input id = "password" onChange = {(e) => setPassword(e.target.value)}/>
+            </FormControl>
 
             <Stack direction = 'row' justifyContent="space-evenly">
                 <Button type = "submit">Add</Button>
-                <Button onClick = {(e)=>{props.setShowAddUser(false)}}>Close</Button>
+                <Button onClick = {(e)=>{props.setShowAddExec(false)}}>Close</Button>
             </Stack>
             
         </Stack>

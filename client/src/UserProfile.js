@@ -1,17 +1,30 @@
 import AddTransaction from './AddTransaction'
 import {useState,useEffect} from 'react'
-import {Button, FormControl, MenuItem, Input, Select, InputLabel, Container, FormHelperText,Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography} from '@mui/material'
+import {Button, FormControl, MenuItem,  Select, InputLabel, Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography} from '@mui/material'
 import {RequestService} from "./Services/RequestService"
 
 
 function UserProfile(props){
     // Show user information and allows transaction adding if the user is logged in
-    const [user, setUser]  = useState(RequestService.userRequest(props.ccid,props.club))
+    const [user, setUser]  = useState(getUserInfo())
     const [clubs, setClubs] = useState(user.clubs)
     
     const [club, setClub] = useState((Object.keys(clubs))[0])
-    const [isExecView, setIsExecView] = useState(true)
+    const [isExecView, setIsExecView] = useState(props.isExec)
     
+    function getUserInfo(){
+      //sets user. If they have no transactions add a special row
+      let info = RequestService.userRequest(props.ccid)
+      console.log(info.clubs)
+      if (Object.keys(info.clubs).length === 0){
+      
+        //no transaction history
+        info.clubs = {"No Transactions":{transactions:[{date:"",Amount:""}],balance:0}}
+        
+      }
+      return info
+    }
+
     useEffect(()=>{
       setClubs(user.clubs)
       createAllClubs()

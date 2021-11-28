@@ -3,7 +3,17 @@ let path = process.env.REACT_APP_SERVER
 function createData(date, amount) {
   return { date, amount };
 }
-
+function printResponse(res){
+  res.json()
+  .then((body)=>{
+    console.log(body)
+  })
+}
+// function getBody(res){
+//   res.json((body)=>{
+//     return body
+//   })
+// }
 export const RequestService = {
     template: ()=>{
       //The method...
@@ -22,41 +32,31 @@ export const RequestService = {
             console.log("request failed")
           })
     },
-    userRequest: (ccid,clubs)=>{
-        //Gets user transactions for the specified clubs 
+    userRequest: (ccid,club = null)=>{
+        //Gets user transactions for the specified club
         //or all clubs if 'clubs' is left empty
 
-      
-        //fetch(path + "/test-json?ccid="+ccid)
-        //.then(()=>{
+        let headers
+        if(club){
+          //get all transactions
+          headers = {ccid:ccid}
+        }else{
+          //specific club
+          headers = {ccid:ccid, club:club}
+        }
 
-        // })
+        fetch(path + "/transactions")
+        .then((res)=>{
+         
+          printResponse(res)
+        }).catch(()=>{
+          console.log("Server request failed.")
+        })
 
         //TEST RETURN
         return {
             name:'Bobby',
-            clubs: {
-                club1:{
-                  transactions:  [
-                    createData('Nov 1 2021', "Payed $5" ),
-                    createData('Dec 2 2020', "Billed $1"),
-                    createData('Mar 20 2019', "Payed $5"),
-                    createData('Jan 1 2001', "Billed $20"),
-                    createData('Dec 4 1985', "Payed $20"),
-                  ],
-                  balance: 50
-                }
-               ,
-                club2:{
-                  transactions:  [
-                    createData('Nov 1 2021', "Billed $5" ),
-                    createData('Dec 2 2020', "Billed $1"),
-                    createData('Mar 20 2019', "Billed $5"),
-                    createData('Jan 1 2001', "Billed $20"),
-                    createData('Dec 4 1985', "Billed $20"),
-                  ],
-                  balance: -20
-                }}
+            clubs: {}
         }
     },
     //AddTransaction
@@ -129,6 +129,12 @@ export const RequestService = {
       //TEST RETURN
       return 0
     },
+    addExec: (ccid,name,password)=>{
+      //The method returns 0 if succ 1 if fail
+
+      //TEST RETURN
+      return 0
+    }
 
 }
 

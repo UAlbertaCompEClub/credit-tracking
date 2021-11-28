@@ -16,8 +16,8 @@ function App() {
   const [ isLoggedIn,setisLoggedIn] = useState(false) 
   const [ExecInfo, setExecInfo] = useState({ccid:'abc1', token : 'token', club:"Club Name"})
   const [customerCcid,setCustomerCcid] = useState(null)
-
-  RequestService.testRequest()
+  const [isExec,setIsExec] = useState(true) //TODO Change to false for production
+  // RequestService.testRequest()
 
   function openUser(ccid){
     setCustomerCcid(ccid)
@@ -33,6 +33,11 @@ function App() {
     //TODO Delete token from local storage
   }
 
+  function setExec(info){
+    setIsExec(true)
+    setExecInfo(info)
+  }
+
 
   return (
     <ThemeProvider theme = {mainTheme}>
@@ -41,14 +46,14 @@ function App() {
         <Container  maxWidth = "sm" >
           <Stack >
             {/* If page = Auth show auth data */}
-            {page == "Auth" && <Auth openUser ={openUser} setPage = {setPage}
+            {page === "Auth" && <Auth openUser ={openUser} setPage = {setPage}
                customerCcid = {setCustomerCcid}
-               setExecInfo = {setExecInfo}/>}
-            {page == "ClubDashboard" && <ClubDashboard theme = {mainTheme}
+               setExecInfo = {setExec}/>}
+            {page === "ClubDashboard" && <ClubDashboard theme = {mainTheme}
               club = {ExecInfo.club} token = {ExecInfo.token} exec = {ExecInfo.ccid} 
               openUser = {openUser} logout = {logout} />}
-            {page == "UserProfile" && <UserProfile  token = {ExecInfo.token}
-              club = {ExecInfo.club} user = {customerCcid}
+            {page === "UserProfile" && <UserProfile  token = {ExecInfo.token}
+              club = {ExecInfo.club} user = {customerCcid} isExec = {isExec}
               setPage = {setPage}/>}
           </Stack>
         </Container>

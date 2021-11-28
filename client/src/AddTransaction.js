@@ -17,7 +17,7 @@ function AddTransaction(props){
     function submitTransactionHandler(type){
         //Make a call to submit the transaction. 
         let realAmount
-        if(type == "charge"){
+        if(type === "charge"){
             realAmount = amount*-1
         }else{
             realAmount = amount

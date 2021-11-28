@@ -64,14 +64,14 @@ function Auth(props){
         // let status = fetch(path + "checkUser"+"?ccid="+ccid)
 
         //open PW if you are an exec
-        if( status == 1){ 
+        if( status === 1){ 
             //ccid is exec
             setIsExec(true);
             setShowAlert(true);
             setAlertType("success")
             setAlertText("Welcome Exec! Please enter your password.")
             
-        }else if (status == 0){
+        }else if (status === 0){
             //ccid is customer
             setShowAlert(true);
             setAlertType("success")

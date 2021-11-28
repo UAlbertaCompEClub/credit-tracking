@@ -1,7 +1,9 @@
-import {Button, FormControl, Input, InputLabel, Container, FormHelperText,Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography} from '@mui/material'
+import {Button, FormControl, Input, InputLabel,Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography} from '@mui/material'
 import {useState} from 'react'
 import {RequestService} from "./Services/RequestService"
 import {AddUser} from './AddUser'
+import {AddExec} from './AddExec'
+
 function ClubDashboard(props){
 
     const [clubName, setClubName] = useState(props.club)
@@ -9,7 +11,7 @@ function ClubDashboard(props){
     const [users, setUsers] = useState(RequestService.clubRequest(props.club,props.token))
     const [shownUsers,setShownUsers] = useState(users)
     const [showAddUser,setShowAddUser] = useState(false)
-    
+    const [showAddExec,setShowAddExec] = useState(false)
 
     function refresh(){
       //get updated list of users
@@ -20,7 +22,7 @@ function ClubDashboard(props){
     
       console.log(ccidName)
       ccidName = ccidName.toLowerCase()
-      if(ccidName == ""){
+      if(ccidName === ""){
         setShownUsers(users)
       }else{
         let newUsers = []
@@ -52,6 +54,43 @@ function ClubDashboard(props){
       //Search users and return matches to show users
       shownUsers = []
       
+    }
+    function toggleAddPerson(personType){
+      //Shows or hides add Exec and add User
+      //only one can display at a time.
+
+      if(personType === "Exec"){
+        if(showAddExec){
+          //toggle closed
+          setShowAddExec(false)
+          
+        }else{
+          //toggle open
+          setShowAddExec(true)
+          if(setShowAddUser){
+            //hide add user when we open add exec
+            setShowAddUser(false)
+          }
+        }
+      }else if (personType === "customer"){
+        if(showAddUser){
+          //Toggle closed
+          setShowAddUser(false)
+        
+        }else{
+          //toggle open
+          setShowAddUser(true)
+          if(setShowAddExec){
+            //hide add user when we open add exec
+            setShowAddExec(false)
+          }
+        }
+      }
+
+
+
+
+
     }
     
     const table = <TableContainer component={Paper}>
@@ -97,10 +136,12 @@ function ClubDashboard(props){
                     <InputLabel htmlFor = "ccid">ccid or name</InputLabel>
                     <Input id = "ccid" value = {ccid} onChange= {(e) => {setCcid(e.target.value); searchUsers(e.target.value)}} />
                 </FormControl>
-                <Button onClick = {(e)=>{setShowAddUser(true)}}> Add Customer</Button>
+                <Button onClick = {(e)=>{toggleAddPerson("customer")}}> Add Customer</Button>
+                <Button onClick = {(e)=>{toggleAddPerson("Exec")}}> Add Exec</Button>
             </Stack>
 
             {showAddUser && <AddUser setShowAddUser ={setShowAddUser} refresh = {refresh} />}
+            {showAddExec && <AddExec setShowAddExec ={setShowAddExec} refresh = {refresh} />}
 
             {table}
 
