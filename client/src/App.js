@@ -6,6 +6,7 @@ import ClubDashboard from './ClubDashboard';
 import UserProfile from './UserProfile';
 import { mainTheme } from './theme';
 import { RequestService } from './Services/RequestService'
+import { StyledEngineProvider } from '@mui/material/styles';
 
 //TO DO: INPUT VERIFICATION
 
@@ -35,8 +36,11 @@ function App() {
 
 
   return (
+
     <ThemeProvider theme = {mainTheme}>
       <CssBaseline/>
+
+      <StyledEngineProvider injectFirst>
       <Container >
         <Container  maxWidth = "sm" >
           <Stack >
@@ -53,6 +57,7 @@ function App() {
           </Stack>
         </Container>
       </Container>
+      </StyledEngineProvider>
     </ThemeProvider>
 
   );

@@ -84,6 +84,7 @@ function ClubDashboard(props){
      </TableContainer>
 
     return(
+        
         <Stack>
             <Stack direction = 'row' justifyContent="space-evenly">
               <Button onClick = {props.logout} >Logout</Button>
