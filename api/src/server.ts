@@ -5,6 +5,8 @@ import path from 'path';
 import dotenv from 'dotenv'
 
 import routes from './routes/routes';
+import userRoutes from './routes/users/users';
+import authRoutes from './routes/auth/login';
 import middleware from './controllers/middleware';
 
 require('dotenv').config({ path: 'db.env' });
@@ -38,12 +40,15 @@ router.use(middleware.cors_call());
  * Routes Definitions
  */
 router.use('/api/v1', routes);
+router.use('/api/v1', userRoutes);
+router.use('/api/v1', authRoutes);
+
 router.get('/add-entry', (req: Request, res: Response) => {
     res.send('Hello World!')
 });
 router.get('/test-db', async (req: Request, res: Response) => {
     // const transactions = await transactionsUser({ club: 'CompE', ccid: 'mfiaz' });
-    const getUsers = await queries.getUsers({ club: 'CompE'});
+    const getUsers = await queries.getUsers({ clubid: 1 });
     
     res.status(200).json({
         body: getUsers
