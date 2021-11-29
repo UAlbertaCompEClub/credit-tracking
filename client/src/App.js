@@ -7,6 +7,7 @@ import UserProfile from './UserProfile';
 import { mainTheme } from './theme';
 import { RequestService } from './Services/RequestService'
 import { StyledEngineProvider } from '@mui/material/styles';
+import "./style.css"
 
 //TO DO: INPUT VERIFICATION
 

@@ -43,66 +43,26 @@ export function AddUser(props) {
         
     }
 
-    //-------------------Button shinnanigins--------------//
-    const CustomButtonRoot = styled('button')`
-    background-color: transparent;
-    padding: 15px 20px;
-    border-radius: 10px;
-    color: #fff;
-    font-weight: 600;
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    transition: all 200ms ease;
-    cursor: pointer;
-    border: 0.5px;
-    border-colour: grey;
-
-    &:hover {
-        background-color: transparent;
-    }
-
-    &.${buttonUnstyledClasses.active} {
-        background-color: transparent;
-    }
-
-    &.${buttonUnstyledClasses.focusVisible} {
-        box-shadow: transparent;
-        outline: none;
-    }
-
-    &.${buttonUnstyledClasses.disabled} {
-        opacity: 0.5;
-        cursor: not-allowed;
-        box-shadow: 0 0 0 0 rgba(0, 127, 255, 0);
-    }
-    `;
-    function CustomButton(props) {
-        return <ButtonUnstyled {...props} component={CustomButtonRoot} />;
-    }
-    //----------------------------------------------------//
-
-    //
-
     return (
         <form onSubmit = {submitHandler}>
         <Stack>
-            <Typography variant = "p" class = "normalText">Add Customer</Typography>
+            <Typography variant = "p" class = "whiteText">Add Customer</Typography>
              {/* show alert if showAlert is true */}
              {showAlert && <Alert severity = {alertType}> {alertText}!</Alert>} 
             <FormControl>
               {/*ccid */}
-              <InputLabel htmlFor = "ccid" class = "normalText">ccid</InputLabel>
+              <InputLabel htmlFor = "ccid" class = "whiteText">ccid</InputLabel>
                 <Input id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
             </FormControl>
             <FormControl>
                 {/* name */}
-                <InputLabel htmlFor = "name" class = "normalText">Name</InputLabel>
+                <InputLabel htmlFor = "name" className = "whiteText">Name</InputLabel>
                 <Input id = "name" onChange = {(e) => setName(e.target.value)}/>
             </FormControl>
 
             <Stack direction = 'row' justifyContent="space-evenly">
-                <Button className = "redText" type = "submit">Add</Button>
-                <CustomButton onClick = {(e)=>{props.setShowAddUser(false)}}>Close</CustomButton>
+                <Button className = "btn cyanBtn" type = "submit">Add</Button>
+                <Button className = "btn cyanBtn" onClick = {(e)=>{props.setShowAddUser(false)}}>Close</Button>
             </Stack>
             
         </Stack>

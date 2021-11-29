@@ -1,31 +1,65 @@
-.nothing {
-    color: tomato;
-    border: 2px solid blue;
-    margin: 20px;
-    padding: 20px;
-}
-
+/*-------------------------text--------------------------*/
 .normalText{
     color: white;
-    margin: 5px;
-    padding: 5px;
     background-color: transparent;
     border-color: transparent;
 }
 
 .redText{
     color: #ca0004;
-    margin: 5px;
-    padding: 5px;
     background-color: transparent;
-    border-color: transparent;
-    border-width: 0.5px;
 }
 
-.greenText{
+.cyanText{
     color: #00EEC7;
     background-color: transparent;
-    border-color: transparent;
-    margin: 5px;
-    padding: 5px;
 }
+/*-------------------------------------------------------*/
+
+/*----------------------------- Btns -------------------*/
+.btn {
+    border: 0.5px solid;
+    background-color: transparent;
+    color: black;
+    padding: 2px 2px;
+    font-size: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+
+.redBtn{
+    color: #ca0004;
+    border-color: grey;
+}
+.redBtn:hover{
+    color: white;
+    border-color: white;
+    background-color: #ca0004;
+}
+
+.cyanBtn{
+    color: #00EEC7;
+    border-color: grey;
+}
+
+.cyanBtn:hover{
+    color: black;
+    border-color: white;
+    background-color: #00EEC7;
+}
+
+.whiteBtn{
+    color: white;
+    border-color: grey;
+}
+.whiteBtn:hover{
+    color: black;
+    border-color: grey;
+    background-color: white;
+}
+/*------------------------------------------------*/
