@@ -3,6 +3,17 @@ import * as db from 'zapatos/db';
 import type * as schema from 'zapatos/schema';
 import connection from './dbConnection';
 
+const createTransaction = async (transactionParam: { ccid: string, club: string, amount: number; }) => {
+    const transaction: schema.transactions.Insertable = {
+        ccid: transactionParam.ccid,
+        club: transactionParam.club,
+        amount: transactionParam.amount,
+        id: db.Default,
+        created_at: db.Default
+    };
+    return db.insert('transactions', transaction).run(connection);
+};
+
 const transactionsUser = async (transaction: { club: string, ccid: string}) => {
     const where: schema.transactions.Whereable = {};
     if (transaction.club !== 'any') {
@@ -28,16 +39,14 @@ const clubBalance = async (queryParams: { name: string }) => {
     return db.select('clubs', where).run(connection);
 };
 
-
-const createTransaction = async (transactionParam: { ccid: string, club: string, amount: number; }) => {
-    const transaction: schema.transactions.Insertable = {
-        ccid: transactionParam.ccid,
-        club: transactionParam.club,
-        amount: transactionParam.amount,
-        id: db.Default,
-        created_at: db.Default
+const createUser = async (userParam: { ccid: string; full_name: string, foip: boolean; }) => {
+    const user: schema.users.Insertable = {
+        ccid: userParam.ccid,
+        full_name: userParam.full_name,
+        foip: userParam.foip,
+        balance: 0
     };
-    db.insert('transactions', transaction).run(connection);
+    return db.insert('users', user).run(connection);
 };
 
 const getUser = async (userParam: { ccid: string}) => {
@@ -66,5 +75,6 @@ export {
     transactionsUser,
     getUser,
     getUsers,
-    transactionsAll
+    transactionsAll,
+    createUser
 };

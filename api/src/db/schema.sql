@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS execs (
     ccid TEXT NOT NULL PRIMARY KEY,
     password TEXT NOT NULL,
-    program TEXT NOT NULL
+    clubid INT NOT NULL REFERENCES clubs
 );
 
 /* clubs table */
