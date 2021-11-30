@@ -2,6 +2,8 @@ import {Button, FormControl, Input, InputLabel, Container, FormHelperText,Stack,
 import {useState} from 'react'
 import {RequestService} from "./Services/RequestService"
 import {AddUser} from './AddUser'
+import "./style.css"
+
 function ClubDashboard(props){
 
     const [clubName, setClubName] = useState(props.club)
@@ -55,11 +57,11 @@ function ClubDashboard(props){
     }
     
     const table = <TableContainer component={Paper}>
-    <Table aria-label="simple table">
+    <Table aria-label="simple table" className = "thead tbody">
       <TableHead>
         <TableRow>
           <TableCell>Name</TableCell>
-          <TableCell align="right">ccid</TableCell>
+          <TableCell align="right" >ccid</TableCell>
           <TableCell align="right">Transactions</TableCell>
         </TableRow>
       </TableHead>
@@ -98,7 +100,7 @@ function ClubDashboard(props){
                     <InputLabel htmlFor = "ccid">ccid or name</InputLabel>
                     <Input id = "ccid" value = {ccid} onChange= {(e) => {setCcid(e.target.value); searchUsers(e.target.value)}} />
                 </FormControl>
-                <Button onClick = {(e)=>{setShowAddUser(true)}}> Add Customer</Button>
+                <Button className="btn whiteBtn" font-size="" onClick = {(e)=>{setShowAddUser(true)}}> Add Customer</Button>
             </Stack>
 
             {showAddUser && <AddUser setShowAddUser ={setShowAddUser} refresh = {refresh} />}

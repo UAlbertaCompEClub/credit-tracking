@@ -16,7 +16,7 @@
 }
 /*-------------------------------------------------------*/
 
-/*----------------------------- Btns -------------------*/
+/*----------------------------- Buttons -------------------*/
 .btn {
     border: 0.5px solid;
     background-color: transparent;
@@ -24,7 +24,7 @@
     padding: 2px 2px;
     font-size: 10px;
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 20px;   /*todo: change to flex boxes*/
     margin-bottom: 10px;
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
@@ -62,4 +62,17 @@
     border-color: grey;
     background-color: white;
 }
+/*------------------------------------------------*/
+
+/*------------------Tables------------------------*/
+.tbody tr:nth-child(even){
+    background: grey;
+    border-bottom: 1.5px solid cyan;
+    border-top: 1.5px solid cyan;
+}
+.thead thead{
+    background: hotpink;
+    border-bottom: 1.5px solid cyan;
+} 
+
 /*------------------------------------------------*/
