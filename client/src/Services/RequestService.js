@@ -32,35 +32,59 @@ export const RequestService = {
             console.log("request failed")
           })
     },
-    userRequest: (ccid,club = null)=>{
+    userRequest:async (ccid,club = null)=>{
         //Gets user transactions for the specified club
         //or all clubs if 'clubs' is left empty
 
-        let headers
-        if(club){
-          //get all transactions
-          headers = {ccid:ccid}
-        }else{
-          //specific club
-          headers = {ccid:ccid, club:club}
-        }
+        // let headers
+        // if(club){
+        //   //get all transactions
+        //   headers = {ccid:ccid}
+        // }else{
+        //   //specific club
+        //   headers = {ccid:ccid, club:club}
+        // }
 
-        fetch(path + "/transactions")
-        .then((res)=>{
-          console.log("Server request Success.")
-          printResponse(res)
-        }).catch(()=>{
-          console.log("Server request failed.")
-        })
+        // fetch(path + "/transactions")
+        // .then((res)=>{
+        //   console.log("Server request Success.")
+        //   printResponse(res)
+        // }).catch(()=>{
+        //   console.log("Server request failed.")
+        // })
+
+        //create all club data
+        // function createAllClubs(){
+        //   console.log("Recomputed totals")
+        //   let trans = []
+        //   let total = 0
+        //   for( let club in user.clubs){
+        //     total += user.clubs[club].balance
+        //     trans = trans.concat(user.clubs[club].transactions)
+        //     console.log(total)
+        //   }
+        //   setUser((prev)=>{
+        //     return{
+        //       ...prev,
+        //       clubs:
+        //       { ...prev.clubs, "All Clubs":{
+        //         transactions: trans,
+        //         balance: total
+        //         }
+        //       }
+        //     }
+        //   })
+             
+        // }
 
         //TEST RETURN
         return {
             name:'Bobby',
-            clubs: {}
+            clubs: {"No Transactions":{transactions:[{date:"",Amount:""}],balance:0}}
         }
     },
     //AddTransaction
-    newTransaction: (ccid, amount, token)=>{
+    newTransaction: async (ccid, amount, token)=>{
         //add transaction. Return balance for succ, null for fail
         // fetch(path+"/transaction",
         //         {method:"post",body:{
@@ -107,7 +131,7 @@ export const RequestService = {
       return body;
     },
     //Auth.js
-    ccidCheckReq: (ccid)=>{
+    ccidCheckReq: async (ccid)=>{
       //The method...
 
       //TEST RETURN
@@ -119,7 +143,7 @@ export const RequestService = {
         return -1
       }
     },
-    execLogin: (ccid,pw)=>{
+    execLogin: async (ccid,pw)=>{
       //The method...
 
       //TEST RETURN
@@ -130,13 +154,13 @@ export const RequestService = {
       }
       
     },
-    addUser: (ccid,name)=>{
+    addUser: async (ccid,name)=>{
       //The method returns 0 if succ 1 if fail
 
       //TEST RETURN
       return 0
     },
-    addExec: (ccid,name,password)=>{
+    addExec: async (ccid,name,password)=>{
       //The method returns 0 if succ 1 if fail
 
       //TEST RETURN

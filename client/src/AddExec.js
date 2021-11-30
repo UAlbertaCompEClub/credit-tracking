@@ -1,4 +1,4 @@
-import {Button, FormControl,Alert, Input, InputLabel,Stack,Typography} from '@mui/material'
+import {Button, FormControl,Alert,LinearProgress, Input, InputLabel,Stack,Typography} from '@mui/material'
 import {useState} from 'react'
 import {RequestService} from "./Services/RequestService"
 
@@ -9,15 +9,25 @@ export function AddExec(props) {
     const[alertType,setAlertType] = useState("error");
     const[alertText,setAlertText] = useState("You are not registered. Ask an executive to register!");
     const[showAlert,setShowAlert] = useState(false);
+    const[isLoading,setIsLoading] = useState(false)
 
-    function submitHandler(input){
+    async function submitHandler(input){
         input.preventDefault()
 
         if(ccid === "" || name === ""){
             setShowAlert(true);
             setAlertType("error")
             setAlertText("Please fill all fields")
-        }else if(RequestService.ccidCheckReq(ccid) !== -1 ){
+            setIsLoading(false)
+            return
+        }
+        
+        let ccidStatus
+        await RequestService.ccidCheckReq(ccid).then((res)=>{
+            ccidStatus = res
+        })
+        
+        if(ccidStatus !== -1 ){
             //ccid is registered already
             setShowAlert(true);
             setAlertType("error")
@@ -37,8 +47,7 @@ export function AddExec(props) {
                 setAlertText("Exec could not be added.")
             }
         }
-
-        
+        setIsLoading(false)
     }
 
     return (
@@ -55,17 +64,17 @@ export function AddExec(props) {
             <FormControl>
                 {/* name */}
                 <InputLabel htmlFor = "name">Name</InputLabel>
-                <Input id = "name" onChange = {(e) => setName(e.target.value)}/>
+                <Input disabled = {isLoading} id = "name" onChange = {(e) => setName(e.target.value)}/>
             </FormControl>
             <FormControl>
                 {/* password */}
                 <InputLabel htmlFor = "password">Password</InputLabel>
-                <Input id = "password" onChange = {(e) => setPassword(e.target.value)}/>
+                <Input disabled = {isLoading} id = "password" onChange = {(e) => setPassword(e.target.value)}/>
             </FormControl>
 
             <Stack direction = 'row' justifyContent="space-evenly">
-                <Button type = "submit">Add</Button>
-                <Button onClick = {(e)=>{props.setShowAddExec(false)}}>Close</Button>
+                <Button  disabled = {isLoading} type = "submit">Add</Button>
+                <Button  disabled = {isLoading} onClick = {(e)=>{props.setShowAddExec(false)}}>Close</Button>
             </Stack>
             
         </Stack>

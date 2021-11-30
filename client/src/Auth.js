@@ -1,4 +1,4 @@
-import {Button, FormControl, Input, InputLabel, FormHelperText,Stack, Typography, Alert} from '@mui/material/'
+import {Button, FormControl, Input, LinearProgress, InputLabel, FormHelperText,Stack, Typography, Alert} from '@mui/material/'
 import {useState} from 'react'
 import {RequestService} from './Services/RequestService'
 
@@ -14,6 +14,7 @@ function Auth(props){
     const[alertType,setAlertType] = useState("error");
     const[alertText,setAlertText] = useState("You are not registered. Ask an executive to register!");
     const[showAlert,setShowAlert] = useState(false);
+    const[isLoading,setIsLoading] = useState(false)
 
     function submitHandler(input){
         //checks if ccid is valid and prompts for PW if they are execs
@@ -35,9 +36,12 @@ function Auth(props){
         setPassword("")
     }
 
-    function Execlogin(){
+    async function Execlogin(){
         //Attemps login
-        const response = RequestService.execLogin(ccid,password)
+        let response 
+        await RequestService.execLogin(ccid,password).then((res)=>{
+            response = res;
+        })
         if(response){
             props.setExecInfo(response)
             setShowAlert(true);
@@ -110,21 +114,25 @@ function Auth(props){
 
                 {/* Exec and customer ccid */}
                 <InputLabel htmlFor = "ccid">ccid</InputLabel>
-                <Input id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
+                <Input disabled = {isLoading} id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
                 <FormHelperText id = "ccidHelperText">For customers and Execs</FormHelperText>
             </FormControl>
+            {isLoading && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
+              <LinearProgress color="inherit" />
+            </Stack>}
+
             
             {isExec && //only show if ccid is exec
              <FormControl >
                 {/* Exec Password */}
                 <InputLabel htmlFor = "password">Password</InputLabel>
-                <Input id = "password" onChange = {(e) => setPassword(e.target.value)}/>
+                <Input disabled = {isLoading} id = "password" onChange = {(e) => setPassword(e.target.value)}/>
                 <FormHelperText id = "passwordHelperText">Please enter your Exec password</FormHelperText>
             </FormControl>
             }
 
             <Stack direction = 'row' justifyContent="space-evenly">
-                <Button type = "submit">Submit</Button>
+                <Button  disabled = {isLoading} type = "submit">Submit</Button>
                 {isExec && <Button onClick = {backHandler}>Back</Button>}
             </Stack>
         </Stack>

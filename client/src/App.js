@@ -11,7 +11,7 @@ import { RequestService } from './Services/RequestService'
 
 function App() {
 
-  const [page,setPage] = useState("ClubDashboard")
+  const [page,setPage] = useState("UserProfile")
   const [ isLoggedIn,setisLoggedIn] = useState(false) 
   const [ExecInfo, setExecInfo] = useState({ccid:'abc1', token : 'token', club:"CompE"})
   const [customerCcid,setCustomerCcid] = useState(null)

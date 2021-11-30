@@ -1,93 +1,87 @@
 import AddTransaction from './AddTransaction'
 import {useState,useEffect} from 'react'
-import {Button, FormControl, MenuItem,  Select, InputLabel, Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography} from '@mui/material'
+import {Button, FormControl, MenuItem, LinearProgress, Select, InputLabel, Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography} from '@mui/material'
 import {RequestService} from "./Services/RequestService"
 
 
 function UserProfile(props){
     // Show user information and allows transaction adding if the user is logged in
-    const [user, setUser]  = useState(getUserInfo())
-    const [clubs, setClubs] = useState(user.clubs)
-    
-    const [club, setClub] = useState((Object.keys(clubs))[0])
+    const [user, setUser]  = useState({name:"",clubs:{"No Transactions":{transactions:[{date:"",Amount:""}],balance:0}}})
+    const[isLoading,setIsLoading] = useState(false)
+
+    const [club, setClub] = useState((Object.keys(user.clubs))[0])
     const [isExecView, setIsExecView] = useState(props.isExec)
+    const [table,setTable] = useState("")
     
-    function getUserInfo(){
+    //run on startup only
+    useEffect(()=>{
+      getUserInfo()
+    },[])
+
+    
+    async function getUserInfo(){
       //sets user. If they have no transactions add a special row
-      let info = RequestService.userRequest(props.ccid)
+
+      setIsLoading(true)
+
+      let info
+      await RequestService.userRequest(props.ccid)
+      .then((res)=>{
+        info = res
+      })
       console.log(info.clubs)
       if (Object.keys(info.clubs).length === 0){
       
         //no transaction history
         info.clubs = {"No Transactions":{transactions:[{date:"",Amount:""}],balance:0}}
         
+      }else{
+        setUser(info)
       }
-      return info
+      setIsLoading(false)
     }
 
-    useEffect(()=>{
-      setClubs(user.clubs)
-      createAllClubs()
-     
-    },[user])
-
-    //create the combined clubs data
-    function createAllClubs(){
-      console.log("Recomputed totals")
-      let trans = []
-      let total = 0
-      for( let club in clubs){
-        total += clubs[club].balance
-        trans = trans.concat(clubs[club].transactions)
-        console.log(total)
-      }
-      setClubs({ ...clubs, "All Clubs":{
-        transactions: trans,
-        balance: total
-        }
-      }) 
-    }
-    console.log(clubs)
-
-
-
-
-    function refresh(){
-      setUser(RequestService.userRequest(props.ccid,props.club))
-
-    }
 
     //Table Logic
     function createData(date, amount) {
         return { date, amount };
     }
-    let keyHelper=0
-    const table = <TableContainer component={Paper}>
-      <Table  aria-label="simple table">
+    useEffect(()=>{
+      
 
-          <TableHead>
-            <TableRow>
-              <TableCell>Date</TableCell>
-              <TableCell >Amount</TableCell>
-            </TableRow>
-          </TableHead>
+      let keyHelper=0
+      setTable(<TableContainer component={Paper}>
+        <Table  aria-label="simple table">
 
-          <TableBody>
-            {clubs[club].transactions.map((row) => (
-              <TableRow key={row.date+row.amount+keyHelper++} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
 
-                <TableCell component="th" scope="row"> {row.date} </TableCell>
-                <TableCell >{row.amount}</TableCell>
-                
+            <TableHead>
+              <TableRow>
+                <TableCell>Date</TableCell>
+                <TableCell >Amount</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-          
-      </Table>
-      </TableContainer>
+            </TableHead>
+
+            <TableBody>
+              {user.clubs[club].transactions.map((row) => (
+                <TableRow key={row.date+row.amount+keyHelper++} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+
+                  <TableCell component="th" scope="row"> {row.date} </TableCell>
+                  <TableCell >{row.amount}</TableCell>
+                  
+                </TableRow>
+              ))}
+            </TableBody>
+            
+        </Table>
+        </TableContainer>)
+    },[user])
+    
+    
+    
+    
 
     function balanceMessage(){
-        const balance = clubs[club].balance
+        const balance = user.clubs[club].balance
 
         if (balance < 0){
             //user owes money
@@ -120,13 +114,16 @@ function UserProfile(props){
                     value={club}
                     label="club"
                     onChange={changeClub}>
-                    {[...(Object.keys(clubs))].map( clubName => <MenuItem key = {clubName} value={clubName}>{clubName}</MenuItem>)}
+                    {[...(Object.keys(user.clubs))].map( clubName => <MenuItem key = {clubName} value={clubName}>{clubName}</MenuItem>)}
                 </Select>
             </FormControl>
+            {isLoading && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
+              <LinearProgress color="inherit" />
+            </Stack>}
             {table}
 
 
-            {isExecView && <AddTransaction refresh = {refresh}></AddTransaction>}
+            {isExecView && <AddTransaction refresh = {getUserInfo}></AddTransaction>}
             {/* Only show the add transaction if current user is an exec */}
         </Stack>
         
