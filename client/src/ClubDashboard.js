@@ -1,24 +1,88 @@
-import {Button, FormControl, Input, InputLabel,Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography} from '@mui/material'
-import {useState} from 'react'
+import {Button, FormControl, Box,Input,Grid, LinearProgress, InputLabel,Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography, CircularProgress} from '@mui/material'
+import {useState,useEffect} from 'react'
 import {RequestService} from "./Services/RequestService"
 import {AddUser} from './AddUser'
 import {AddExec} from './AddExec'
 
 function ClubDashboard(props){
-
     const [clubName, setClubName] = useState(props.club)
     const [ccid, setCcid] = useState("")
-    const [users, setUsers] = useState(RequestService.clubRequest(clubName))
-    console.log(users)
-    const [shownUsers,setShownUsers] = useState(users)
+    
     const [showAddUser,setShowAddUser] = useState(false)
     const [showAddExec,setShowAddExec] = useState(false)
 
     
+    const [users, setUsers] = useState({allUsers:[],shownUsers:[],table:"",isLoading:true })
+    
+    
+    function getTable(users){
 
-    function refresh(){
+      return(<TableContainer component={Paper}>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell align="right">ccid</TableCell>
+              <TableCell align="right">Transactions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users.map((row) => (
+              <TableRow
+                key={row.name}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                onClick = {(e)=>{
+                  selectUser(row.ccid)
+                }}
+              >
+                <TableCell component="th" scope="row" >
+                  {row.name}
+                </TableCell>
+                <TableCell align="right">{row.ccid}</TableCell>
+                <TableCell align="right">{row.transactions}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+          </Table>
+        </TableContainer>)
+      
+    }
+    async function firstCall(){ 
+      // First API call
+      await RequestService.clubRequest(clubName)
+      .then((res)=>{
+        console.log(res)
+        //Set initial users and shown users
+
+        setUsers({
+          allUsers:res,
+          shownUsers:res,
+          table:getTable(res),
+          isLoading:false
+        })
+      })
+
+    }
+
+    useEffect( ()=>{
+      firstCall()},[])
+
+    async function refresh(){
       //get updated list of users
-      setUsers(RequestService.clubRequest(props.club,props.token))
+      setUsers((prevState)=>{
+        return{...prevState,isLoading:true}
+      })
+
+      RequestService.clubRequest(props.club,props.token)
+      .then((res)=>{
+        setUsers({
+          allUsers:res,
+          shownUsers:res,
+          table:getTable(res),
+          isLoading:false
+        })
+        searchUsers(ccid)
+      })
     }
 
     function searchUsers(ccidName){
@@ -26,7 +90,12 @@ function ClubDashboard(props){
       console.log(ccidName)
       ccidName = ccidName.toLowerCase()
       if(ccidName === ""){
-        setShownUsers(users)
+        setUsers((prevState)=>{
+          return{
+            ...prevState,
+            shownUsers:prevState.allUsers
+          }
+        }) 
       }else{
         let newUsers = []
         for(let user of users){
@@ -34,7 +103,12 @@ function ClubDashboard(props){
             newUsers.push(user)
           }
         }
-        setShownUsers(newUsers)
+        setUsers((prevState)=>{
+          return{
+            ...prevState,
+            shownUsers:newUsers
+          }
+        }) 
       }
       
     }
@@ -55,7 +129,7 @@ function ClubDashboard(props){
 
     function search(){
       //Search users and return matches to show users
-      shownUsers = []
+      users.shownUsers = []
       
     }
     function toggleAddPerson(personType){
@@ -89,42 +163,8 @@ function ClubDashboard(props){
           }
         }
       }
-
-
-
-
-
     }
     
-    const table = <TableContainer component={Paper}>
-    <Table aria-label="simple table">
-      <TableHead>
-        <TableRow>
-          <TableCell>Name</TableCell>
-          <TableCell align="right">ccid</TableCell>
-          <TableCell align="right">Transactions</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {shownUsers.map((row) => (
-          <TableRow
-            key={row.name}
-            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            onClick = {(e)=>{
-              selectUser(row.ccid)
-            }}
-          >
-            <TableCell component="th" scope="row" >
-              {row.name}
-            </TableCell>
-            <TableCell align="right">{row.ccid}</TableCell>
-            <TableCell align="right">{row.transactions}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-      </Table>
-     </TableContainer>
-
     return(
         <Stack>
             <Stack direction = 'row' justifyContent="space-evenly">
@@ -146,8 +186,11 @@ function ClubDashboard(props){
             {showAddUser && <AddUser  setShowAddUser ={setShowAddUser} refresh = {refresh} />}
             {showAddExec && <AddExec setShowAddExec ={setShowAddExec} refresh = {refresh} />}
 
-            {table}
-
+            {/* Show table when not loading and show text when loading */}
+            {users.isLoading && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
+              <LinearProgress color="inherit" />
+            </Stack>}
+            {!users.isLoading && users.table} 
         </Stack>
 
     );

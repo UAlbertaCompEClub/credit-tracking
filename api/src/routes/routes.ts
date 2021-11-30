@@ -156,7 +156,6 @@ router.get('/club', async (req: Request, res: Response) => {
             counter++;
         }
         transactions = transactions + " ..."
-
         //build element and add it to array
         usersArray.push({name:userObj.full_name,ccid:userObj.ccid,transactions:transactions})
     }

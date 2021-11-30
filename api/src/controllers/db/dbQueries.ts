@@ -71,7 +71,7 @@ const getUsers = async (userParam: { club: string }) => {
 const getUsersRobust = async (userParam: { club: string }) => {
     // console.log("club = " + userParam.club)
     const query = db.sql<schema.users.SQL | schema.transactions.SQL, schema.users.Selectable[]>`
-        SELECT U.ccid, U.balance
+        SELECT U.ccid, U.full_name, U.balance
         FROM ${"users"} U, ${"transactions"} T
         WHERE U.ccid=T.ccid AND T.club=${db.param(userParam.club)}
         GROUP BY U.ccid, U.full_name

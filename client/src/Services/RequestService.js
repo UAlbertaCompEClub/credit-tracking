@@ -84,20 +84,27 @@ export const RequestService = {
         return (amount)
     },
     //ClubDashboard.js
-    clubRequest:(club,token)=>{
-      console.log(club)
+    clubRequest:async (club,token)=>{
 
-      fetch(path+"/club", {method:"get", headers:{'club':club,'token':token}})
+      let resp;
+      let body;
+
+      await fetch(path+"/club", {method:"get", headers:{'club':club,'token':token}})
       .then((res)=>{ 
         console.log("Club request success.")
-        res.json().then((res)=>{
-          console.log(res)
-        })
+        resp = res
       }).catch(()=>{
         console.log("Club request Failed.")
+        //Dummy Data
+        return([{name:'Failed Request', ccid:"adp",transactions:"23, +123, 23 ..."}])
       })
 
-      return([{name:'bobby', ccid:"adp",transactions:"23, +123, 23 ..."}])
+      await resp.json().then((Jres)=>{
+        console.log(Jres.body)
+        body = Jres.body
+      })
+
+      return body;
     },
     //Auth.js
     ccidCheckReq: (ccid)=>{
