@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import * as queries from '../controllers/db/dbQueries';
+
 import type * as schema from 'zapatos/schema';
 import middleWare from '../controllers/controllers';
 
@@ -22,7 +23,12 @@ router.get('/test', (req: Request, res: Response) => {
 
 router.get('/test-db', async (req: Request, res: Response) => {
     // const transactions = await transactionsUser({ club: 'CompE', ccid: 'mfiaz' });
-    const getUsers = await queries.getUsers({ club: 'CompE' });
+    const getUsers = await queries.getUsers({ clubid: 1 });
+
+    // const getUsers = await queries.createUser({ ccid: 'rachel', full_name: 'rachel', foip: true});
+    // const getUsers = await queries.createUser({ ccid: 'mfiaz', full_name: 'muhammad fiaz', foip: true });
+
+    // const getUsers = await userOps.createExec({ ccid: 'mfiaz', password: 'password', clubid: 1 });
 
     res.status(200).json({
         body: getUsers
@@ -41,9 +47,9 @@ router.get('/user', async (req: Request, res: Response) => {
         };
         const User = await queries.getUser(queryParams);
     }
-    else if (params.hasOwnProperty('club')) {
+    else if (params.hasOwnProperty('clubid')) {
         const queryParams = {
-            club: params.get("club")
+            clubid: parseInt(params.get("clubid"))
         };
         const User = await queries.getUsers(queryParams);
     }
@@ -65,16 +71,15 @@ router.get('/transactions', async (req: Request, res: Response) => {
 
     const Transactions: schema.transactions.JSONSelectable[] = [];
     if (params.hasOwnProperty('club') && params.hasOwnProperty('ccid')) {
-
         const queryParams = {
-            club: params.get("club"),
+            clubid: parseInt(params.get("clubid")),
             ccid: params.get("ccid")
         };
         const Transactions = await queries.transactionsUser(queryParams);
     }
-    else if (params.hasOwnProperty('club')) {
+    else if (params.hasOwnProperty('clubid')) {
         const queryParams = {
-            club: params.get("club"),
+            clubid: parseInt(params.get("clubid")),
             ccid: 'any'
         };
         const Transactions = await queries.transactionsUser(queryParams);
@@ -82,7 +87,7 @@ router.get('/transactions', async (req: Request, res: Response) => {
     else if (params.hasOwnProperty('ccid')) {
         const queryParams = {
             ccid: params.get("ccid"),
-            club: 'any'
+            clubid: 0
         };
         const Transactions = await queries.transactionsUser(queryParams);
     }
@@ -101,13 +106,13 @@ router.get('/club-balance', async (req: Request, res: Response) => {
     const User: schema.clubs.JSONSelectable[] = [];
     if (params.hasOwnProperty('club')) {
         const queryParams = {
-            name: params.get("club")
+            clubname: params.get("club")
         };
         const User = await queries.clubBalance(queryParams);
     }
     else {
         const queryParams = {
-            name: 'any'
+            clubname: 'any'
         };
         const User = await queries.clubBalance(queryParams);
     }

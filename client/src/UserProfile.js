@@ -1,17 +1,28 @@
 import AddTransaction from './AddTransaction'
+<<<<<<< HEAD
 import {useState,useEffect} from 'react'
 import {Button, FormControl, MenuItem,  Select, InputLabel, Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography} from '@mui/material'
+=======
+import {useState} from 'react'
+import {Button, FormControl, MenuItem, Input, Select, InputLabel, Container, FormHelperText,Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography} from '@mui/material'
+>>>>>>> api_auth
 import {RequestService} from "./Services/RequestService"
 
 
 function UserProfile(props){
     // Show user information and allows transaction adding if the user is logged in
+<<<<<<< HEAD
     const [user, setUser]  = useState(getUserInfo())
     const [clubs, setClubs] = useState(user.clubs)
+=======
+    const [user, setUser]  = useState(RequestService.userRequest(props.ccid,props.club))
+    let clubs =(user.clubs)
+>>>>>>> api_auth
     
     const [club, setClub] = useState((Object.keys(clubs))[0])
     const [isExecView, setIsExecView] = useState(props.isExec)
     
+<<<<<<< HEAD
     function getUserInfo(){
       //sets user. If they have no transactions add a special row
       let info = RequestService.userRequest(props.ccid)
@@ -48,20 +59,37 @@ function UserProfile(props){
       }) 
     }
     console.log(clubs)
+=======
+   
+    
+>>>>>>> api_auth
 
+      // TODO create the combined clubs data
+      // function getNetBalance(){
+      //   let total = 0
+      //   for( club of clubs){
+      //     total += clubs[club].balance
+      //   }
+      //   return total;
+      // }
+      // clubs = { ...clubs, "All Clubs":{
+      //       transactions:[
+
+      //       ],
+      //       balance: getNetBalance()
+      //   } 
 
 
 
     function refresh(){
       setUser(RequestService.userRequest(props.ccid,props.club))
-
     }
 
     //Table Logic
     function createData(date, amount) {
         return { date, amount };
     }
-    let keyHelper=0
+      
     const table = <TableContainer component={Paper}>
       <Table  aria-label="simple table">
 
@@ -74,7 +102,7 @@ function UserProfile(props){
 
           <TableBody>
             {clubs[club].transactions.map((row) => (
-              <TableRow key={row.date+row.amount+keyHelper++} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+              <TableRow key={row.date+row.amount} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
 
                 <TableCell component="th" scope="row"> {row.date} </TableCell>
                 <TableCell >{row.amount}</TableCell>
@@ -120,7 +148,7 @@ function UserProfile(props){
                     value={club}
                     label="club"
                     onChange={changeClub}>
-                    {[...(Object.keys(clubs))].map( clubName => <MenuItem key = {clubName} value={clubName}>{clubName}</MenuItem>)}
+                    {[...(Object.keys(clubs))].map( clubName => <MenuItem value={clubName}>{clubName}</MenuItem>)}
                 </Select>
             </FormControl>
             {table}
