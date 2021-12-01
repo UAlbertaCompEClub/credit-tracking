@@ -128,15 +128,7 @@ router.get ('/checkCcid', (req:Request,res:Response) =>{
 
 
 // POST REQUESTS
-router.post('/add-user', (req: Request, res: Response) => {
-    res.send('Hello World!')
-});
-
 router.post('/transaction', (req: Request, res: Response) => {
-    res.send('Hello World!');
-});
-
-router.post('/login', (req: Request, res: Response) => {
     res.send('Hello World!');
 });
 
