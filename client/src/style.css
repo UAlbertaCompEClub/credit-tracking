@@ -44,12 +44,14 @@
 }
 
 .cyanBtn{
-    background-color:#3ee4cf ;
+    color:#3ee4cf;
+    background-color: transparent;
     border-color: grey;
 }
 
 .cyanBtn:hover{
     border-color: white;
+    color: black;
     background-color:  #78ebdc;  
 }
 
