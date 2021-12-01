@@ -100,7 +100,7 @@ function ClubDashboard(props){
                     <InputLabel htmlFor = "ccid">ccid or name</InputLabel>
                     <Input id = "ccid" value = {ccid} onChange= {(e) => {setCcid(e.target.value); searchUsers(e.target.value)}} />
                 </FormControl>
-                <Button className="btn whiteBtn" font-size="" onClick = {(e)=>{setShowAddUser(true)}}> Add Customer</Button>
+                <Button className="btn cyanBtn" onClick = {(e)=>{setShowAddUser(true)}}> Add Customer</Button>
             </Stack>
 
             {showAddUser && <AddUser setShowAddUser ={setShowAddUser} refresh = {refresh} />}

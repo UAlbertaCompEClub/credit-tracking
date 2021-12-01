@@ -21,8 +21,9 @@
     border: 0.5px solid;
     background-color: transparent;
     color: black;
-    padding: 2px 2px;
+    padding: 1px 10px 1px 10px;   
     font-size: 10px;
+    font-weight: 700;
     cursor: pointer;
     margin-top: 20px;   /*todo: change to flex boxes*/
     margin-bottom: 10px;
@@ -43,17 +44,16 @@
 }
 
 .cyanBtn{
-    color: #00EEC7;
+    background-color:#3ee4cf ;
     border-color: grey;
 }
 
 .cyanBtn:hover{
-    color: black;
     border-color: white;
-    background-color: #00EEC7;
+    background-color:  #78ebdc;  
 }
 
-.whiteBtn{
+.whiteBtn{  
     color: white;
     border-color: grey;
 }
@@ -65,14 +65,15 @@
 /*------------------------------------------------*/
 
 /*------------------Tables------------------------*/
-.tbody tr:nth-child(even){
-    background: hotpink;
-    border-bottom: 1.5px solid cyan;
-    border-top: 1.5px solid cyan;
+.tbody tr{
+    background: #1a1a18;
+    border-bottom: 1.5px solid #242422;
+    border-top: 1.5px solid #242422;
 }
+
 .thead thead{
-    background: hotpink;
-    border-bottom: 1.5px solid cyan;
+    background: #1a1a18;
+    border-bottom: 1.5px solid white;
 } 
 
 /*------------------------------------------------*/
