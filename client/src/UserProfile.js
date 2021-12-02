@@ -14,10 +14,8 @@ function UserProfile(props){
       club:"",
       table:""
     })
-
     const [isExecView, setIsExecView] = useState(props.isExec)
 
-    
     //run on startup only
     useEffect(()=>{
       getUserInfo(true)
@@ -97,8 +95,11 @@ function UserProfile(props){
         isLoading:false}
       })
     }
+    function refresh(){
+      setUser(RequestService.userRequest(props.ccid,props.club))
+    }
 
-
+    
 
     function balanceMessage(){
       console.log(userState.user.clubs)

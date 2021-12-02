@@ -3,10 +3,10 @@ import * as db from 'zapatos/db';
 import type * as schema from 'zapatos/schema';
 import connection from './dbConnection';
 
-const createTransaction = async (transactionParam: { ccid: string, club: string, amount: number; }) => {
+const createTransaction = async (transactionParam: { ccid: string, clubid: number, amount: number; }) => {
     const transaction: schema.transactions.Insertable = {
         ccid: transactionParam.ccid,
-        club: transactionParam.club,
+        clubid: transactionParam.clubid,
         amount: transactionParam.amount,
         id: db.Default,
         created_at: db.Default
@@ -14,13 +14,13 @@ const createTransaction = async (transactionParam: { ccid: string, club: string,
     return db.insert('transactions', transaction).run(connection);
 };
 
-const transactionsUser = async (transaction: { club: string, ccid: string}) => {
+const transactionsUser = async (transaction: { clubid: number, ccid: string}) => {
     const where: schema.transactions.Whereable = {};
-    if (transaction.club !== 'any') {
+    if (transaction.clubid !== 0) {
         where.ccid = transaction.ccid;
     }
     if (transaction.ccid !== 'any') {
-        where.club = transaction.club;
+        where.clubid = transaction.clubid;
     }
     return db.select('transactions', where).run(connection);
 };
@@ -30,10 +30,10 @@ const transactionsAll = async () => {
     return db.select('transactions', where).run(connection);
 };
 
-const clubBalance = async (queryParams: { name: string }) => {
+const clubBalance = async (queryParams: { clubname: string }) => {
     const where: schema.clubs.Whereable = {};
-    if (queryParams.name !== 'any') {
-        where.name = queryParams.name;
+    if (queryParams.clubname !== 'any') {
+        where.clubname = queryParams.clubname;
     }
     // console.log(await db.select('transactions', where).run(connection));
     return db.select('clubs', where).run(connection);
@@ -58,13 +58,13 @@ const getUser = async (userParam: { ccid: string}) => {
     return db.select('users', where).run(connection);
 };
 
-const getUsers = async (userParam: { club: string }) => {
+const getUsers = async (userParam: { clubid: number }) => {
     const query = db.sql<schema.users.SQL | schema.transactions.SQL, schema.users.Selectable[]>`
         SELECT U.ccid, U.balance
         FROM ${"users"} U, ${"transactions"} T
-        WHERE U.ccid=T.ccid AND T.club=${db.param(userParam.club)}
+        WHERE U.ccid=T.ccid AND T.clubid=${db.param(userParam.clubid)}
         GROUP BY U.ccid
-        HAVING COUNT(T.club)>0
+        HAVING COUNT(T.clubid)>0
     `.run(connection);
     return query;
 };
