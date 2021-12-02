@@ -3,6 +3,13 @@ let path = process.env.REACT_APP_SERVER
 function createData(date, amount) {
   return { date, amount };
 }
+function wait(time) {
+  return new Promise(function(resolve, reject) {
+
+      // Setting 2000 ms time
+      setTimeout(resolve, time);
+  })
+}
 function printResponse(res){
   res.json()
   .then((body)=>{
@@ -76,11 +83,12 @@ export const RequestService = {
         //   })
              
         // }
-
+      
         //TEST RETURN
+        await wait(1000)
         return {
             name:'Bobby',
-            clubs: {"No Transactions":{transactions:[{date:"",Amount:""}],balance:0}}
+            clubs: {"CompE":{transactions:[{date:"Today",amount:20}],balance:20}}
         }
     },
     //AddTransaction

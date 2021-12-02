@@ -36,7 +36,7 @@ function AddTransaction(props){
             setAlertType("success")
             setAlertText("Transaction Success: for this club user now has a balance of: "+confirmation )
             setShowAlert(true)
-            props.refresh() // refresh the transaction list and balance
+            props.refresh(false) // refresh the transaction list and balance
         }else{
             //transaction failed
             setAlertType("error")
