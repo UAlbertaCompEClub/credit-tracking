@@ -106,13 +106,13 @@ router.get('/club-balance', async (req: Request, res: Response) => {
     const User: schema.clubs.JSONSelectable[] = [];
     if (params.hasOwnProperty('club')) {
         const queryParams = {
-            clubname: params.get("club")
+            clubid: parseInt(params.get("club"))
         };
         const User = await queries.clubBalance(queryParams);
     }
     else {
         const queryParams = {
-            clubname: 'any'
+            clubid: 0
         };
         const User = await queries.clubBalance(queryParams);
     }
@@ -122,14 +122,47 @@ router.get('/club-balance', async (req: Request, res: Response) => {
     });
 });
 
-router.get ('/checkCcid', (req:Request,res:Response) =>{
-    res.send()
+router.get('/checkCcid', async (req:Request,res:Response) =>{
+    const params = res.json(req.body);
+
+    const User: schema.users.JSONSelectable[] = [];
+    if (params.hasOwnProperty('ccid')) {
+        const queryParams = {
+            ccid: params.get('ccid')
+        };
+        const User = await queries.getUser(queryParams);
+    }
+    else {
+        res.status(400).json({
+            body: "User Not Found!"
+        });
+    }
+
+    res.status(200).json({
+        body: User[0].isexec
+    });
 })
 
+router.get('/getClubs', async (req: Request, res: Response) => {
+    const clubs = await queries.getClubs();
+    res.status(200).json({
+        body: clubs
+    });
+})
 
 // POST REQUESTS
-router.post('/transaction', (req: Request, res: Response) => {
-    res.send('Hello World!');
+router.post('/transaction', async (req: Request, res: Response) => {
+    const params = res.json(req.body);
+
+    const Transactions: schema.transactions.JSONSelectable[] = [];
+    if (params.hasOwnProperty('ccid')) {
+        const queryParams = {
+            ccid: params.get('ccid'),
+            clubid: parseInt(params.get('clubid')),
+            amount: parseInt(params.get('amount'))
+        };
+        await queries.createTransaction(queryParams);
+    }
 });
 
 export default router;

@@ -30,10 +30,15 @@ const transactionsAll = async () => {
     return db.select('transactions', where).run(connection);
 };
 
-const clubBalance = async (queryParams: { clubname: string }) => {
+const getClubs = async () => {
     const where: schema.clubs.Whereable = {};
-    if (queryParams.clubname !== 'any') {
-        where.clubname = queryParams.clubname;
+    return db.select('clubs', where).run(connection);
+};
+
+const clubBalance = async (queryParams: { clubid: number }) => {
+    const where: schema.clubs.Whereable = {};
+    if (queryParams.clubid !== 0) {
+        where.clubid = queryParams.clubid;
     }
     // console.log(await db.select('transactions', where).run(connection));
     return db.select('clubs', where).run(connection);
@@ -76,5 +81,6 @@ export {
     getUser,
     getUsers,
     transactionsAll,
-    createUser
+    createUser,
+    getClubs
 };
