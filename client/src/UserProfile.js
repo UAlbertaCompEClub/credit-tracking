@@ -21,7 +21,40 @@ function UserProfile(props){
       getUserInfo(true)
     },[])
 
-    
+    function getTableElement(isFirstTime,info,clubExplicit=null){
+      let keyHelper=0
+      let club
+      if(isFirstTime){
+        club = Object.keys(info.clubs)[0]
+      }else if( clubExplicit == null){
+        club = userState.club
+      }else{
+        club = clubExplicit
+      }
+
+
+      const table = 
+      (<TableContainer component={Paper}>
+        <Table  aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Date</TableCell>
+                <TableCell >Amount</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {info.clubs[club].transactions.map((row) => (
+                <TableRow key={row.date+row.amount+keyHelper++} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell component="th" scope="row"> {row.date} </TableCell>
+                  <TableCell >{row.amount}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+        </Table>
+        </TableContainer>)
+        return table
+    }
+
     async function getUserInfo(isFirstTime){
       //sets user. If they have no transactions add a special row
       //If this is the first call, also set the selected club to the first
@@ -32,62 +65,36 @@ function UserProfile(props){
       })
 
       let info
-      await RequestService.userRequest(props.customerCcid,props.exec.clubid)
-      .then((res)=>{
-        info = res
-      })
- 
-      if (Object.keys(info.clubs).length === 0){
-      
-        //no transaction history
-        info.clubs = {"No Transactions":{transactions:[{date:"",Amount:""}],balance:0}}
-        
+      if(isExecView){
+        await RequestService.userRequest(props.customerCcid,props.exec.clubid)
+        .then((res)=>{
+          info = res
+        })
       }else{
+        await RequestService.userRequest(props.customerCcid)
+        .then((res)=>{
+          info = res
+        })
       }
-        let keyHelper=0
-      
-        const table = 
-        (<TableContainer component={Paper}>
-          <Table  aria-label="simple table">
-  
-  
-              <TableHead>
-                <TableRow>
-                  <TableCell>Date</TableCell>
-                  <TableCell >Amount</TableCell>
-                </TableRow>
-              </TableHead>
-  
-              <TableBody>
-                {info.clubs[(isFirstTime?(Object.keys(info.clubs))[0]:userState.club)].transactions.map((row) => (
-                  <TableRow key={row.date+row.amount+keyHelper++} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-  
-                    <TableCell component="th" scope="row"> {row.date} </TableCell>
-                    <TableCell >{row.amount}</TableCell>
-                    
-                  </TableRow>
-                ))}
-              </TableBody>
-              
-          </Table>
-          </TableContainer>)
+      console.log(info)
+      const table = getTableElement(isFirstTime,info)
 
-        if(isFirstTime){
-          setUserState((prevState)=>{
-            return{...prevState,
-            user:info,
-            table:table,
-            club:(Object.keys(info.clubs))[0]
-          }
-          })
-        }else{
-          setUserState((prevState)=>{
-            return{...prevState,
-            user:info,
-            table:table,
-          }
-          })
+      if(isFirstTime){
+        setUserState((prevState)=>{
+          return{...prevState,
+          user:info,
+          table:table,
+          club:(Object.keys(info.clubs))[0]
         }
+        })
+      }else{
+        setUserState((prevState)=>{
+          return{...prevState,
+          user:info,
+          table:table,
+          }
+        })
+      }
         
       
       setUserState((prevState)=>{
@@ -97,8 +104,6 @@ function UserProfile(props){
     }
 
     function balanceMessage(){
-      console.log(userState.user.clubs)
-      console.log(userState.club)
         const balance = userState.user.clubs[userState.club].balance
 
         if (balance < 0){
@@ -111,11 +116,15 @@ function UserProfile(props){
     }
 
     function changeClub(event){
-      
+      //update table and selector
+        const table = getTableElement(false,userState.user,event.target.value)
         setUserState((prevState)=>{
           return{...prevState,
-          club:event.target.value}
+          club:event.target.value,
+          table:table}
         })
+        console.log("club changed to "+event.target.value)
+        
     }
     
     function closeUser(){
@@ -130,8 +139,9 @@ function UserProfile(props){
                 <Typography variant = "h2">{balanceMessage()}</Typography>
                 <Typography variant = "p">For</Typography>
                 <FormControl>
-                    <InputLabel id="club">club</InputLabel>
+                    <InputLabel  id="club">club</InputLabel>
                     <Select
+                       disabled = {isExecView} 
                         labelId="club"
                         id="clubSelect"
                         value={userState.club}

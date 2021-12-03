@@ -16,11 +16,32 @@ function printResponse(res){
     console.log(body)
   })
 }
+async function getResponse(res){
+  let response
+  await res.json()
+  .then((body)=>{
+    response = body
+  })
+  return response
+}
 // function getBody(res){
 //   res.json((body)=>{
 //     return body
 //   })
 // }
+function createAllClubs(user){
+   // create combined club data,
+
+  let trans = []
+  let total = 0
+  for( let club in user.clubs){
+    total += user.clubs[club].balance
+    trans = trans.concat(user.clubs[club].transactions)
+    console.log(total)
+  }
+  return user
+  
+}
 export const RequestService = {
     template: ()=>{
       //The method...
@@ -39,12 +60,27 @@ export const RequestService = {
         //     console.log("request failed")
         //   })
     },
+ 
     userRequest:async (ccid,clubid = null)=>{
         //Gets user transactions for the specified club
         //or all clubs if 'clubs' is left empty
+        //name is also returned
+        //In the form:
+          // { name: ,
+          //     clubs: {
+          //         clubName1:{
+          //             transactions:{
+          //                 date: ,
+          //                 amount:
+          //             },
+          //             balance:
+          //         }
+          //     } }
+  
 
         console.log("getting transactions for "+ ccid +"with club id "+clubid)
 
+        let transactions 
         let headers
         if(clubid == null){
           //get all transactions
@@ -52,55 +88,27 @@ export const RequestService = {
         }else{
           //specific club
           headers = {ccid:ccid, clubid:clubid}
-
-          fetch(path + "/transactions",{headers:headers})
-          .then((res)=>{
-            console.log("Server request Success.")
-            printResponse(res)
-          }).catch(()=>{
-            console.log("Server request failed.")
-          })
-
+        }
+        console.log(headers)
+        let rawTransactions
+        await fetch(path + "/transactions",{headers:headers})
+        .then((res)=>{
+          console.log("Server request Success.")
+          rawTransactions = res
+        }).catch(()=>{
+          console.log("Server request failed.")
+          //TODO throw an error here
+        })
+       
+        transactions = (await getResponse(rawTransactions)).body
+        if (Object.keys(transactions.clubs).length === 0){
+          //no transaction history
+          transactions.clubs = {"No Transactions":{transactions:[{date:"",Amount:""}],balance:0}}
         }
         
-        fetch(path + "/clubBalance")
-          .then((res)=>{
-            console.log("Server request Success.")
-            printResponse(res)
-          }).catch(()=>{
-            console.log("Server request failed.")
-          })
+        console.log( transactions)
 
-        // create all club data
-        // function createAllClubs(){
-        //   console.log("Recomputed totals")
-        //   let trans = []
-        //   let total = 0
-        //   for( let club in user.clubs){
-        //     total += user.clubs[club].balance
-        //     trans = trans.concat(user.clubs[club].transactions)
-        //     console.log(total)
-        //   }
-        //   setUser((prev)=>{
-        //     return{
-        //       ...prev,
-        //       clubs:
-        //       { ...prev.clubs, "All Clubs":{
-        //         transactions: trans,
-        //         balance: total
-        //         }
-        //       }
-        //     }
-        //   })
-             
-        
-      
-        //TEST RETURN
-        await wait(1000)
-        return {
-            name:'Bobby',
-            clubs: {"CompE":{transactions:[{date:"Today",amount:20}],balance:20}}
-        }
+        return transactions
     },
     //AddTransaction
     newTransaction: async (ccid, amount, token)=>{

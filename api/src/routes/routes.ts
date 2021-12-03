@@ -3,6 +3,7 @@ import * as queries from '../controllers/db/dbQueries';
 
 import type * as schema from 'zapatos/schema';
 import middleWare from '../controllers/controllers';
+import { transaction } from 'zapatos/db';
 
 export const router = express.Router();
 
@@ -65,59 +66,123 @@ router.get('/user', async (req: Request, res: Response) => {
     });
 });
 
+async function buildUserTransactions(Transactions:schema.transactions.JSONSelectable[],ccid:any){
+        //Organize transactions by club and compute totals
+        //This is kinda un optimized - could be fixed with a 
+        //query to find all club ids that a user has spent money in
+        let clubs:any = {}
+        for(let transaction of Transactions){
+            if(clubs.hasOwnProperty(transaction.clubid)){  
+                //Club has been added
+            }else{
+                //Club has not been added so add it
+                clubs[transaction.clubid] = {transactions:[], balance:0};
+            }
+            //Add transaction and add to club balance
+            clubs[transaction.clubid].transactions.push({
+                date:transaction.created_at.slice(0,10),
+                amount:transaction.amount});
+            clubs[transaction.clubid].balance = clubs[transaction.clubid].balance + transaction.amount;
+
+        }
+        //replace clubID with club name
+        for(let clubid of Object.keys(clubs) ){
+            let clubData = await queries.getClubs({clubid:parseInt(clubid)})
+            clubs[clubData[0].clubname] = clubs[clubid]
+            delete clubs[clubid]
+        }
+        
+        let name= (await queries.getUser({'ccid':String(ccid)}))[0].full_name
+
+        return {name:name,clubs:clubs}
+}
+function clean(Transactions:schema.transactions.JSONSelectable[]){
+    //removes extra attributes in transactions and computes the net balance,
+    //returning a new object with all data
+    let club:any = {transactions: [], balance:0};
+    for(let transaction of Transactions){        
+        //Add transaction and add to club balance
+        club.transactions.push({
+            date:transaction.created_at.slice(0,10),
+            amount:transaction.amount});
+        club.balance = club.balance + transaction.amount;
+    }
+    return club;
+}
 
 router.get('/transactions', async (req: Request, res: Response) => {
     // Return transactions for one or all clubs for user packaged as: 
-        // {  name: ,
-        //     clubs: {
-        //         clubName1:{
-        //             transactions:{
-        //                 date: ,
-        //                 amount: 
-        //             },
-        //             balance: 
-        //         }
-        //     } }
+    // {  name: ,
+    //     clubs: {
+    //         clubName1:{
+    //             transactions:{
+    //                 date: ,
+    //                 amount:
+    //             },
+    //             balance:
+    //         }
+    //     } }
+    //or all transactions for all users or all transactions for one club
 
-
-
-    const params = {ccid:req.get('ccid'),clubid:req.get('clubid')}
-
+    let params:any = {};
+    if (req.get('ccid')){
+        params['ccid'] = req.get('ccid')
+    }
+    if (req.get('clubid')){
+        params['clubid'] = req.get('clubid')
+    }
+    console.log(params)
+    
     let Transactions: schema.transactions.JSONSelectable[] = [];
-    let clubs: any;
+    let transactions:any = {};
     if (params.hasOwnProperty('clubid') && params.hasOwnProperty('ccid')) {
          // Return transactions for one club for user
 
+        const clubid:number = parseInt(params.clubid)
+        
         const queryParams = {
-            clubid: parseInt(String(params.clubid)),
+            clubid: clubid,
             ccid: String(params.ccid)
         };
+        
         Transactions = await queries.transactionsUser(queryParams);
+        //Build data structure
+        await buildUserTransactions(Transactions,params.ccid).then((res)=>{
+            transactions = res
+        })
+        console.log("getting transactions for "+ params.ccid +"with club id "+clubid)
+        console.log(Transactions)
+
     }
     else if (params.hasOwnProperty('clubid')) {
         const queryParams = {
             clubid: parseInt(String(params.clubid)),
             ccid: 'any'
         };
-        Transactions = await queries.transactionsUser(queryParams);
+        transactions = await queries.transactionsUser(queryParams);
     }
     else if (params.hasOwnProperty('ccid')) {
         // Return all transactions for all clubs for user
-        
         const queryParams = {
             ccid: String(params.ccid),
             clubid: 0
         };
+        
         Transactions = await queries.transactionsUser(queryParams);
+        console.log(Transactions)
+        await buildUserTransactions(Transactions,params.ccid).then((res)=>{
+            transactions = res
+        })
+        transactions.clubs['All Clubs'] = clean(Transactions);
+
     }
     else {
-        Transactions = await queries.transactionsAll();
+        transactions = await queries.transactionsAll();
     }
 
-    let name = queries.getUser({'ccid':String(params.ccid)})
-    
+    console.log(transactions);
     res.status(200).json({
-        body: {name:(params.hasOwnProperty('ccid')?name:"All"),clubs:clubs}
+        body: transactions
     });
 });
 
@@ -213,12 +278,12 @@ router.get('/checkCcid', async (req:Request,res:Response) =>{
     });
 })
 
-router.get('/getClubs', async (req: Request, res: Response) => {
-    const clubs = await queries.getClubs();
-    res.status(200).json({
-        body: clubs
-    });
-})
+// router.get('/getClubs', async (req: Request, res: Response) => {
+//     const clubs = await queries.getClubs({clubid:req.get('clubid')});
+//     res.status(200).json({
+//         body: clubs
+//     });
+// })
 
 // POST REQUESTS
 router.post('/transaction', async (req: Request, res: Response) => {

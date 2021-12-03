@@ -17,10 +17,10 @@ const createTransaction = async (transactionParam: { ccid: string, clubid: numbe
 const transactionsUser = async (transaction: { clubid: number, ccid: string}) => {
     const where: schema.transactions.Whereable = {};
     if (transaction.clubid !== 0) {
-        where.ccid = transaction.ccid;
+        where.clubid = transaction.clubid;
     }
     if (transaction.ccid !== 'any') {
-        where.clubid = transaction.clubid;
+        where.ccid = transaction.ccid;
     }
     return db.select('transactions', where).run(connection);
 };
@@ -34,8 +34,9 @@ const transactionsAll = async () => {
     return db.select('transactions', where).run(connection);
 };
 
-const getClubs = async () => {
+const getClubs = async (queryParams: { clubid: number }) => {
     const where: schema.clubs.Whereable = {};
+    where.clubid = queryParams.clubid
     return db.select('clubs', where).run(connection);
 };
 
