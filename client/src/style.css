@@ -17,36 +17,28 @@
 /*-------------------------------------------------------*/
 
 /*----------------------------- Buttons -------------------*/
-.btn {
+/* basic cyan button */
+.btn { 
     border: 0.5px solid;
     background-color: transparent;
     color: black;
     padding: 1px 10px 1px 10px;   
-    font-size: 10px;
     font-weight: 700;
     cursor: pointer;
-    margin-top: 20px;   /*todo: change to flex boxes*/
-    margin-bottom: 10px;
+    overflow: hidden;
+}
+.oval{
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
     border-bottom-left-radius: 30px;
     border-bottom-right-radius: 30px;
 }
-
-.redBtn{
-    color: #ca0004;
-    border-color: grey;
-}
-.redBtn:hover{
-    color: white;
-    border-color: white;
-    background-color: #ca0004;
-}
-
 .cyanBtn{
     color:#3ee4cf;
     background-color: transparent;
     border-color: grey;
+    height: 19px;
+    font-size: 10px;
 }
 
 .cyanBtn:hover{
@@ -55,14 +47,15 @@
     background-color:  #78ebdc;  
 }
 
-.whiteBtn{  
-    color: white;
+.whiteBtn{
     border-color: grey;
+    background-color: transparent;  
+    color: white;  
 }
 .whiteBtn:hover{
-    color: black;
     border-color: grey;
-    background-color: white;
+    color: black;
+    background-color:  white;  
 }
 /*------------------------------------------------*/
 

@@ -89,8 +89,8 @@ function ClubDashboard(props){
         
         <Stack>
             <Stack direction = 'row' justifyContent="space-evenly">
-              <Button onClick = {props.logout} >Logout</Button>
-              <Button onClick = {(e)=>{selectUser(props.exec)}} >My Profile</Button>
+              <Button className="btn whiteBtn" onClick = {props.logout} >Logout</Button>
+              <Button className="btn whiteBtn" onClick = {(e)=>{selectUser(props.exec)}} >My Profile</Button>
             </Stack>
             
             <Typography variant = "h1">{clubName}</Typography>
@@ -100,7 +100,7 @@ function ClubDashboard(props){
                     <InputLabel htmlFor = "ccid">ccid or name</InputLabel>
                     <Input id = "ccid" value = {ccid} onChange= {(e) => {setCcid(e.target.value); searchUsers(e.target.value)}} />
                 </FormControl>
-                <Button className="btn cyanBtn" onClick = {(e)=>{setShowAddUser(true)}}> Add Customer</Button>
+                <Button className="btn cyanBtn oval" onClick = {(e)=>{setShowAddUser(true)}}> Add Customer</Button>
             </Stack>
 
             {showAddUser && <AddUser setShowAddUser ={setShowAddUser} refresh = {refresh} />}

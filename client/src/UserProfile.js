@@ -2,7 +2,7 @@ import AddTransaction from './AddTransaction'
 import {useState,useEffect} from 'react'
 import {Button, FormControl, MenuItem, Input, Select, InputLabel, Container, FormHelperText,Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography} from '@mui/material'
 import {RequestService} from "./Services/RequestService"
-
+import "./style.css"
 
 function UserProfile(props){
     // Show user information and allows transaction adding if the user is logged in

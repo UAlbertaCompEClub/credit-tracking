@@ -1,6 +1,8 @@
 import {Button, FormControl, InputAdornment, Input,Alert, InputLabel, FormHelperText,Stack,Typography} from '@mui/material'
 import {useState} from 'react'
 import {RequestService} from './Services/RequestService'
+import "./style.css"
+
 function AddTransaction(props){
     const [amount,setAmount] = useState(0)
 

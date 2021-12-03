@@ -1,6 +1,7 @@
 import {Button, FormControl, Input, InputLabel, FormHelperText,Stack, Typography, Alert} from '@mui/material/'
 import {useState} from 'react'
 import {RequestService} from './Services/RequestService'
+import "./style.css"
 
 let path = process.env.REACT_APP_SERVER
 
@@ -124,7 +125,7 @@ function Auth(props){
             }
 
             <Stack direction = 'row' justifyContent="space-evenly">
-                <Button type = "submit">Submit</Button>
+                <Button className ="btn whiteBtn" type = "submit">Submit</Button>
                 {isExec && <Button onClick = {backHandler}>Back</Button>}
             </Stack>
         </Stack>

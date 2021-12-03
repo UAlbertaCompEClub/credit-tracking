@@ -47,6 +47,8 @@ export function AddUser(props) {
             <Typography variant = "p" class = "whiteText">Add Customer</Typography>
              {/* show alert if showAlert is true */}
              {showAlert && <Alert severity = {alertType}> {alertText}!</Alert>} 
+
+             {/* Todo: flex box this area */}
             <FormControl>
               {/*ccid */}
               <InputLabel htmlFor = "ccid" class = "whiteText">ccid</InputLabel>
@@ -59,8 +61,8 @@ export function AddUser(props) {
             </FormControl>
 
             <Stack direction = 'row' justifyContent="space-evenly">
-                <Button className = "btn cyanBtn" type = "submit">Add</Button>
-                <Button className = "btn cyanBtn" onClick = {(e)=>{props.setShowAddUser(false)}}>Close</Button>
+                <Button className = "btn cyanBtn oval" type = "submit">Add</Button>
+                <Button className = "btn cyanBtn oval" onClick = {(e)=>{props.setShowAddUser(false)}}>Close</Button>
             </Stack>
             
         </Stack>
