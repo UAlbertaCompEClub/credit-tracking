@@ -25,6 +25,10 @@ const transactionsUser = async (transaction: { clubid: number, ccid: string}) =>
     return db.select('transactions', where).run(connection);
 };
 
+
+
+
+
 const transactionsAll = async () => {
     const where: schema.transactions.Whereable = {};
     return db.select('transactions', where).run(connection);
@@ -35,7 +39,7 @@ const clubBalance = async (queryParams: { clubname: string }) => {
     if (queryParams.clubname !== 'any') {
         where.clubname = queryParams.clubname;
     }
-    // console.log(await db.select('transactions', where).run(connection));
+    
     return db.select('clubs', where).run(connection);
 };
 
@@ -68,14 +72,14 @@ const getUsers = async (userParam: { clubid: number }) => {
     `.run(connection);
     return query;
 };
-const getUsersRobust = async (userParam: { club: string }) => {
+const getUsersRobust = async (userParam: { clubid: string }) => {
     // console.log("club = " + userParam.club)
     const query = db.sql<schema.users.SQL | schema.transactions.SQL, schema.users.Selectable[]>`
         SELECT U.ccid, U.full_name, U.balance
         FROM ${"users"} U, ${"transactions"} T
-        WHERE U.ccid=T.ccid AND T.club=${db.param(userParam.club)}
+        WHERE U.ccid=T.ccid AND T.clubid=${db.param(userParam.clubid)}
         GROUP BY U.ccid, U.full_name
-        HAVING COUNT(T.club)>0
+        HAVING COUNT(T.clubid)>0
     `.run(connection);
     return query;
 };

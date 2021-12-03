@@ -29,38 +29,49 @@ export const RequestService = {
     },
     //App.js Requests
     testRequest: ()=>{
-        fetch(path + "/test-json",{method:"POST",body:{
-            name: 'test-name',
-            attribute1: 'test-att'
-          }})
-          .then((res)=>{
-            console.log(res)
-          }).catch(()=>{
-            console.log("request failed")
-          })
+        // fetch(path + "/test-json",{method:"POST",body:{
+        //     name: 'test-name',
+        //     attribute1: 'test-att'
+        //   }})
+        //   .then((res)=>{
+        //     console.log(res)
+        //   }).catch(()=>{
+        //     console.log("request failed")
+        //   })
     },
-    userRequest:async (ccid,club = null)=>{
+    userRequest:async (ccid,clubid = null)=>{
         //Gets user transactions for the specified club
         //or all clubs if 'clubs' is left empty
 
-        // let headers
-        // if(club){
-        //   //get all transactions
-        //   headers = {ccid:ccid}
-        // }else{
-        //   //specific club
-        //   headers = {ccid:ccid, club:club}
-        // }
+        console.log("getting transactions for "+ ccid +"with club id "+clubid)
 
-        // fetch(path + "/transactions")
-        // .then((res)=>{
-        //   console.log("Server request Success.")
-        //   printResponse(res)
-        // }).catch(()=>{
-        //   console.log("Server request failed.")
-        // })
+        let headers
+        if(clubid == null){
+          //get all transactions
+          headers = {ccid:ccid}
+        }else{
+          //specific club
+          headers = {ccid:ccid, clubid:clubid}
 
-        //create all club data
+          fetch(path + "/transactions",{headers:headers})
+          .then((res)=>{
+            console.log("Server request Success.")
+            printResponse(res)
+          }).catch(()=>{
+            console.log("Server request failed.")
+          })
+
+        }
+        
+        fetch(path + "/clubBalance")
+          .then((res)=>{
+            console.log("Server request Success.")
+            printResponse(res)
+          }).catch(()=>{
+            console.log("Server request failed.")
+          })
+
+        // create all club data
         // function createAllClubs(){
         //   console.log("Recomputed totals")
         //   let trans = []
@@ -82,7 +93,7 @@ export const RequestService = {
         //     }
         //   })
              
-        // }
+        
       
         //TEST RETURN
         await wait(1000)
@@ -116,12 +127,12 @@ export const RequestService = {
         return (amount)
     },
     //ClubDashboard.js
-    clubRequest:async (club,token)=>{
+    clubRequest:async (clubid,token)=>{
 
       let resp;
       let body;
 
-      await fetch(path+"/club", {method:"get", headers:{'club':club,'token':token}})
+      await fetch(path+"/club", {method:"get", headers:{'clubid':clubid,'token':token}})
       .then((res)=>{ 
         console.log("Club request success.")
         resp = res

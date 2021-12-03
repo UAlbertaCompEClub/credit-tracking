@@ -67,36 +67,57 @@ router.get('/user', async (req: Request, res: Response) => {
 
 
 router.get('/transactions', async (req: Request, res: Response) => {
-    const params = res.json(req.body);
+    // Return transactions for one or all clubs for user packaged as: 
+        // {  name: ,
+        //     clubs: {
+        //         clubName1:{
+        //             transactions:{
+        //                 date: ,
+        //                 amount: 
+        //             },
+        //             balance: 
+        //         }
+        //     } }
 
-    const Transactions: schema.transactions.JSONSelectable[] = [];
-    if (params.hasOwnProperty('club') && params.hasOwnProperty('ccid')) {
+
+
+    const params = {ccid:req.get('ccid'),clubid:req.get('clubid')}
+
+    let Transactions: schema.transactions.JSONSelectable[] = [];
+    let clubs: any;
+    if (params.hasOwnProperty('clubid') && params.hasOwnProperty('ccid')) {
+         // Return transactions for one club for user
+
         const queryParams = {
-            clubid: parseInt(params.get("clubid")),
-            ccid: params.get("ccid")
+            clubid: parseInt(String(params.clubid)),
+            ccid: String(params.ccid)
         };
-        const Transactions = await queries.transactionsUser(queryParams);
+        Transactions = await queries.transactionsUser(queryParams);
     }
     else if (params.hasOwnProperty('clubid')) {
         const queryParams = {
-            clubid: parseInt(params.get("clubid")),
+            clubid: parseInt(String(params.clubid)),
             ccid: 'any'
         };
-        const Transactions = await queries.transactionsUser(queryParams);
+        Transactions = await queries.transactionsUser(queryParams);
     }
     else if (params.hasOwnProperty('ccid')) {
+        // Return all transactions for all clubs for user
+        
         const queryParams = {
-            ccid: params.get("ccid"),
+            ccid: String(params.ccid),
             clubid: 0
         };
-        const Transactions = await queries.transactionsUser(queryParams);
+        Transactions = await queries.transactionsUser(queryParams);
     }
     else {
-        const Transactions = await queries.transactionsAll();
+        Transactions = await queries.transactionsAll();
     }
 
+    let name = queries.getUser({'ccid':String(params.ccid)})
+    
     res.status(200).json({
-        body: Transactions
+        body: {name:(params.hasOwnProperty('ccid')?name:"All"),clubs:clubs}
     });
 });
 
@@ -128,10 +149,10 @@ router.get('/club', async (req: Request, res: Response) => {
     //Headers should also contain exec token
 
     
-    const club:any = req.get('club');
-    console.log("club in router.get = " + club)
+    const clubid:any = req.get('clubid');
+    console.log("club in router.get = " + clubid)
 
-    const users:any = await queries.getUsersRobust({club:club});
+    const users:any = await queries.getUsersRobust({clubid:clubid});
     console.log(users);
     let usersArray:any = []
 
@@ -139,7 +160,7 @@ router.get('/club', async (req: Request, res: Response) => {
     for (let user in users){
         const userObj:any = users[user];
         let transactions:string = "";
-        const allTrans:any = await queries.transactionsUser({club:club,ccid:userObj.ccid});
+        const allTrans:any = await queries.transactionsUser({clubid:clubid,ccid:userObj.ccid});
         
         //Get transaction priveiw string using first 3 transactions
         let counter:number = 0;
@@ -170,6 +191,8 @@ router.get('/club', async (req: Request, res: Response) => {
         body: usersArray
     });
 });
+
+
 
 router.get ('/checkCcid', (req:Request,res:Response) =>{
     res.send()

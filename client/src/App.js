@@ -13,8 +13,8 @@ function App() {
 
   const [page,setPage] = useState("UserProfile")
   const [ isLoggedIn,setisLoggedIn] = useState(false) 
-  const [ExecInfo, setExecInfo] = useState({ccid:'abc1', token : 'token', club:"CompE"})
-  const [customerCcid,setCustomerCcid] = useState(null)
+  const [ExecInfo, setExecInfo] = useState({ccid:'abc1', token : 'token', club:"CompE",clubid:1})
+  const [customerCcid,setCustomerCcid] = useState("cstm")
   const [isExec,setIsExec] = useState(true) //TODO Change to false for production
   // RequestService.testRequest()
 
@@ -49,10 +49,10 @@ function App() {
                customerCcid = {setCustomerCcid}
                setExecInfo = {setExec}/>}
             {page === "ClubDashboard" && <ClubDashboard theme = {mainTheme}
-              club = {ExecInfo.club} token = {ExecInfo.token} exec = {ExecInfo.ccid} 
+             exec = {ExecInfo}  
               openUser = {openUser} logout = {logout} />}
-            {page === "UserProfile" && <UserProfile  token = {ExecInfo.token}
-              club = {ExecInfo.club} user = {customerCcid} isExec = {isExec}
+            {page === "UserProfile" && <UserProfile  
+              exec = {ExecInfo}  isExec = {isExec} customerCcid = {customerCcid}
               setPage = {setPage}/>}
           </Stack>
         </Container>

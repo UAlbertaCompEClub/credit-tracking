@@ -32,7 +32,7 @@ function UserProfile(props){
       })
 
       let info
-      await RequestService.userRequest(props.ccid)
+      await RequestService.userRequest(props.customerCcid,props.exec.clubid)
       .then((res)=>{
         info = res
       })
@@ -95,11 +95,6 @@ function UserProfile(props){
         isLoading:false}
       })
     }
-    function refresh(){
-      setUser(RequestService.userRequest(props.ccid,props.club))
-    }
-
-    
 
     function balanceMessage(){
       console.log(userState.user.clubs)

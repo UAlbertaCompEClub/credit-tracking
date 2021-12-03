@@ -5,7 +5,7 @@ import {AddUser} from './AddUser'
 import {AddExec} from './AddExec'
 
 function ClubDashboard(props){
-    const [clubName, setClubName] = useState(props.club)
+    const [clubName, setClubName] = useState(props.exec.club)
     const [ccid, setCcid] = useState("")
     
     const [showAddUser,setShowAddUser] = useState(false)
@@ -49,7 +49,7 @@ function ClubDashboard(props){
     }
     async function firstCall(){ 
       // First API call
-      await RequestService.clubRequest(clubName)
+      await RequestService.clubRequest(props.exec.clubid)
       .then((res)=>{
         console.log(res)
         //Set initial users and shown users
@@ -73,7 +73,7 @@ function ClubDashboard(props){
         return{...prevState,isLoading:true}
       })
 
-      RequestService.clubRequest(props.club,props.token)
+      RequestService.clubRequest(props.clubid,props.token)
       .then((res)=>{
         setUsers({
           allUsers:res,
@@ -169,7 +169,7 @@ function ClubDashboard(props){
         <Stack>
             <Stack direction = 'row' justifyContent="space-evenly">
               <Button onClick = {props.logout} >Logout</Button>
-              <Button onClick = {(e)=>{selectUser(props.exec)}} >My Profile</Button>
+              <Button onClick = {(e)=>{selectUser(props.exec.ccid)}} >My Profile</Button>
             </Stack>
             
             <Typography variant = "h1">{clubName}</Typography>
