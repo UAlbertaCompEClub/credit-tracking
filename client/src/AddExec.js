@@ -1,4 +1,4 @@
-import {Button, FormControl,Alert,LinearProgress, Input, InputLabel,Stack,Typography} from '@mui/material'
+import {Button, FormControl,Alert, Input, InputLabel,Stack,Typography} from '@mui/material'
 import {useState} from 'react'
 import {RequestService} from "./Services/RequestService"
 
@@ -33,7 +33,7 @@ export function AddExec(props) {
             setAlertType("error")
             setAlertText("Exec already exists")
         }else{
-            const status = RequestService.addExec(ccid,name)
+            const status = RequestService.addExec(ccid,name,password,props.clubid)
             if(status === 0){
                 //req succeded
                 setShowAlert(true);

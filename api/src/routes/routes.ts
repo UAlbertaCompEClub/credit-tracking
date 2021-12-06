@@ -295,14 +295,13 @@ router.get('/checkCcid', async (req:Request,res:Response) =>{
 
 // POST REQUESTS
 router.post('/transaction', async (req: Request, res: Response) => {
-    const params = res.json(req.body);
 
     const Transactions: schema.transactions.JSONSelectable[] = [];
-    if (params.hasOwnProperty('ccid')) {
+    if (req.get('ccid')) {
         const queryParams = {
-            ccid: params.get('ccid'),
-            clubid: parseInt(params.get('clubid')),
-            amount: parseInt(params.get('amount'))
+            ccid:String(req.get('ccid')),
+            clubid: parseInt(String(req.get('clubid'))),
+            amount: parseInt(String(req.get('amount')))
         };
         await queries.createTransaction(queryParams);
     }

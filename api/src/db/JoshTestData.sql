@@ -1,7 +1,8 @@
 INSERT INTO users (ccid,isExec,full_name,foip,balance)
 VALUES ('cstm',false, 'Customer C',true,20),
-('CompEEXEC',true,'Fiaz',true,10),
-('ElecEEXEC',true,'Barry',true,10);
+('CompEEXEC',true,'larry',true,10),
+('ElecEEXEC',true,'Barry',true,10)
+('fiaz',true,'M.Fiaz',true,20);
 
 INSERT INTO execs (ccid, password,clubid)
 VALUES ('CompEEXEC','execPassword',1),

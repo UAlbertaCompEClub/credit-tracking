@@ -1,12 +1,8 @@
 let path = process.env.REACT_APP_SERVER
 
-function createData(date, amount) {
-  return { date, amount };
-}
+//Helper Functions
 function wait(time) {
   return new Promise(function(resolve, reject) {
-
-      // Setting 2000 ms time
       setTimeout(resolve, time);
   })
 }
@@ -24,12 +20,9 @@ async function getResponse(res){
   })
   return response
 }
-// function getBody(res){
-//   res.json((body)=>{
-//     return body
-//   })
-// }
 
+
+//Exported functions
 export const RequestService = {
     template: ()=>{
       //The method...
@@ -100,26 +93,23 @@ export const RequestService = {
     //AddTransaction
     newTransaction: async (ccid, amount, token)=>{
         //add transaction. Return balance for succ, null for fail
-        // fetch(path+"/transaction",
-        //         {method:"post",body:{
-        //             ccid:ccid,amount:amount,token:token
-        //         }})
-        // .then((res)=>{
-        //     let response
-        //     res.json().then((body)=>[
-        //         response = body
-        //     ])
-        //     if(body){ //TODO place condition
-        //         return body
-        //     }else{
-        //         return null
-        //     }
-        // }).catch(()=>{
-        //     return null
-        // })
+        let balance
+        fetch(path+"/transaction",
+                {method:"post",body:{
+                    ccid:ccid,
+                    amount:amount,
+                    token:window.localStorage.getItem('execToken')
+                }})
+        .then((res)=>{
+          balance = res
+        }).catch(()=>{
+            return null
+        })
+
+        balance = await getResponse(balance);
 
         //Test return
-        return (amount)
+        return (balance)
     },
     //ClubDashboard.js
     clubRequest:async (clubid,token)=>{
@@ -152,6 +142,7 @@ export const RequestService = {
       // .then((res)=>{
       //   status = res
       //   console.log("Ccid Check Success")
+      //   window.localStorage.setItem('customerCcid',ccid)
       // }).catch(()=>{
       //   console.log("Ccid Check Failed")
       // })
@@ -165,6 +156,8 @@ export const RequestService = {
     execLogin: async (ccid,pw)=>{
       //The method...
 
+      //Manual wait time to show we received their input
+      await wait(1000)
 
       let response
       await fetch(path+"/login", {method:'POST',headers:{ccid:ccid,password:pw}})
@@ -175,20 +168,25 @@ export const RequestService = {
         console.log("Ccid Check Failed")
       })
       let status = await getResponse(response)
-      console.log(status.ccid)
       if(status.ccid !== -1){
-        return {
+        const execData =  {
           ccid:status.ccid,
           club:status.club,
-          clubid:status.club,
+          clubid:status.clubid,
           token:status.token}
-      }else{
-        return null
-      }
-      
+        console.log(execData)
 
-      if(ccid =='exec' && pw == 'password'){
-        return {ccid:ccid,token:"loggedInToken", club:"Computer Engineering"}
+        //store data locally
+        const storage = window.localStorage
+
+        storage.clear() //Logout any customer logged in
+        storage.setItem('execCcid',execData.ccid)
+        storage.setItem('execClub',execData.club)
+        storage.setItem('execClubid',execData.clubid)
+        storage.setItem('execToken',execData.token)
+        storage.setItem('execExpiry', Date.now()+2592000)//30 days expiry
+        
+        return execData
       }else{
         return null
       }
@@ -200,7 +198,7 @@ export const RequestService = {
       //TEST RETURN
       return 0
     },
-    addExec: async (ccid,name,password)=>{
+    addExec: async (ccid,name,password,clubid)=>{
       //The method returns 0 if succ 1 if fail
 
       //TEST RETURN

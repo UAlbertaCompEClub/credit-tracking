@@ -2,8 +2,6 @@ import {Button, FormControl, Input, LinearProgress, InputLabel, FormHelperText,S
 import {useState} from 'react'
 import {RequestService} from './Services/RequestService'
 
-let path = process.env.REACT_APP_SERVER
-
 
 function Auth(props){
 
@@ -39,6 +37,7 @@ function Auth(props){
     async function Execlogin(){
         //Attemps login
         let response 
+        setIsLoading(true)
         await RequestService.execLogin(ccid,password).then((res)=>{
             response = res;
         })
@@ -47,21 +46,24 @@ function Auth(props){
             setShowAlert(true);
             setAlertType("success")
             setAlertText("Welcome! Logging in...")
-
-            //TODO save token to local storage
-
-            props.setPage('ClubDashboard')
+            props.autoLogout()
+            setTimeout(()=>{
+                props.setPage('ClubDashboard')
+            },300)
         }else{
             setShowAlert(true);
             setAlertType("error")
             setAlertText("Your password is incorrect")
         }
+        setIsLoading(false)
     }
 
     async function checkUser(){
         // Checks if a user (using ccid only) is an exec or not and whether they have any records if they are a customer
         //if they are valid customers, log in
         //server call returns 1 for EXEC, 0 for customer, -1 if they are not in the system.
+
+        setIsLoading(true)
 
         //set this value from the server
         let status = await RequestService.ccidCheckReq(ccid)
@@ -89,6 +91,8 @@ function Auth(props){
             setAlertType("error")
             setAlertText("You are not registered or the ccid is incorrect. Ask an executive to register")
         }
+
+        setIsLoading(false)
     }
 
     function backHandler(){
@@ -116,10 +120,7 @@ function Auth(props){
                 <InputLabel htmlFor = "ccid">ccid</InputLabel>
                 <Input disabled = {isLoading} id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
                 <FormHelperText id = "ccidHelperText">For customers and Execs</FormHelperText>
-            </FormControl>
-            {isLoading && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
-              <LinearProgress color="inherit" />
-            </Stack>}
+            
 
             
             {isExec && //only show if ccid is exec
@@ -130,6 +131,10 @@ function Auth(props){
                 <FormHelperText id = "passwordHelperText">Please enter your Exec password</FormHelperText>
             </FormControl>
             }
+            </FormControl>
+            {isLoading && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
+              <LinearProgress color="inherit" />
+            </Stack>}
 
             <Stack direction = 'row' justifyContent="space-evenly">
                 <Button  disabled = {isLoading} type = "submit">Submit</Button>

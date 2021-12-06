@@ -14,7 +14,6 @@ function UserProfile(props){
       club:"",
       table:""
     })
-    const [isExecView, setIsExecView] = useState(props.isExec)
 
     //run on startup only
     useEffect(()=>{
@@ -65,7 +64,7 @@ function UserProfile(props){
       })
 
       let info
-      if(isExecView){
+      if(props.isExec){
         await RequestService.userRequest(props.customerCcid,props.exec.clubid)
         .then((res)=>{
           info = res
@@ -133,7 +132,7 @@ function UserProfile(props){
 
     return (
         <Stack >
-            { isExecView && <Button onClick = {closeUser} >Close</Button>}
+            { props.isExec && <Button onClick = {closeUser} >Close</Button>}
             {!userState.isLoading && <Stack>
                 <Typography variant = "h1">{userState.user.name}</Typography>
                 <Typography variant = "h2">{balanceMessage()}</Typography>
@@ -141,7 +140,7 @@ function UserProfile(props){
                 <FormControl>
                     <InputLabel  id="club">club</InputLabel>
                     <Select
-                       disabled = {isExecView} 
+                       disabled = {props.isExec} 
                         labelId="club"
                         id="clubSelect"
                         value={userState.club}
@@ -158,7 +157,7 @@ function UserProfile(props){
             {!userState.isLoading && userState.table}
 
 
-            {isExecView && <AddTransaction refresh = {getUserInfo}></AddTransaction>}
+            {props.isExec && <AddTransaction refresh = {getUserInfo}></AddTransaction>}
             {/* Only show the add transaction if current user is an exec */}
         </Stack>
         

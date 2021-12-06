@@ -4,6 +4,7 @@ import * as clubQueries from '../../controllers/db/dbQueries'
 import * as auth from '../../auth/auth';
 import jwt from 'jsonwebtoken';
 import assert from 'assert';
+import { Console } from 'console';
 
 require('dotenv').config({ path: 'secret-key.env' });
 
@@ -15,6 +16,7 @@ router.post('/login', async (req: Request, res: Response) => {
     const execParams = {
         ccid: String(req.get("ccid")),
     };
+    console.log(process.env)
     const exec = await queries.returnExec(execParams);
     console.log(exec)
     if (exec.length !==0) {
@@ -27,7 +29,7 @@ router.post('/login', async (req: Request, res: Response) => {
         assert(key !== undefined && key !== null);
     
         const passwordSame = await auth.checkPass(password, hashedPass);
-       
+  
         if (passwordSame === true) {
             res.status(200).json({
                 ccid: exec[0].ccid,
@@ -38,13 +40,13 @@ router.post('/login', async (req: Request, res: Response) => {
         }   
         else {
             res.status(200).json({
-                body: -1
+                ccid: -1
             });
         }
     }
     else {
         res.status(200).json({
-            body: -1
+            ccid: -1
         });
     }
 });
