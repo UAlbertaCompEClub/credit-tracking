@@ -50,7 +50,7 @@ function UserProfile(props){
     }
     let keyHelper=0
     const table = <TableContainer component={Paper}>
-      <Table  aria-label="simple table">
+      <Table  aria-label="simple table" className = "thead tbody">
 
           <TableHead>
             <TableRow>
@@ -95,7 +95,7 @@ function UserProfile(props){
 
     return (
         <Stack >
-            { isExecView && <Button onClick = {closeUser} >Close</Button>}
+            { isExecView && <Button className ="btn whiteBtn" onClick = {closeUser} >Close</Button>}
             <Typography variant = "h1">{user.name}</Typography>
             <Typography variant = "h2">{balanceMessage()}</Typography>
             <Typography variant = "p">For</Typography>

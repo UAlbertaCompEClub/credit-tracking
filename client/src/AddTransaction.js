@@ -47,9 +47,9 @@ function AddTransaction(props){
         <Stack>
             <Typography variant = "h2">Add a Transaction</Typography>
             <Stack direction = "row" justifyContent = "space-between">
-                <Button onClick = {(e)=>{ quickAddHandler(0.25)}}>+$0.25</Button>
-                <Button onClick = {(e)=>{ quickAddHandler(0.50)}}>+$0.50</Button>
-                <Button onClick = {(e)=>{ quickAddHandler(1)}}>+$1.00</Button>
+                <Button className ="btn whiteBtn" onClick = {(e)=>{ quickAddHandler(0.25)}}>+$0.25</Button>
+                <Button className ="btn whiteBtn" onClick = {(e)=>{ quickAddHandler(0.50)}}>+$0.50</Button>
+                <Button className ="btn whiteBtn" onClick = {(e)=>{ quickAddHandler(1)}}>+$1.00</Button>
             </Stack>
             <FormControl>
                 <InputLabel htmlFor = "amount">Amount</InputLabel>
@@ -58,9 +58,10 @@ function AddTransaction(props){
             </FormControl>
 
             {showAlert && <Alert severity = {alertType}> {alertText}!</Alert>}
-
-            <Button onClick = {(e)=>{ submitTransactionHandler("charge")}}>Charge</Button>
-            <Button onClick = {(e)=>{ submitTransactionHandler("deposit")}}>Deposit</Button>
+            <Stack direction = 'row' justifyContent="space-evenly">
+                <Button className = "btn cyanBtn oval" onClick = {(e)=>{ submitTransactionHandler("charge")}}>Charge</Button>
+                <Button className = "btn cyanBtn oval" onClick = {(e)=>{ submitTransactionHandler("deposit")}}>Deposit</Button>
+            </Stack>
         </Stack>
         
         
