@@ -258,12 +258,12 @@ router.get('/club', async (req: Request, res: Response) => {
 });
 
 router.get('/checkCcid', async (req:Request,res:Response) =>{
-    const params = res.json(req.body);
+    const params = {ccid:String(req.get('ccid'))};
 
     const User: schema.users.JSONSelectable[] = [];
     if (params.hasOwnProperty('ccid')) {
         const queryParams = {
-            ccid: params.get('ccid')
+            ccid: params.ccid
         };
         const User = await queries.getUser(queryParams);
     }
@@ -272,10 +272,18 @@ router.get('/checkCcid', async (req:Request,res:Response) =>{
             body: "User Not Found!"
         });
     }
-
-    res.status(200).json({
-        body: User[0].isexec
-    });
+    console.log(params.ccid)
+    console.log(User)
+    if(User.length == 0){
+        res.status(200).json({
+            body: -1
+        });
+    }else{
+        res.status(200).json({
+            body: (User[0].isexec? 1:0) //Return 1 if user is an exec, 0 if they are not
+        });
+    }
+    
 })
 
 // router.get('/getClubs', async (req: Request, res: Response) => {

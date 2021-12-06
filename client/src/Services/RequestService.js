@@ -29,19 +29,7 @@ async function getResponse(res){
 //     return body
 //   })
 // }
-function createAllClubs(user){
-   // create combined club data,
 
-  let trans = []
-  let total = 0
-  for( let club in user.clubs){
-    total += user.clubs[club].balance
-    trans = trans.concat(user.clubs[club].transactions)
-    console.log(total)
-  }
-  return user
-  
-}
 export const RequestService = {
     template: ()=>{
       //The method...
@@ -106,7 +94,6 @@ export const RequestService = {
           transactions.clubs = {"No Transactions":{transactions:[{date:"",Amount:""}],balance:0}}
         }
         
-        console.log( transactions)
 
         return transactions
     },
@@ -160,20 +147,46 @@ export const RequestService = {
     //Auth.js
     ccidCheckReq: async (ccid)=>{
       //The method...
+      // let status = "Default"
+      // await fetch(path+"/checkCcid", {headers:{ccid:ccid}})
+      // .then((res)=>{
+      //   status = res
+      //   console.log("Ccid Check Success")
+      // }).catch(()=>{
+      //   console.log("Ccid Check Failed")
+      // })
+      // status = await getResponse(status)
+      // console.log(status)
+      // return status
 
-      //TEST RETURN
-      if(ccid =='exec'){
-        return 1
-      }else if(ccid == 'customer'){
-        return 0
-      }else{
-        return -1
-      }
+      return 1
+
     },
     execLogin: async (ccid,pw)=>{
       //The method...
 
-      //TEST RETURN
+
+      let response
+      await fetch(path+"/login", {method:'POST',headers:{ccid:ccid,password:pw}})
+      .then((res)=>{
+        response = res
+        console.log("Ccid Check Success")
+      }).catch(()=>{
+        console.log("Ccid Check Failed")
+      })
+      let status = await getResponse(response)
+      console.log(status.ccid)
+      if(status.ccid !== -1){
+        return {
+          ccid:status.ccid,
+          club:status.club,
+          clubid:status.club,
+          token:status.token}
+      }else{
+        return null
+      }
+      
+
       if(ccid =='exec' && pw == 'password'){
         return {ccid:ccid,token:"loggedInToken", club:"Computer Engineering"}
       }else{

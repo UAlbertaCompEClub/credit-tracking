@@ -58,15 +58,15 @@ function Auth(props){
         }
     }
 
-    function checkUser(){
+    async function checkUser(){
         // Checks if a user (using ccid only) is an exec or not and whether they have any records if they are a customer
         //if they are valid customers, log in
         //server call returns 1 for EXEC, 0 for customer, -1 if they are not in the system.
 
         //set this value from the server
-        let status = RequestService.ccidCheckReq(ccid)
+        let status = await RequestService.ccidCheckReq(ccid)
         // let status = fetch(path + "checkUser"+"?ccid="+ccid)
-
+   
         //open PW if you are an exec
         if( status === 1){ 
             //ccid is exec
