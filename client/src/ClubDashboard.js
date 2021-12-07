@@ -1,13 +1,20 @@
-<<<<<<< HEAD
-import {Button, FormControl, Input, InputLabel,Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography} from '@mui/material'
-import {useState} from 'react'
-=======
 import {Button, FormControl, Input, InputLabel, Container, FormHelperText,Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography} from '@mui/material'
 import {useState, useEffect} from 'react'
->>>>>>> api_auth
 import {RequestService} from "./Services/RequestService"
 import {AddUser} from './AddUser'
 import {AddExec} from './AddExec'
+
+function request() {
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ccid: 'mfiaz' })
+  };
+  fetch('http://localhost:8000/api/v1/getuser', requestOptions)
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(data => console.log(data));
+}
 
 function ClubDashboard(props){
 
@@ -60,6 +67,7 @@ function ClubDashboard(props){
       shownUsers = []
       
     }
+
     function toggleAddPerson(personType){
       //Shows or hides add Exec and add User
       //only one can display at a time.
@@ -130,21 +138,13 @@ function ClubDashboard(props){
     return(
         <Stack>
             <Stack direction = 'row' justifyContent="space-evenly">
-              <Button onClick = {props.logout} >Logout</Button>
+              <Button onClick = {request()} >Logout</Button>
               <Button onClick = {(e)=>{selectUser(props.exec)}} >My Profile</Button>
             </Stack>
             
             <Typography variant = "h1">{clubName}</Typography>
 
             <Stack direction = "row" justifyContent = "space-between" width = "100%">
-<<<<<<< HEAD
-                <FormControl>
-                    <InputLabel htmlFor = "ccid">ccid or name</InputLabel>
-                    <Input id = "ccid" value = {ccid} onChange= {(e) => {setCcid(e.target.value); searchUsers(e.target.value)}} />
-                </FormControl>
-                <Button onClick = {(e)=>{toggleAddPerson("customer")}}> Add Customer</Button>
-                <Button onClick = {(e)=>{toggleAddPerson("Exec")}}> Add Exec</Button>
-=======
                 <Stack  direction = "row">
                     <FormControl>
                         <InputLabel htmlFor = "ccid">ccid or name</InputLabel>
@@ -156,7 +156,6 @@ function ClubDashboard(props){
                 
 
                 <Button onClick = {(e)=>{setShowAddUser(true)}}> Add Customer</Button>
->>>>>>> api_auth
             </Stack>
 
             {showAddUser && <AddUser setShowAddUser ={setShowAddUser} refresh = {refresh} />}

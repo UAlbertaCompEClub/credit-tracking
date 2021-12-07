@@ -37,32 +37,40 @@ router.get('/test-db', async (req: Request, res: Response) => {
 });
 
 
-router.get('/user', async (req: Request, res: Response) => {
+router.post('/getuser', async (req: Request, res: Response) => {
     const params = req.body;
 
     const User: schema.users.JSONSelectable[] = [];
     if (params.hasOwnProperty('ccid')) {
+        console.log("inserted ccid");
+        console.log(params.ccid);
         const queryParams = {
-            ccid: params.get("ccid")
+            ccid: params.ccid
         };
         const User = await queries.getUser(queryParams);
+        res.status(200).json({
+            body: User
+        });
     }
     else if (params.hasOwnProperty('clubid')) {
+        console.log("inserted clubid");
         const queryParams = {
-            clubid: parseInt(params.get("clubid"))
+            clubid: parseInt(params.clubid)
         };
         const User = await queries.getUsers(queryParams);
+        res.status(200).json({
+            body: User
+        });
     }
     else {
         const queryParams = {
             ccid: 'any',
         };
         const User = await queries.getUser(queryParams);
+        res.status(200).json({
+            body: User
+        });
     }
-
-    res.status(200).json({
-        body: User
-    });
 });
 
 

@@ -1,68 +1,19 @@
 import AddTransaction from './AddTransaction'
-<<<<<<< HEAD
-import {useState,useEffect} from 'react'
-import {Button, FormControl, MenuItem,  Select, InputLabel, Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography} from '@mui/material'
-=======
 import {useState} from 'react'
 import {Button, FormControl, MenuItem, Input, Select, InputLabel, Container, FormHelperText,Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography} from '@mui/material'
->>>>>>> api_auth
 import {RequestService} from "./Services/RequestService"
 
 
 function UserProfile(props){
     // Show user information and allows transaction adding if the user is logged in
-<<<<<<< HEAD
-    const [user, setUser]  = useState(getUserInfo())
-    const [clubs, setClubs] = useState(user.clubs)
-=======
     const [user, setUser]  = useState(RequestService.userRequest(props.ccid,props.club))
     let clubs =(user.clubs)
->>>>>>> api_auth
     
     const [club, setClub] = useState((Object.keys(clubs))[0])
     const [isExecView, setIsExecView] = useState(props.isExec)
     
-<<<<<<< HEAD
-    function getUserInfo(){
-      //sets user. If they have no transactions add a special row
-      let info = RequestService.userRequest(props.ccid)
-      console.log(info.clubs)
-      if (Object.keys(info.clubs).length === 0){
-      
-        //no transaction history
-        info.clubs = {"No Transactions":{transactions:[{date:"",Amount:""}],balance:0}}
-        
-      }
-      return info
-    }
-
-    useEffect(()=>{
-      setClubs(user.clubs)
-      createAllClubs()
-     
-    },[user])
-
-    //create the combined clubs data
-    function createAllClubs(){
-      console.log("Recomputed totals")
-      let trans = []
-      let total = 0
-      for( let club in clubs){
-        total += clubs[club].balance
-        trans = trans.concat(clubs[club].transactions)
-        console.log(total)
-      }
-      setClubs({ ...clubs, "All Clubs":{
-        transactions: trans,
-        balance: total
-        }
-      }) 
-    }
-    console.log(clubs)
-=======
    
     
->>>>>>> api_auth
 
       // TODO create the combined clubs data
       // function getNetBalance(){
