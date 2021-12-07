@@ -14,7 +14,7 @@ const createTransaction = async (transactionParam: { ccid: string, clubid: numbe
     return db.insert('transactions', transaction).run(connection);
 };
 
-const transactionsUser = async (transaction: { clubid: number, ccid: string}) => {
+const transactionsUser = async (transaction: { clubid: number, ccid: string }) => {
     const where: schema.transactions.Whereable = {};
     if (transaction.clubid !== 0) {
         where.ccid = transaction.ccid;
@@ -54,13 +54,21 @@ const createUser = async (userParam: { ccid: string; full_name: string, foip: bo
     return db.insert('users', user).run(connection);
 };
 
-const getUser = async (userParam: { ccid: string}) => {
+const getUser = async (userParam: { ccid: string }) => {
     const where: schema.users.Whereable = {};
     if (userParam.ccid !== 'any') {
         where.ccid = userParam.ccid;
     }
     // console.log(await db.select('transactions', where).run(connection));
     return db.select('users', where).run(connection);
+};
+
+const getExec = async (userParam: { ccid: string }) => {
+    const where: schema.execs.Whereable = {};
+    if (userParam.ccid !== 'any') {
+        where.ccid = userParam.ccid;
+    }
+    return db.select('execs', where).run(connection);
 };
 
 const getUsers = async (userParam: { clubid: number }) => {
@@ -82,5 +90,6 @@ export {
     getUsers,
     transactionsAll,
     createUser,
-    getClubs
+    getClubs,
+    getExec
 };
