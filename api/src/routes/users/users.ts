@@ -1,53 +1,67 @@
 import express, { NextFunction, Request, Response } from 'express';
 import * as queries from '../../controllers/db/dbUsers';
+import * as regQueries from '../../controllers/db/dbQueries';
 import type * as schema from 'zapatos/schema';
 import middleWare from '../../controllers/controllers';
+import jwt from 'jsonwebtoken';
+import { assert } from 'console';
 
 export const router = express.Router();
 
 router.post('/user', async (req: Request, res: Response) => {
+    // assert(req.token !== undefined && req.token !== null);
+    // const token = req.get('token');
+    // console.log('token', req);
+    new Promise<void>((resolve) => {
+        resolve();
+        console.log('user creation process begin!')
+    })
+        .then(async () => {
+            const params = req.body;
+            console.log(params);
+            let foip = false;
+            if (params.foip === "t") {
+                foip = true;
+            }
+            if (params.isexec === "t") {
+                const execExistsCheck = await regQueries.getExec({ ccid: params.ccid });
+                if (execExistsCheck.length > 0) {
+                    throw new Error("Exec Already Exists!");
+                }
 
-    let foip = false;
-    if (req.get('foip') === "t") {
-        foip = true;
-    }
+                const execParams = {
+                    ccid: params.ccid,
+                    password: params.password,
+                    clubid: parseInt(params.clubid)
+                };
+                await queries.createExec(execParams);
+            }
 
-    if (req.get('isexec')==="t") {
-        const userParams = {
-            ccid: String(req.get("ccid")),
-            isexec: true,
-            full_name: String(req.get("full_name")),
-            foip: foip,
-            balance: 0
-        };
-        await queries.createUser(userParams);
+            console.log("check if user exists");
+            const userExistsCheck = await regQueries.getUser({ ccid: params.ccid });
+            if (userExistsCheck.length > 0) {
+                throw new Error("User Already Exists!");
+            }
 
-        const execParams = {
-            ccid: String(req.get("ccid")),
-            password: String(req.get("password")),
-            clubid: parseInt(String(req.get("clubid")))
-        };
-        await queries.createExec(execParams);
-    }
-    else {
-        const userParams = {
-            ccid: String(req.get("ccid")),
-            isexec: true,
-            full_name: String(req.get("full_name")),
-            foip: foip,
-            balance: 0
-        };
-        await queries.createUser(userParams);
-    }
-
-
-
-
-    
-
-    res.status(200).json({
-        body: "1"
-    });
+            const userParams = {
+                ccid: params.ccid,
+                isexec: params.isexec,
+                full_name: params.full_name,
+                foip: foip,
+                balance: 0
+            };
+            await queries.createUser(userParams);
+        })
+        .then(data =>
+            res.status(200).json({
+                body: 1
+            })
+        )
+        .catch(data =>
+            res.status(400).json({
+                body: -1
+            })
+        );
 });
 
 

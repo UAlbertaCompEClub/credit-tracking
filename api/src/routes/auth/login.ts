@@ -1,29 +1,28 @@
 import express, { NextFunction, Request, Response } from 'express';
 import * as queries from '../../controllers/db/dbAuth';
-import * as clubQueries from '../../controllers/db/dbQueries'
+import * as regQueries from '../../controllers/db/dbQueries';
 import * as auth from '../../auth/auth';
 import jwt from 'jsonwebtoken';
 import assert from 'assert';
 import { Console } from 'console';
 
-require('dotenv').config({ path: 'secret-key.env' });
+require('dotenv').config({ path: './src/auth/secret-key.env' });
 
 
 export const router = express.Router();
 
 router.post('/login', async (req: Request, res: Response) => {
-
+    const params = req.body;
     const execParams = {
-        ccid: String(req.get("ccid")),
+        ccid: params.ccid
     };
-    console.log(process.env)
-    const exec = await queries.returnExec(execParams);
-    console.log(exec)
-    if (exec.length !==0) {
-        const password = String(req.get("password"));
+    const exec = await regQueries.getExec(execParams);
+    if (exec.length===1) {
+        const password = params.password;
         const hashedPass = exec[0].password;
 
-        const key = process.env.jwtsecretkey;
+        const key = process.env.SECRETKEY;
+        // console.log(key);
 
         //we need to ensure that the key has been supplied here!
         assert(key !== undefined && key !== null);
@@ -34,7 +33,7 @@ router.post('/login', async (req: Request, res: Response) => {
             res.status(200).json({
                 ccid: exec[0].ccid,
                 token: jwt.sign(execParams, key, { expiresIn: '30d' }),
-                club: (await clubQueries.getClubs({clubid:exec[0].clubid}))[0].clubname,
+                club: (await regQueries.getClubs({clubid:exec[0].clubid}))[0].clubname,
                 clubid:exec[0].clubid
             });
         }   

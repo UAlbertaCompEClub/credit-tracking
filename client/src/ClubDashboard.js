@@ -4,6 +4,22 @@ import {RequestService} from "./Services/RequestService"
 import {AddUser} from './AddUser'
 import {AddExec} from './AddExec'
 
+function request() {
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      ccid: 'mfiaz',
+      password: 'password'
+   }),
+    token: JSON.stringify('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjY2lkIjoibWZpYXoiLCJpYXQiOjE2Mzg5MTQ2NDgsImV4cCI6MTY0MTUwNjY0OH0.Ikbba9WSkiryA9nMrtovniQYlcmSc1TWBjFNw89VXjA')
+  };
+  fetch('http://localhost:8000/api/v1/user', requestOptions)
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(data => console.log(data));
+}
+
 function ClubDashboard(props){
   const [ccid, setCcid] = useState("")
   
