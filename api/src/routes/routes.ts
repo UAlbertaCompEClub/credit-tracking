@@ -38,7 +38,7 @@ router.get('/test-db', async (req: Request, res: Response) => {
 
 
 router.get('/user', async (req: Request, res: Response) => {
-    const params = res.json(req.body);
+    const params = req.body;
 
     const User: schema.users.JSONSelectable[] = [];
     if (params.hasOwnProperty('ccid')) {
@@ -67,7 +67,7 @@ router.get('/user', async (req: Request, res: Response) => {
 
 
 router.get('/transactions', async (req: Request, res: Response) => {
-    const params = res.json(req.body);
+    const params = req.body;
 
     const Transactions: schema.transactions.JSONSelectable[] = [];
     if (params.hasOwnProperty('club') && params.hasOwnProperty('ccid')) {
@@ -101,7 +101,7 @@ router.get('/transactions', async (req: Request, res: Response) => {
 });
 
 router.get('/club-balance', async (req: Request, res: Response) => {
-    const params = res.json(req.body);
+    const params = req.body;
 
     const User: schema.clubs.JSONSelectable[] = [];
     if (params.hasOwnProperty('club')) {
@@ -123,7 +123,7 @@ router.get('/club-balance', async (req: Request, res: Response) => {
 });
 
 router.get('/checkCcid', async (req:Request,res:Response) =>{
-    const params = res.json(req.body);
+    const params = req.body;
 
     const User: schema.users.JSONSelectable[] = [];
     if (params.hasOwnProperty('ccid')) {
@@ -152,7 +152,7 @@ router.get('/getClubs', async (req: Request, res: Response) => {
 
 // POST REQUESTS
 router.post('/transaction', async (req: Request, res: Response) => {
-    const params = res.json(req.body);
+    const params = req.body;
 
     const Transactions: schema.transactions.JSONSelectable[] = [];
     if (params.hasOwnProperty('ccid')) {

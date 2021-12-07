@@ -6,34 +6,35 @@ import middleWare from '../../controllers/controllers';
 export const router = express.Router();
 
 router.post('/user', async (req: Request, res: Response) => {
-    const params = res.json(req.body);
+    // const params = res.json(req.body);
+    const params = req.body;
     let foip = false;
-    if (params.get('foip') === "t") {
+    if (params.foip === "t") {
         foip = true;
     }
 
-    if (params.get('isexec')==="t") {
+    if (params.isexec==="t") {
         const userParams = {
-            ccid: params.get("ccid"),
+            ccid: params.ccid,
             isexec: true,
-            full_name: params.get("full_name"),
+            full_name: params.full_name,
             foip: foip,
             balance: 0
         };
         await queries.createUser(userParams);
 
         const execParams = {
-            ccid: params.get("ccid"),
-            password: params.get("password"),
-            clubid: parseInt(params.get("clubid"))
+            ccid: params.ccid,
+            password: params.password,
+            clubid: parseInt(params.clubid)
         };
         await queries.createExec(execParams);
     }
     else {
         const userParams = {
-            ccid: params.get("ccid"),
+            ccid: params.ccid,
             isexec: true,
-            full_name: params.get("full_name"),
+            full_name: params.full_name,
             foip: foip,
             balance: 0
         };

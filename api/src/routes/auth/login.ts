@@ -4,7 +4,7 @@ import * as auth from '../../auth/auth';
 import jwt from 'jsonwebtoken';
 import assert from 'assert';
 
-require('dotenv').config({ path: 'secret-key.env' });
+require('dotenv').config({ path: './src/auth/secret-key.env' });
 
 
 export const router = express.Router();
