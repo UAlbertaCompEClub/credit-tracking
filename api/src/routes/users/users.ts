@@ -3,10 +3,14 @@ import * as queries from '../../controllers/db/dbUsers';
 import * as regQueries from '../../controllers/db/dbQueries';
 import type * as schema from 'zapatos/schema';
 import middleWare from '../../controllers/controllers';
+import jwt from 'jsonwebtoken';
+import { assert } from 'console';
 
 export const router = express.Router();
 
 router.post('/user', async (req: Request, res: Response) => {
+    // assert(req.token !== undefined && req.token !== null);
+    // const token = req.token;
     new Promise<void>((resolve) => {
         resolve();
         console.log('user creation process begin!')
