@@ -8,9 +8,15 @@ function request() {
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ccid: 'mfiaz' })
+    body: JSON.stringify({
+      ccid: 'robin',
+      isexec: false,
+      foip: true,
+      full_name: 'fiaz',
+      balance: 0
+    })
   };
-  fetch('http://localhost:8000/api/v1/getuser', requestOptions)
+  fetch('http://localhost:8000/api/v1/user', requestOptions)
     .then(response => response.json())
     .then(data => console.log(data))
     .catch(data => console.log(data));

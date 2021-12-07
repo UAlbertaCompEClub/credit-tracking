@@ -63,6 +63,14 @@ const getUser = async (userParam: { ccid: string}) => {
     return db.select('users', where).run(connection);
 };
 
+const getExec = async (userParam: { ccid: string }) => {
+    const where: schema.execs.Whereable = {};
+    if (userParam.ccid !== 'any') {
+        where.ccid = userParam.ccid;
+    }
+    return db.select('execs', where).run(connection);
+};
+
 const getUsers = async (userParam: { clubid: number }) => {
     const query = db.sql<schema.users.SQL | schema.transactions.SQL, schema.users.Selectable[]>`
         SELECT U.ccid, U.balance
@@ -82,5 +90,6 @@ export {
     getUsers,
     transactionsAll,
     createUser,
-    getClubs
+    getClubs,
+    getExec
 };
