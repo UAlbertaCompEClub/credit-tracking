@@ -10,7 +10,8 @@ export const router = express.Router();
 
 router.post('/user', async (req: Request, res: Response) => {
     // assert(req.token !== undefined && req.token !== null);
-    // const token = req.token;
+    // const token = req.get('token');
+    // console.log('token', req);
     new Promise<void>((resolve) => {
         resolve();
         console.log('user creation process begin!')
