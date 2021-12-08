@@ -165,19 +165,4 @@ router.get('/get-clubs', async (req: Request, res: Response) => {
     });
 })
 
-// POST REQUESTS
-router.post('/transaction', async (req: Request, res: Response) => {
-    const params = req.body;
-
-    const Transactions: schema.transactions.JSONSelectable[] = [];
-    if (params.hasOwnProperty('ccid')) {
-        const queryParams = {
-            ccid: params.ccid,
-            clubid: parseInt(params.clubid),
-            amount: parseInt(params.amount)
-        };
-        await queries.createTransaction(queryParams);
-    }
-});
-
 export default router;
