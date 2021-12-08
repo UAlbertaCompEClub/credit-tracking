@@ -9,40 +9,60 @@ import { assert } from 'console';
 export const router = express.Router();
 
 router.post('/user', async (req: Request, res: Response) => {
-    // assert(req.token !== undefined && req.token !== null);
-    // const token = req.get('token');
-    // console.log('token', req);
     new Promise<void>((resolve) => {
         resolve();
         console.log('user creation process begin!')
     })
-        .then(async () => {
-            const params = req.body;
-            console.log(params);
-            let foip = false;
-            if (params.foip === "t") {
-                foip = true;
-            }
-            if (params.isexec === "t") {
-                const execExistsCheck = await regQueries.getExec({ ccid: params.ccid });
-                if (execExistsCheck.length > 0) {
-                    throw new Error("Exec Already Exists!");
-                }
+    .then(async () => {
+        const params = req.body;
+        const token = params.token;
+        assert(token !== undefined && token !== null);
 
-                const execParams = {
-                    ccid: params.ccid,
-                    password: params.password,
-                    clubid: parseInt(params.clubid)
-                };
-                await queries.createExec(execParams);
+        console.log('token', token);
+        console.log(params);
+        
+        let key = process.env.SECRETKEY;
+        assert(key !== undefined && key !== null);
+        key = key || '';
+
+        //checks if user is verified
+        const verified = jwt.verify(token, key, (err: any, data: any) => {
+            if (err) {
+                console.log("User not Verified!");
+                throw new Error("");
+            }
+        });
+
+        let foip = false;
+        if (params.foip === "t") {
+            foip = true;
+        }
+
+        const execExistsCheck = await regQueries.getExec({ ccid: params.ccid });
+        if (params.isexec === true) {
+            if (execExistsCheck.length !== 0) {
+                console.log("Exec Already Exists!");
+                throw new Error();
             }
 
-            console.log("check if user exists");
-            const userExistsCheck = await regQueries.getUser({ ccid: params.ccid });
-            if (userExistsCheck.length > 0) {
-                throw new Error("User Already Exists!");
-            }
+            const execParams = {
+                ccid: params.ccid,
+                password: params.password,
+                clubid: parseInt(params.clubid)
+            };
+            await queries.createExec(execParams);
+        }
 
+        console.log("check if user exists");
+        const userExistsCheck = await regQueries.getUser({ ccid: params.ccid });
+        if (userExistsCheck.length!==0) {
+            if (execExistsCheck.length!==0) {
+                console.error("User Already Exists!");
+                throw new Error();
+            }
+        }
+
+        if (execExistsCheck.length!==0) {
             const userParams = {
                 ccid: params.ccid,
                 isexec: params.isexec,
@@ -51,17 +71,18 @@ router.post('/user', async (req: Request, res: Response) => {
                 balance: 0
             };
             await queries.createUser(userParams);
+        }
+    })
+    .then(data =>
+        res.status(200).json({
+            body: 1
         })
-        .then(data =>
-            res.status(200).json({
-                body: 1
-            })
-        )
-        .catch(data =>
-            res.status(400).json({
-                body: -1
-            })
-        );
+    )
+    .catch(data =>
+        res.status(400).json({
+            body: -1
+        })
+    );
 });
 
 
