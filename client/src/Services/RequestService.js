@@ -208,7 +208,8 @@ export const RequestService = {
                   ccid:ccid,
                   full_name:full_name,
                   isexec:false,
-                  foip:true //may need to be changed later
+                  foip:true, //may need to be changed later
+                  token:token
               })})
       .then((res)=>{
         console.log("User Creation Succ")
@@ -236,7 +237,8 @@ export const RequestService = {
                   clubid:clubid,
                   full_name:full_name,
                   isexec:true,
-                  foip:true //may need to be changed later
+                  foip:true, //may need to be changed later
+                  token:token
               })})
       .then((res)=>{
         console.log("Exec Creation Succ")

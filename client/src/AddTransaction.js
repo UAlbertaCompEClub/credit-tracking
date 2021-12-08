@@ -11,8 +11,14 @@ function AddTransaction(props){
     const[isLoading,setIsLoading] = useState(false)
 
     function quickAddHandler(add){
+  
         setAmount((amount)=>{
-            return amount + add
+            if(amount ===""){
+                return 0 + add
+            }else{
+                return amount + add
+            }
+           
         })
     }
     async function submitTransactionHandler(type){

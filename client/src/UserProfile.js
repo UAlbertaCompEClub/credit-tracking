@@ -125,36 +125,10 @@ function UserProfile(props){
         console.log("club changed to "+event.target.value)
         
     }
-    return info
-  }
 
-  useEffect(() => {
-    setClubs(user.clubs)
-    createAllClubs()
-
-  }, [user])
-
-  //create the combined clubs data
-  function createAllClubs() {
-    console.log("Recomputed totals")
-    let trans = []
-    let total = 0
-    for (let club in clubs) {
-      total += clubs[club].balance
-      trans = trans.concat(clubs[club].transactions)
-      console.log(total)
+    function closeUser(){
+      props.setPage("ClubDashboard")
     }
-    setClubs({
-      ...clubs, "All Clubs": {
-        transactions: trans,
-        balance: total
-      }
-    })
-  }
-  console.log(clubs)
-
-
-
 
     return (
         <Stack >
