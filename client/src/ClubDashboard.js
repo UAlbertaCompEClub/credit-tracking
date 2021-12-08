@@ -1,5 +1,5 @@
-import { Button, FormControl, Input, InputLabel, Container, FormHelperText, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material'
-import { useState, useEffect } from 'react'
+import { Button, FormControl, Input, InputLabel, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material'
+import { useState } from 'react'
 import { RequestService } from "./Services/RequestService"
 import { AddUser } from './AddUser'
 import { AddExec } from './AddExec'
@@ -132,17 +132,12 @@ function ClubDashboard(props) {
       <Typography variant="h1">{clubName}</Typography>
 
       <Stack direction="row" justifyContent="space-between" width="100%">
-        <Stack direction="row">
-          <FormControl>
-            <InputLabel htmlFor="ccid">ccid or name</InputLabel>
-            <Input id="ccid" value={ccid} onChange={(e) => { setCcid(e.target.value); searchUsers(e.target.value) }} />
-
-          </FormControl>
-          <Button>Search</Button>
-        </Stack >
-
-
-        <Button onClick={(e) => { setShowAddUser(true) }}> Add Customer</Button>
+        <FormControl>
+          <InputLabel htmlFor="ccid">ccid or name</InputLabel>
+          <Input id="ccid" value={ccid} onChange={(e) => { setCcid(e.target.value); searchUsers(e.target.value) }} />
+        </FormControl>
+        <Button onClick={(e) => { toggleAddPerson("customer") }}> Add Customer</Button>
+        <Button onClick={(e) => { toggleAddPerson("Exec") }}> Add Exec</Button>
       </Stack>
 
       {showAddUser && <AddUser setShowAddUser={setShowAddUser} refresh={refresh} />}
