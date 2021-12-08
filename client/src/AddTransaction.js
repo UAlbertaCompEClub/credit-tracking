@@ -69,7 +69,7 @@ function AddTransaction(props){
             </Stack>
             <FormControl>
                 <InputLabel htmlFor = "amount">Amount</InputLabel>
-                <Input disabled = {isLoading} type = "number" startAdornment={<InputAdornment position="start">$</InputAdornment>} id = "amount" value = {amount} onChange = {(e) => setAmount(e.target.value)} />
+                <Input autoComplete="off" disabled = {isLoading} type = "number" startAdornment={<InputAdornment position="start">$</InputAdornment>} id = "amount" value = {amount} onChange = {(e) => setAmount(e.target.value)} />
                 <FormHelperText id = "amountHelperText">Enter Amount</FormHelperText>
             </FormControl>
 

@@ -27,7 +27,7 @@ function ClubDashboard(props){
   const [showAddExec,setShowAddExec] = useState(false)
 
   
-  const [users, setUsers] = useState({allUsers:[],shownUsers:[],table:"",isLoading:true })
+  const [users, setUsers] = useState({allUsers:[],table:"",isLoading:true })
   
   
   function getTable(users){
@@ -64,14 +64,13 @@ function ClubDashboard(props){
   }
   async function firstCall(){ 
     // First API call
-    await RequestService.clubRequest(props.exec.clubid)
+    await RequestService.clubRequest(props.exec.clubid,props.exec.token)
     .then((res)=>{
       console.log(res)
       //Set initial users and shown users
 
       setUsers({
         allUsers:res,
-        shownUsers:res,
         table:getTable(res),
         isLoading:false
       })
@@ -82,22 +81,29 @@ function ClubDashboard(props){
   useEffect( ()=>{
     firstCall()},[])
 
+  useEffect(()=>{
+    searchUsers(ccid)
+  },[users.allUsers])
+
   async function refresh(){
     //get updated list of users
-    setUsers((prevState)=>{
-      return{...prevState,isLoading:true}
-    })
 
-    RequestService.clubRequest(props.clubid,props.token)
-    .then((res)=>{
-      setUsers({
-        allUsers:res,
-        shownUsers:res,
-        table:getTable(res),
-        isLoading:false
+    
+      setUsers((prevState)=>{
+        return{...prevState,isLoading:true}
       })
-      searchUsers(ccid)
-    })
+
+    setTimeout(()=>{
+      RequestService.clubRequest(props.exec.clubid,props.exec.token)
+      .then((res)=>{
+        setUsers({
+          allUsers:res,
+          table:getTable(res),
+          isLoading:false
+        })
+        
+      })
+    },1000)
   }
 
   function searchUsers(ccidName){
@@ -108,20 +114,21 @@ function ClubDashboard(props){
       setUsers((prevState)=>{
         return{
           ...prevState,
-          shownUsers:prevState.allUsers
+          table:getTable(users.allUsers)
         }
       }) 
     }else{
       let newUsers = []
-      for(let user of users){
+      for(let user of users.allUsers){
         if (user.ccid.toLowerCase().includes(ccidName) || user.name.toLowerCase().includes(ccidName)){
           newUsers.push(user)
         }
       }
+      console.log(newUsers)
       setUsers((prevState)=>{
         return{
           ...prevState,
-          shownUsers:newUsers
+          table:getTable(newUsers)
         }
       }) 
     }
@@ -177,14 +184,14 @@ function ClubDashboard(props){
           <Stack direction = "row" justifyContent = "space-between" width = "100%">
               <FormControl>
                   <InputLabel htmlFor = "ccid">ccid or name</InputLabel>
-                  <Input id = "ccid" value = {ccid} onChange= {(e) => {setCcid(e.target.value); searchUsers(e.target.value)}} />
+                  <Input autoComplete="off" id = "ccid" value = {ccid} onChange= {(e) => {setCcid(e.target.value); searchUsers(e.target.value)}} />
               </FormControl>
               <Button onClick = {(e)=>{toggleAddPerson("customer")}}> Add Customer</Button>
               <Button onClick = {(e)=>{toggleAddPerson("Exec")}}> Add Exec</Button>
           </Stack>
 
-          {showAddUser && <AddUser  setShowAddUser ={setShowAddUser} refresh = {refresh} />}
-          {showAddExec && <AddExec clubid = {props.exec.clubid} setShowAddExec ={setShowAddExec} refresh = {refresh} />}
+          {showAddUser && <AddUser   exec = {props.exec} setShowAddUser ={setShowAddUser} refresh = {refresh} />}
+          {showAddExec && <AddExec exec = {props.exec} setShowAddExec ={setShowAddExec} refresh = {refresh} />}
 
           {/* Show table when not loading and show text when loading */}
           {users.isLoading && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>

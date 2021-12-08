@@ -33,12 +33,13 @@ export function AddExec(props) {
             setAlertType("error")
             setAlertText("Exec already exists")
         }else{
-            const status = RequestService.addExec(ccid,name,password,props.clubid)
-            if(status === 0){
+            const status = await RequestService.addExec(ccid,name,password,props.exec.clubid,props.exec.token)
+            if(parseInt(status) === 0){
                 //req succeded
                 setShowAlert(true);
                 setAlertType("success")
                 setAlertText("Exec Added")
+                await RequestService.newTransaction(ccid,0,props.exec.clubid,props.exec.token)
                 props.refresh()
             }else{
                 //req failed
@@ -59,17 +60,17 @@ export function AddExec(props) {
             <FormControl>
               {/*ccid */}
               <InputLabel htmlFor = "ccid">ccid</InputLabel>
-                <Input id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
+                <Input autoComplete="off" id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
             </FormControl>
             <FormControl>
                 {/* name */}
                 <InputLabel htmlFor = "name">Name</InputLabel>
-                <Input disabled = {isLoading} id = "name" onChange = {(e) => setName(e.target.value)}/>
+                <Input autoComplete="off" disabled = {isLoading} id = "name" onChange = {(e) => setName(e.target.value)}/>
             </FormControl>
             <FormControl>
                 {/* password */}
                 <InputLabel htmlFor = "password">Password</InputLabel>
-                <Input disabled = {isLoading} id = "password" onChange = {(e) => setPassword(e.target.value)}/>
+                <Input autoComplete="off" disabled = {isLoading} id = "password" onChange = {(e) => setPassword(e.target.value)}/>
             </FormControl>
 
             <Stack direction = 'row' justifyContent="space-evenly">

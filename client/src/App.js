@@ -14,7 +14,7 @@ function App() {
   const [page,setPage] = useState("Auth")
   const [ExecInfo, setExecInfo] = useState({ccid:'Default', token : 'Default', club:"Default",clubid:0})
   const [customerCcid,setCustomerCcid] = useState("cstm")
-  const [isExec,setIsExec] = useState(true) //TODO Change to false for production
+  const [isExec,setIsExec] = useState(false) //TODO Change to false for production
   // RequestService.testRequest()
 
  

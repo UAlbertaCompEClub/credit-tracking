@@ -111,7 +111,6 @@ export const RequestService = {
 
         status = (await getResponse(status)).status;
 
-        //Test return
         return (status)
     },
     //ClubDashboard.js
@@ -200,17 +199,58 @@ export const RequestService = {
       }
       
     },
-    addUser: async (ccid,name)=>{
+    addUser: async (ccid,full_name,token)=>{
       //The method returns 0 if succ 1 if fail
+
+      let status
+      await fetch(path+"/user",
+              {method:"POST", headers:{"Content-type":"application/json"},body:JSON.stringify({
+                  ccid:ccid,
+                  full_name:full_name,
+                  isexec:false,
+                  foip:true //may need to be changed later
+              })})
+      .then((res)=>{
+        console.log("User Creation Succ")
+        status = res
+      }).catch(()=>{
+        console.log("User Creation Failure")
+          return null
+      })
+
+      status = (await getResponse(status)).status;
+
+      return (status)
 
       //TEST RETURN
       return 0
     },
-    addExec: async (ccid,name,password,clubid)=>{
-      //The method returns 0 if succ 1 if fail
+    addExec: async (ccid,full_name,password,clubid,token)=>{
+      //The method returns 0 if succ -1 if fail
 
-      //TEST RETURN
-      return 0
+      let status
+      await fetch(path+"/user",
+              {method:"POST", headers:{"Content-type":"application/json"},body:JSON.stringify({
+                  ccid:ccid,
+                  password:password,
+                  clubid:clubid,
+                  full_name:full_name,
+                  isexec:true,
+                  foip:true //may need to be changed later
+              })})
+      .then((res)=>{
+        console.log("Exec Creation Succ")
+        status = res
+      }).catch(()=>{
+        console.log("Exec Creation Failure")
+          return null
+      })
+
+      status = (await getResponse(status)).status;
+      
+
+      return (status)
+
     }
 
 }

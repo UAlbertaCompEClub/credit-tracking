@@ -228,6 +228,7 @@ router.get('/club', async (req: Request, res: Response) => {
     const users:any = await queries.getUsersRobust({clubid:clubid});
     console.log(users);
     let usersArray:any = []
+    let usersHash:any = {}
 
     //Adding the transaction preview field. 
     for (let user in users){

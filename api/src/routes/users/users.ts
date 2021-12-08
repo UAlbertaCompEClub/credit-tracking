@@ -20,10 +20,10 @@ router.post('/user', async (req: Request, res: Response) => {
             const params = req.body;
             console.log(params);
             let foip = false;
-            if (params.foip === "t") {
+            if (params.foip === true) {
                 foip = true;
             }
-            if (params.isexec === "t") {
+            if (params.isexec === true) {
                 const execExistsCheck = await regQueries.getExec({ ccid: params.ccid });
                 if (execExistsCheck.length > 0) {
                     throw new Error("Exec Already Exists!");
@@ -54,12 +54,12 @@ router.post('/user', async (req: Request, res: Response) => {
         })
         .then(data =>
             res.status(200).json({
-                body: 1
+                status: 0
             })
         )
         .catch(data =>
             res.status(400).json({
-                body: -1
+                status: -1
             })
         );
 });

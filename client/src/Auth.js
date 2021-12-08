@@ -120,7 +120,7 @@ function Auth(props){
 
                 {/* Exec and customer ccid */}
                 <InputLabel htmlFor = "ccid">ccid</InputLabel>
-                <Input disabled = {isLoading || isExec} id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
+                <Input autoComplete="off" disabled = {isLoading || isExec} id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
                 <FormHelperText id = "ccidHelperText">For customers and Execs</FormHelperText>
             
 
@@ -129,7 +129,7 @@ function Auth(props){
              <FormControl >
                 {/* Exec Password */}
                 <InputLabel htmlFor = "password">Password</InputLabel>
-                <Input type = "password" disabled = {isLoading} id = "password" onChange = {(e) => setPassword(e.target.value)}/>
+                <Input autoComplete="off" type = "password" disabled = {isLoading} id = "password" onChange = {(e) => setPassword(e.target.value)}/>
                 <FormHelperText id = "passwordHelperText">Please enter your Exec password</FormHelperText>
             </FormControl>
             }

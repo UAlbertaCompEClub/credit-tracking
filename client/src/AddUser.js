@@ -37,12 +37,14 @@ export function AddUser(props) {
             setAlertType("error")
             setAlertText("User already exists")
         }else{
-            const status = RequestService.addUser(ccid,name)
+            const status = await RequestService.addUser(ccid,name,props.exec.token)
             if(status === 0){
                 //req succeded
+                await RequestService.newTransaction(ccid,0,props.exec.clubid,props.exec.token)
                 setShowAlert(true);
                 setAlertType("success")
                 setAlertText("User Added")
+                
                 props.refresh()
             }else{
                 //req failed
@@ -104,12 +106,12 @@ export function AddUser(props) {
             <FormControl>
               {/*ccid */}
               <InputLabel htmlFor = "ccid" class = "normalText">ccid</InputLabel>
-                <Input disabled = {isLoading} id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
+                <Input autoComplete="off" disabled = {isLoading} id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
             </FormControl>
             <FormControl>
                 {/* name */}
                 <InputLabel htmlFor = "name" class = "normalText">Name</InputLabel>
-                <Input disabled = {isLoading} id = "name" onChange = {(e) => setName(e.target.value)}/>
+                <Input autoComplete="off" disabled = {isLoading} id = "name" onChange = {(e) => setName(e.target.value)}/>
             </FormControl>
 
             {isLoading && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
