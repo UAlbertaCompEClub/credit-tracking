@@ -5,8 +5,9 @@ import path from 'path';
 import dotenv from 'dotenv'
 
 import routes from './routes/routes';
-import userRoutes from './routes/users/users';
+import userRoutes from './routes/auth/users';
 import authRoutes from './routes/auth/login';
+import transactionRoutes from './routes/auth/transaction';
 import middleware from './controllers/middleware';
 
 require('dotenv').config({ path: 'db.env' });
@@ -43,6 +44,7 @@ router.use(express.json());//parse requests as json objects
 router.use('/api/v1', routes);
 router.use('/api/v1', userRoutes);
 router.use('/api/v1', authRoutes);
+router.use('/api/v1', transactionRoutes);
 
 router.get('/add-entry', (req: Request, res: Response) => {
     res.send('Hello World!')
