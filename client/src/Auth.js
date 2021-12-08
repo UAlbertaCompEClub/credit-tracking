@@ -6,7 +6,7 @@ import {RequestService} from './Services/RequestService'
 function Auth(props){
 
     //state vars
-    const[isExec,setIsExec] = useState(false);
+    const[isExec,setIsExec] = useState(props.isExec);
     const[ccid,setCcid] = useState("");
     const[password,setPassword] = useState("");
     const[alertType,setAlertType] = useState("error");
@@ -89,7 +89,9 @@ function Auth(props){
             //ccid is not registered
             setShowAlert(true);
             setAlertType("error")
-            setAlertText("You are not registered or the ccid is incorrect. Ask an executive to register")
+            setTimeout(()=>{
+                setAlertText("You are not registered or the ccid is incorrect. Ask an executive to register")
+            },300)
         }
 
         setIsLoading(false)
@@ -118,7 +120,7 @@ function Auth(props){
 
                 {/* Exec and customer ccid */}
                 <InputLabel htmlFor = "ccid">ccid</InputLabel>
-                <Input disabled = {isLoading} id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
+                <Input disabled = {isLoading || isExec} id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
                 <FormHelperText id = "ccidHelperText">For customers and Execs</FormHelperText>
             
 
@@ -127,7 +129,7 @@ function Auth(props){
              <FormControl >
                 {/* Exec Password */}
                 <InputLabel htmlFor = "password">Password</InputLabel>
-                <Input disabled = {isLoading} id = "password" onChange = {(e) => setPassword(e.target.value)}/>
+                <Input type = "password" disabled = {isLoading} id = "password" onChange = {(e) => setPassword(e.target.value)}/>
                 <FormHelperText id = "passwordHelperText">Please enter your Exec password</FormHelperText>
             </FormControl>
             }

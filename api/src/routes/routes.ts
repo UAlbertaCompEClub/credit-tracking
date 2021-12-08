@@ -265,10 +265,10 @@ router.get('/club', async (req: Request, res: Response) => {
     });
 });
 
-router.get('/checkCcid', async (req:Request,res:Response) =>{
+router.get('/check-ccid', async (req:Request,res:Response) =>{
     const params = {ccid:String(req.get('ccid'))};
     const User = await queries.getUser(params);
-   
+    console.log(User)
     if(User.length == 0){
         //No user found
         res.status(200).json({
@@ -288,30 +288,26 @@ router.get('/checkCcid', async (req:Request,res:Response) =>{
 //     });
 // })
 
-// POST REQUESTS
-router.post('/transaction', async (req: Request, res: Response) => {
-})
-
-// router.get('/get-clubs', async (req: Request, res: Response) => {
-//     const clubs = await queries.getClubs();
-//     res.status(200).json({
-//         body: clubs
-//     });
-// })
 
 // POST REQUESTS
 router.post('/transaction', async (req: Request, res: Response) => {
     const params = req.body;
+    console.log(params)
 
     const Transactions: schema.transactions.JSONSelectable[] = [];
-    if (req.get('ccid')) {
+    if (params.ccid) {
         const queryParams = {
-            ccid:String(req.get('ccid')),
-            clubid: parseInt(String(req.get('clubid'))),
-            amount: parseInt(String(req.get('amount')))
+            ccid:params.ccid,
+            clubid: parseInt(params.clubid),
+            amount: parseInt(params.amount)
         };
         await queries.createTransaction(queryParams);
     }
+
+    
+    res.status(200).json({
+        status:0 //return the balance
+    });
 });
 
 export default router;

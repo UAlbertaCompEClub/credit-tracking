@@ -12,15 +12,17 @@ require('dotenv').config({ path: './src/auth/secret-key.env' });
 export const router = express.Router();
 
 router.post('/login', async (req: Request, res: Response) => {
-    const params = req.body;
+  
     const execParams = {
-        ccid: params.ccid
+        ccid: String(req.get('ccid'))
     };
+    console.log(execParams)
     const exec = await regQueries.getExec(execParams);
     if (exec.length===1) {
-        const password = params.password;
+        const password = String(req.get('password'));
         const hashedPass = exec[0].password;
 
+        console.log(password)
         const key = process.env.SECRETKEY;
         // console.log(key);
 

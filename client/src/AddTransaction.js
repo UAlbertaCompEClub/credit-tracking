@@ -2,7 +2,7 @@ import {Button, FormControl, LinearProgress, InputAdornment, Input,Alert, InputL
 import {useState} from 'react'
 import {RequestService} from './Services/RequestService'
 function AddTransaction(props){
-    const [amount,setAmount] = useState(0)
+    const [amount,setAmount] = useState("")
 
     //Alert Vars
     const[alertType,setAlertType] = useState("success");
@@ -18,6 +18,16 @@ function AddTransaction(props){
     async function submitTransactionHandler(type){
         //Make a call to submit the transaction. 
         setIsLoading(true)
+
+        if(amount === ""){
+            setAlertType("error")
+            setAlertText("Please Enter a Value")
+            setShowAlert(true)
+            setIsLoading(false)
+            return
+        }
+
+
         let realAmount
         if(type === "charge"){
             realAmount = amount*-1
@@ -26,15 +36,15 @@ function AddTransaction(props){
         }
 
         let confirmation 
-        await RequestService.newTransaction(props.user, realAmount, props.token)
-        .then((res)=>{
+        await RequestService.newTransaction(props.customerCcid, realAmount,props.exec.clubid, props.exec.token)
+        .then((res )=>{
             confirmation = res
         }) //holds the new user balance if successful
 
-        if(confirmation){
+        if(confirmation !== null ){
             //transaction succeded
             setAlertType("success")
-            setAlertText("Transaction Success: for this club user now has a balance of: "+confirmation )
+            setAlertText("Transaction Success")
             setShowAlert(true)
             props.refresh(false) // refresh the transaction list and balance
         }else{
@@ -43,7 +53,7 @@ function AddTransaction(props){
             setAlertText("Transaction Failed.")
             setShowAlert(true)
         }
-
+        setAmount("")
         setIsLoading(false)
 
     }

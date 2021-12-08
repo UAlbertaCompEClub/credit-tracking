@@ -77,6 +77,7 @@ function App() {
     setPage("Auth")
     setExecInfo({})
     setCustomerCcid(null)
+    setIsExec(false)
     window.localStorage.clear()
   }
 
@@ -102,7 +103,7 @@ function App() {
               openUser = {openUser} logout = {logout} />}
             {page === "UserProfile" && <UserProfile  
               exec = {ExecInfo}  isExec = {isExec} customerCcid = {customerCcid}
-              setPage = {setPage}/>}
+              setPage = {setPage}  logout = {logout} />}
           </Stack>
         </Container>
       </Container>

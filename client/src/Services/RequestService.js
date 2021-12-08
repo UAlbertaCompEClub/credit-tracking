@@ -91,25 +91,28 @@ export const RequestService = {
         return transactions
     },
     //AddTransaction
-    newTransaction: async (ccid, amount, token)=>{
+    newTransaction: async (ccid, amount, clubid, token)=>{
         //add transaction. Return balance for succ, null for fail
-        let balance
-        fetch(path+"/transaction",
-                {method:"post",body:{
+        let status
+        await fetch(path+"/transaction",
+                {method:"POST", headers:{"Content-type":"application/json"},body:JSON.stringify({
                     ccid:ccid,
+                    clubid:clubid,
                     amount:amount,
-                    token:window.localStorage.getItem('execToken')
-                }})
+                    token:token
+                })})
         .then((res)=>{
-          balance = res
+          console.log("Transaction Creation Succ")
+          status = res
         }).catch(()=>{
+          console.log("Transaction Creation Failure")
             return null
         })
 
-        balance = await getResponse(balance);
+        status = (await getResponse(status)).status;
 
         //Test return
-        return (balance)
+        return (status)
     },
     //ClubDashboard.js
     clubRequest:async (clubid,token)=>{
@@ -136,21 +139,26 @@ export const RequestService = {
     },
     //Auth.js
     ccidCheckReq: async (ccid)=>{
-      //The method...
-      // let status = "Default"
-      // await fetch(path+"/checkCcid", {headers:{ccid:ccid}})
-      // .then((res)=>{
-      //   status = res
-      //   console.log("Ccid Check Success")
-      //   window.localStorage.setItem('customerCcid',ccid)
-      // }).catch(()=>{
-      //   console.log("Ccid Check Failed")
-      // })
-      // status = await getResponse(status)
-      // console.log(status)
-      // return status
+      //The method returns -1 for no user found
+      // 1 for exec and 0 for customer
+      let status = "Default"
+      await fetch(path+"/check-ccid", {headers:{ccid:ccid}})
+      .then((res)=>{
+        status = res
+        console.log("Ccid Check Success")
+        
+      }).catch(()=>{
+        console.log("Ccid Check Failed")
+      })
+      status = await getResponse(status)
+      console.log(status)
 
-      return 1
+      if(status.body == 0){
+        //customer
+        window.localStorage.setItem('customerCcid',ccid)
+      }
+
+      return status.body
 
     },
     execLogin: async (ccid,pw)=>{

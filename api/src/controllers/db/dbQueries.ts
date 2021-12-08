@@ -11,6 +11,7 @@ const createTransaction = async (transactionParam: { ccid: string, clubid: numbe
         id: db.Default,
         created_at: db.Default
     };
+    console.log("creating Transaction at the query level...")
     return db.insert('transactions', transaction).run(connection);
 };
 

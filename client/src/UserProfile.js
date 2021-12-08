@@ -132,6 +132,7 @@ function UserProfile(props){
 
     return (
         <Stack >
+            { !props.isExec && <Button onClick = {props.logout} >Logout</Button>}
             { props.isExec && <Button onClick = {closeUser} >Close</Button>}
             {!userState.isLoading && <Stack>
                 <Typography variant = "h1">{userState.user.name}</Typography>
@@ -157,7 +158,7 @@ function UserProfile(props){
             {!userState.isLoading && userState.table}
 
 
-            {props.isExec && <AddTransaction refresh = {getUserInfo}></AddTransaction>}
+            {props.isExec && <AddTransaction customerCcid = {props.customerCcid} exec = {props.exec} refresh = {getUserInfo}></AddTransaction>}
             {/* Only show the add transaction if current user is an exec */}
         </Stack>
         
