@@ -25,7 +25,21 @@ const createExec = async (execParam: { ccid: string, password: string, clubid: n
     db.insert('execs', exec).run(connection);
 };
 
+const updatePass = async (execParam: { ccid: string, oldPassword: string, newPassword: string; }) => {
+    const exec: schema.execs.Whereable = {
+        ccid: execParam.ccid
+    };
+    
+    const encryptedPass = await encryptPass(execParam.newPassword);
+    const newPass: schema.execs.Updatable = {
+        password: (encryptedPass || ''),
+    };
+
+    db.update('execs', newPass, exec).run(connection);
+};
+
 export {
     createExec,
-    createUser
+    createUser,
+    updatePass
 };

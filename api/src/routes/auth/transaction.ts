@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import * as queries from '../../controllers/db/dbQueries';
+import { verifyToken } from '../../auth/auth';
 import jwt from 'jsonwebtoken';
 import assert from 'assert';
 
@@ -28,12 +29,7 @@ router.post('/transaction', async (req: Request, res: Response) => {
             key = key || '';
 
             //checks if user is verified
-            const verified = jwt.verify(token, key, (err: any, data: any) => {
-                if (err) {
-                    console.log("User not Verified!");
-                    throw new Error("");
-                }
-            });
+            verifyToken(token, key);
 
             if (params.hasOwnProperty('ccid')) {
                 const queryParams = {
