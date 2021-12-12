@@ -140,8 +140,7 @@ function UserProfile(props){
                 <Typography variant = "p">For</Typography>
                 <FormControl>
                     <InputLabel  id="club">club</InputLabel>
-                    <Select
-                       disabled = {props.isExec} 
+                    <Select 
                         labelId="club"
                         id="clubSelect"
                         value={userState.club}
