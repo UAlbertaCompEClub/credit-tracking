@@ -43,23 +43,22 @@ export function AddUser(props) {
 
     return (
         <form onSubmit = {submitHandler}>
-        <Stack>
+        <Stack spacing = {1} sx = {{mt:1}} direction = "column">
             <Typography variant = "p" class = "whiteText">Add Customer</Typography>
              {/* show alert if showAlert is true */}
              {showAlert && <Alert severity = {alertType}> {alertText}!</Alert>} 
-
-             {/* Todo: flex box this area */}
-            <FormControl>
-              {/*ccid */}
-              <InputLabel htmlFor = "ccid" class = "whiteText">ccid</InputLabel>
-                <Input id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
-            </FormControl>
-            <FormControl>
-                {/* name */}
-                <InputLabel htmlFor = "name" className = "whiteText">Name</InputLabel>
-                <Input id = "name" onChange = {(e) => setName(e.target.value)}/>
-            </FormControl>
-
+             <Stack spacing = {2}>
+                <FormControl >
+                {/*ccid */}
+                <InputLabel htmlFor = "ccid" class = "whiteText">ccid</InputLabel>
+                    <Input id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
+                </FormControl>
+                <FormControl>
+                    {/* name */}
+                    <InputLabel htmlFor = "name" className = "whiteText">Name</InputLabel>
+                    <Input id = "name" onChange = {(e) => setName(e.target.value)}/>
+                </FormControl>
+            </Stack>
             <Stack direction = 'row' justifyContent="space-evenly">
                 <Button className = "btn cyanBtn oval" type = "submit">Add</Button>
                 <Button className = "btn cyanBtn oval" onClick = {(e)=>{props.setShowAddUser(false)}}>Close</Button>

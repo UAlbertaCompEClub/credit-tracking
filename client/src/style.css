@@ -19,26 +19,27 @@
 /*----------------------------- Buttons -------------------*/
 /* basic cyan button */
 .btn { 
-    border: 0.5px solid;
+    border: 0.6px solid;
     background-color: transparent;
     color: black;
-    padding: 1px 10px 1px 10px;   
+    text-overflow: ellipsis;
     font-weight: 700;
     cursor: pointer;
     overflow: hidden;
 }
 .oval{
-    border-top-left-radius: 30px;
-    border-top-right-radius: 30px;
-    border-bottom-left-radius: 30px;
-    border-bottom-right-radius: 30px;
+    border-top-left-radius: 35px;
+    border-top-right-radius: 35px;
+    border-bottom-left-radius: 35px;
+    border-bottom-right-radius: 35px;
 }
 .cyanBtn{
     color:#3ee4cf;
     background-color: transparent;
     border-color: grey;
-    height: 19px;
-    font-size: 10px;
+    height: 20px;
+    font-size: 12px;
+    text-overflow: ellipsis;
 }
 
 .cyanBtn:hover{
@@ -71,4 +72,38 @@
     border-bottom: 1.5px solid white;
 } 
 
+/*------------------------------------------------*/
+
+/*------------------flex container---------------------*/
+/* decided not to use, saving this for later if needed
+@media(min-width: 768px){
+.container1{  
+    display: flex;
+    flex-direction: column;
+    flex-wrap:wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 200px;
+}
+.container2{
+    display:flex;
+}
+.container3{ 
+    display:flex;
+    
+}
+.fbox1{
+    display:flex;
+    flex:1;
+    flex-basis: 100%;
+    padding: 5px;
+}
+.fbox2{
+    flex:1;
+}
+.fbox3{
+    flex:1;
+}
+}
+*/
 /*------------------------------------------------*/

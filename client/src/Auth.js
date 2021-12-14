@@ -100,7 +100,7 @@ function Auth(props){
 
         <Stack justifyContent = "center" spacing = {4}  height = "100vh">
 
-            <Typography variant = "h1" >Login</Typography>
+            <Typography className ="whiteText" variant = "h1" >Login</Typography>
 
             {/* show alert if showAlert is true */}
             {showAlert && <Alert severity = {alertType}> {alertText}!</Alert>} 
@@ -125,7 +125,7 @@ function Auth(props){
             }
 
             <Stack direction = 'row' justifyContent="space-evenly">
-                <Button className ="btn whiteBtn" type = "submit">Submit</Button>
+                <Button className ="btn cyanBtn oval" type = "submit">Submit</Button>
                 {isExec && <Button onClick = {backHandler}>Back</Button>}
             </Stack>
         </Stack>

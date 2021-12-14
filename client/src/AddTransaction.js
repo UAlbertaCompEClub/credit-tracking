@@ -44,23 +44,24 @@ function AddTransaction(props){
 
 
     return(
-        <Stack>
+        <Stack spacing = {1.7} direction = "column">
             <Typography variant = "h2">Add a Transaction</Typography>
             <Stack direction = "row" justifyContent = "space-between">
                 <Button className ="btn whiteBtn" onClick = {(e)=>{ quickAddHandler(0.25)}}>+$0.25</Button>
                 <Button className ="btn whiteBtn" onClick = {(e)=>{ quickAddHandler(0.50)}}>+$0.50</Button>
                 <Button className ="btn whiteBtn" onClick = {(e)=>{ quickAddHandler(1)}}>+$1.00</Button>
             </Stack>
-            <FormControl>
-                <InputLabel htmlFor = "amount">Amount</InputLabel>
-                <Input type = "number" startAdornment={<InputAdornment position="start">$</InputAdornment>} id = "amount" value = {amount} onChange = {(e) => setAmount(e.target.value)} />
-                <FormHelperText id = "amountHelperText">Enter Amount</FormHelperText>
-            </FormControl>
-
-            {showAlert && <Alert severity = {alertType}> {alertText}!</Alert>}
-            <Stack direction = 'row' justifyContent="space-evenly">
-                <Button className = "btn cyanBtn oval" onClick = {(e)=>{ submitTransactionHandler("charge")}}>Charge</Button>
-                <Button className = "btn cyanBtn oval" onClick = {(e)=>{ submitTransactionHandler("deposit")}}>Deposit</Button>
+            <Stack direction = 'column'>
+                <FormControl>
+                    <InputLabel  htmlFor = "amount">Amount</InputLabel>
+                    <Input type = "number" startAdornment={<InputAdornment position="start">$</InputAdornment>} id = "amount" value = {amount} onChange = {(e) => setAmount(e.target.value)} />
+                    <FormHelperText id = "amountHelperText">Enter Amount</FormHelperText>
+                </FormControl>
+                {showAlert && <Alert severity = {alertType}> {alertText}!</Alert>}
+                <Stack sx = {{my:2}} direction = 'row' justifyContent="space-evenly">
+                    <Button className = "btn cyanBtn oval" onClick = {(e)=>{ submitTransactionHandler("charge")}}>Charge</Button>
+                    <Button className = "btn cyanBtn oval" onClick = {(e)=>{ submitTransactionHandler("deposit")}}>Deposit</Button>
+                </Stack>
             </Stack>
         </Stack>
         

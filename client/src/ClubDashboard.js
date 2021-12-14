@@ -87,13 +87,13 @@ function ClubDashboard(props){
 
     return(
         
-        <Stack>
+        <Stack spacing = {1.5} sx = {{my:2}} direction = "column">
             <Stack direction = 'row' justifyContent="space-evenly">
               <Button className="btn whiteBtn" onClick = {props.logout} >Logout</Button>
               <Button className="btn whiteBtn" onClick = {(e)=>{selectUser(props.exec)}} >My Profile</Button>
             </Stack>
             
-            <Typography variant = "h1">{clubName}</Typography>
+            <Typography variant = "h1" className="cyanText">{clubName}</Typography>
 
             <Stack direction = "row" justifyContent = "space-between" width = "100%">
                 <FormControl>

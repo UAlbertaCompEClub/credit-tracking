@@ -94,11 +94,12 @@ function UserProfile(props){
     }
 
     return (
-        <Stack >
+        <Stack spacing = {1.5} sx = {{my:2}} direction = "column">
             { isExecView && <Button className ="btn whiteBtn" onClick = {closeUser} >Close</Button>}
-            <Typography variant = "h1">{user.name}</Typography>
+            <Typography className="cyanText" variant = "h1">{user.name}</Typography>
             <Typography variant = "h2">{balanceMessage()}</Typography>
-            <Typography variant = "p">For</Typography>
+          
+            <Typography variant = "p" className = "align">For</Typography>
             <FormControl>
                 <InputLabel id="club">club</InputLabel>
                 <Select
@@ -111,10 +112,9 @@ function UserProfile(props){
                 </Select>
             </FormControl>
             {table}
-
-
             {isExecView && <AddTransaction refresh = {refresh}></AddTransaction>}
             {/* Only show the add transaction if current user is an exec */}
+
         </Stack>
         
         
