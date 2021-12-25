@@ -351,3 +351,4 @@ MigrationBackup/
 
 # Include our ENV variables
 *.env
+"sendgrid.env" 

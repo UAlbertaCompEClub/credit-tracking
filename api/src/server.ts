@@ -8,6 +8,7 @@ import routes from './routes/routes';
 import userRoutes from './routes/auth/users';
 import authRoutes from './routes/auth/login';
 import transactionRoutes from './routes/auth/transaction';
+import { tick, shipInvoice } from './controllers/mail/sendgrid';
 import middleware from './controllers/middleware';
 
 require('dotenv').config({ path: 'db.env' });
@@ -45,9 +46,11 @@ router.use('/api/v1', userRoutes);
 router.use('/api/v1', authRoutes);
 router.use('/api/v1', transactionRoutes);
 
-router.get('/add-entry', (req: Request, res: Response) => {
-    res.send('Hello World!')
-});
+//timed method set-up
+setInterval(tick, 1000);
+// renderClubList(0, 'mfiaz');
+shipInvoice('mfiaz');
+
 router.get('/test-db', async (req: Request, res: Response) => {
     // const transactions = await transactionsUser({ club: 'CompE', ccid: 'mfiaz' });
     const getUsers = await queries.getUsers({ clubid: 1 });
