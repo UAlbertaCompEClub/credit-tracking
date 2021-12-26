@@ -23,7 +23,7 @@ const renderBalances = async (clubs:any, ccid: string) => {
                 renderedList=renderedList.concat('-');
             }
             renderedList=renderedList.concat('$', 
-                Math.abs(parseInt(balanceDict[element.clubid])).toString(), '</li>');
+                Math.abs(parseFloat(balanceDict[element.clubid])).toString(), '</li>');
         }
     });
     // console.log(renderedList);
@@ -33,7 +33,7 @@ const renderBalances = async (clubs:any, ccid: string) => {
 const renderTransactions = async (clubs: any, ccid: string) => {
     var transactionsRendered = '';
     for (const club of clubs) {
-        const transactions = (await queries.transactionsMonthly({ ccid: ccid, clubid: club.clubid }));
+        const transactions = (await queries.transactionUserWeekly({ ccid: ccid, clubid: club.clubid }));
         if (transactions.length>0) {
             transactionsRendered = transactionsRendered.concat('<strong>', club.clubname, ': </strong>');
             transactions.forEach((transaction: any) => {
@@ -44,7 +44,7 @@ const renderTransactions = async (clubs: any, ccid: string) => {
                     transactionsRendered = transactionsRendered.concat('-');
                 }
                 transactionsRendered = transactionsRendered.concat('$',
-                Math.abs(parseInt(transaction.amount)).toString(), '</p>');
+                Math.abs(parseFloat(transaction.amount)).toString(), '</p>');
             });
             transactionsRendered = transactionsRendered.concat('<br>');
         }

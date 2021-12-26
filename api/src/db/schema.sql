@@ -5,7 +5,9 @@ CREATE TABLE IF NOT EXISTS users (
     isExec BOOLEAN NOT NULL DEFAULT FALSE,
     full_name TEXT NOT NULL,
     foip BOOLEAN NOT NULL DEFAULT FALSE,
-    balance REAL NOT NULL DEFAULT 0
+    balance REAL NOT NULL DEFAULT 0,
+    subscribed BOOLEAN NOT NULL DEFAULT TRUE,
+    active BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 /* execs table */
@@ -28,7 +30,22 @@ CREATE TABLE IF NOT EXISTS transactions (
     clubid INT NOT NULL REFERENCES clubs, 
     ccid TEXT NOT NULL REFERENCES users,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    created_by TEXT NOT NULL REFERENCES execs,
     amount REAL NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS invoice_queue (
+    ccid TEXT NOT NULL PRIMARY KEY REFERENCES users
+);
+
+CREATE TABLE IF NOT EXISTS forgot_password (
+    ccid TEXT NOT NULL PRIMARY KEY REFERENCES users,
+    code TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS state (
+    var TEXT NOT NULL PRIMARY KEY,
+    val TEXT NOT NULL
 );
 
 /* Update balance function */

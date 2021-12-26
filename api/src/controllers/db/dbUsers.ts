@@ -38,8 +38,52 @@ const updatePass = async (execParam: { ccid: string, oldPassword: string, newPas
     db.update('execs', newPass, exec).run(connection);
 };
 
+const getActiveUsers = () => {
+    const query = db.sql<schema.users.SQL | schema.users.Selectable[]>`
+    SELECT U.ccid
+    FROM ${"users"} U
+    WHERE U.active = True
+    `.run(connection);
+    return query;
+};
+
+const updateActiveUsers = async () => {
+    const query = db.sql<schema.users.SQL | schema.transactions.SQL>`
+        UPDATE users
+        SET active = True
+        WHERE ccid IN (SELECT U.ccid
+            FROM transactions T, users U
+            WHERE T.ccid = U.ccid
+            AND T.created_at > now() - interval '1 year'
+            GROUP BY U.ccid
+
+            UNION
+
+            SELECT U.ccid
+            FROM users U
+            WHERE U.balance != 0);
+
+        UPDATE users
+        SET active = False
+        WHERE ccid NOT IN (SELECT U.ccid
+            FROM transactions T, users U
+            WHERE T.ccid = U.ccid
+            AND T.created_at > now() - interval '1 year'
+            GROUP BY U.ccid
+
+            UNION
+
+            SELECT U.ccid
+            FROM users U
+            WHERE U.balance != 0)
+    `.run(connection);
+    return query;
+};
+
 export {
     createExec,
     createUser,
-    updatePass
+    updatePass,
+    getActiveUsers,
+    updateActiveUsers
 };

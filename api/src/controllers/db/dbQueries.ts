@@ -4,13 +4,14 @@ import * as db from 'zapatos/db';
 import type * as schema from 'zapatos/schema';
 import connection from './dbConnection';
 
-const createTransaction = async (transactionParam: { ccid: string, clubid: number, amount: number; }) => {
+const createTransaction = async (transactionParam: { ccid: string, clubid: number, amount: number, exec: string; }) => {
     const transaction: schema.transactions.Insertable = {
         ccid: transactionParam.ccid,
         clubid: transactionParam.clubid,
         amount: transactionParam.amount,
         id: db.Default,
-        created_at: db.Default
+        created_at: db.Default,
+        created_by: transactionParam.exec,
     };
     return db.insert('transactions', transaction).run(connection);
 };
@@ -32,7 +33,7 @@ const transactionsUser = async (transaction: { clubid: number, ccid: string }) =
     return db.select('transactions', where).run(connection);
 };
 
-const transactionsMonthly = async (transactionParam: { clubid: number, ccid: string}) => {
+const transactionUserWeekly = async (transactionParam: { clubid: number, ccid: string}) => {
     var today = new Date()
     var oneMonthAgo = new Date()
     oneMonthAgo.setMonth(oneMonthAgo.getMonth()-1);
@@ -43,7 +44,7 @@ const transactionsMonthly = async (transactionParam: { clubid: number, ccid: str
     const query = db.sql<schema.transactions.SQL | schema.transactions.Selectable[]>`
         SELECT *
         FROM ${"transactions"} T
-        WHERE T.created_at > now() - interval '1 month'
+        WHERE T.created_at > now() - interval '1 week'
         AND T.ccid=${db.param(transactionParam.ccid)}
         AND T.clubid=${db.param(transactionParam.clubid)}
     `.run(connection);
@@ -117,5 +118,5 @@ export {
     createUser,
     getClubs,
     getExec,
-    transactionsMonthly
+    transactionUserWeekly
 };

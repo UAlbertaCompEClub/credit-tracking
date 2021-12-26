@@ -8,8 +8,12 @@ import routes from './routes/routes';
 import userRoutes from './routes/auth/users';
 import authRoutes from './routes/auth/login';
 import transactionRoutes from './routes/auth/transaction';
-import { tick, shipInvoice } from './controllers/mail/sendgrid';
 import middleware from './controllers/middleware';
+
+import { computeActiveUsers, tick }  from './sync/queue';
+import { resetSendLimit, initializeState } from './sync/state';
+
+import * as queries from './controllers/db/dbQueries';
 
 require('dotenv').config({ path: 'db.env' });
 
@@ -20,7 +24,6 @@ console.log("DB ACCESS\n",
 "DB_NAME:", process.env.PGDATABASE, "\n",
 "PORT:", process.env.PGPORT);
 
-import * as queries from './controllers/db/dbQueries';
 
 const router = express();
 const port = process.env.PORT || "8000";
@@ -46,10 +49,15 @@ router.use('/api/v1', userRoutes);
 router.use('/api/v1', authRoutes);
 router.use('/api/v1', transactionRoutes);
 
+//set up server state
+initializeState();
+
 //timed method set-up
-setInterval(tick, 1000);
-// renderClubList(0, 'mfiaz');
-shipInvoice('mfiaz');
+setInterval(tick, 24*3600000);
+// setInterval(tick, 20000);
+setInterval(computeActiveUsers, 24*3600000);
+setInterval(resetSendLimit, 3600000);
+
 
 router.get('/test-db', async (req: Request, res: Response) => {
     // const transactions = await transactionsUser({ club: 'CompE', ccid: 'mfiaz' });
