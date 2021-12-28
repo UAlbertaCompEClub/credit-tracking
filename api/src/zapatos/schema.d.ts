@@ -29,73 +29,103 @@ declare module 'zapatos/schema' {
     export type Table = 'clubs';
     export interface Selectable {
       /**
-      * **clubs.name**
+      * **clubs.clubid**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      clubid: number;
+      /**
+      * **clubs.clubname**
       * - `text` in database
       * - `NOT NULL`, no default
       */
-      name: string;
+      clubname: string;
       /**
       * **clubs.amount**
       * - `float4` in database
-      * - `NOT NULL`, no default
+      * - `NOT NULL`, default: `0`
       */
       amount: number;
     }
     export interface JSONSelectable {
       /**
-      * **clubs.name**
+      * **clubs.clubid**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      clubid: number;
+      /**
+      * **clubs.clubname**
       * - `text` in database
       * - `NOT NULL`, no default
       */
-      name: string;
+      clubname: string;
       /**
       * **clubs.amount**
       * - `float4` in database
-      * - `NOT NULL`, no default
+      * - `NOT NULL`, default: `0`
       */
       amount: number;
     }
     export interface Whereable {
       /**
-      * **clubs.name**
+      * **clubs.clubid**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      clubid?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **clubs.clubname**
       * - `text` in database
       * - `NOT NULL`, no default
       */
-      name?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+      clubname?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
       /**
       * **clubs.amount**
       * - `float4` in database
-      * - `NOT NULL`, no default
+      * - `NOT NULL`, default: `0`
       */
       amount?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
     }
     export interface Insertable {
       /**
-      * **clubs.name**
+      * **clubs.clubid**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      clubid: number | db.Parameter<number> | db.SQLFragment;
+      /**
+      * **clubs.clubname**
       * - `text` in database
       * - `NOT NULL`, no default
       */
-      name: string | db.Parameter<string> | db.SQLFragment;
+      clubname: string | db.Parameter<string> | db.SQLFragment;
       /**
       * **clubs.amount**
       * - `float4` in database
-      * - `NOT NULL`, no default
+      * - `NOT NULL`, default: `0`
       */
-      amount: number | db.Parameter<number> | db.SQLFragment;
+      amount?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
     }
     export interface Updatable {
       /**
-      * **clubs.name**
+      * **clubs.clubid**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      clubid?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+      /**
+      * **clubs.clubname**
       * - `text` in database
       * - `NOT NULL`, no default
       */
-      name?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+      clubname?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
       /**
       * **clubs.amount**
       * - `float4` in database
-      * - `NOT NULL`, no default
+      * - `NOT NULL`, default: `0`
       */
-      amount?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+      amount?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
     }
     export type UniqueIndex = 'clubs_pkey';
     export type Column = keyof Selectable;
@@ -118,11 +148,17 @@ declare module 'zapatos/schema' {
       */
       ccid: string;
       /**
-      * **execs.program**
+      * **execs.password**
       * - `text` in database
       * - `NOT NULL`, no default
       */
-      program: string;
+      password: string;
+      /**
+      * **execs.clubid**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      clubid: number;
     }
     export interface JSONSelectable {
       /**
@@ -132,11 +168,17 @@ declare module 'zapatos/schema' {
       */
       ccid: string;
       /**
-      * **execs.program**
+      * **execs.password**
       * - `text` in database
       * - `NOT NULL`, no default
       */
-      program: string;
+      password: string;
+      /**
+      * **execs.clubid**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      clubid: number;
     }
     export interface Whereable {
       /**
@@ -146,11 +188,17 @@ declare module 'zapatos/schema' {
       */
       ccid?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
       /**
-      * **execs.program**
+      * **execs.password**
       * - `text` in database
       * - `NOT NULL`, no default
       */
-      program?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+      password?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **execs.clubid**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      clubid?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
     }
     export interface Insertable {
       /**
@@ -160,11 +208,17 @@ declare module 'zapatos/schema' {
       */
       ccid: string | db.Parameter<string> | db.SQLFragment;
       /**
-      * **execs.program**
+      * **execs.password**
       * - `text` in database
       * - `NOT NULL`, no default
       */
-      program: string | db.Parameter<string> | db.SQLFragment;
+      password: string | db.Parameter<string> | db.SQLFragment;
+      /**
+      * **execs.clubid**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      clubid: number | db.Parameter<number> | db.SQLFragment;
     }
     export interface Updatable {
       /**
@@ -174,66 +228,19 @@ declare module 'zapatos/schema' {
       */
       ccid?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
       /**
-      * **execs.program**
+      * **execs.password**
       * - `text` in database
       * - `NOT NULL`, no default
       */
-      program?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+      password?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+      /**
+      * **execs.clubid**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      clubid?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
     }
     export type UniqueIndex = 'execs_pkey';
-    export type Column = keyof Selectable;
-    export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
-    export type SQLExpression = db.GenericSQLExpression | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Table | Whereable | Column;
-    export type SQL = SQLExpression | SQLExpression[];
-  }
-
-  /**
-   * **test**
-   * - Table in database
-   */
-  export namespace test {
-    export type Table = 'test';
-    export interface Selectable {
-      /**
-      * **test.column1**
-      * - `int2` in database
-      * - `NOT NULL`, no default
-      */
-      column1: number;
-    }
-    export interface JSONSelectable {
-      /**
-      * **test.column1**
-      * - `int2` in database
-      * - `NOT NULL`, no default
-      */
-      column1: number;
-    }
-    export interface Whereable {
-      /**
-      * **test.column1**
-      * - `int2` in database
-      * - `NOT NULL`, no default
-      */
-      column1?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
-    }
-    export interface Insertable {
-      /**
-      * **test.column1**
-      * - `int2` in database
-      * - `NOT NULL`, no default
-      */
-      column1: number | db.Parameter<number> | db.SQLFragment;
-    }
-    export interface Updatable {
-      /**
-      * **test.column1**
-      * - `int2` in database
-      * - `NOT NULL`, no default
-      */
-      column1?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
-    }
-    export type UniqueIndex = 'test_pkey';
     export type Column = keyof Selectable;
     export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
     export type SQLExpression = db.GenericSQLExpression | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Table | Whereable | Column;
@@ -254,11 +261,17 @@ declare module 'zapatos/schema' {
       */
       id: string;
       /**
-      * **transactions.club**
+      * **transactions.clubid**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      clubid: number;
+      /**
+      * **transactions.ccid**
       * - `text` in database
       * - `NOT NULL`, no default
       */
-      club: string;
+      ccid: string;
       /**
       * **transactions.created_at**
       * - `timestamptz` in database
@@ -271,12 +284,6 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       amount: number;
-      /**
-      * **transactions.ccid**
-      * - `text` in database
-      * - `NOT NULL`, no default
-      */
-      ccid: string;
     }
     export interface JSONSelectable {
       /**
@@ -286,11 +293,17 @@ declare module 'zapatos/schema' {
       */
       id: string;
       /**
-      * **transactions.club**
+      * **transactions.clubid**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      clubid: number;
+      /**
+      * **transactions.ccid**
       * - `text` in database
       * - `NOT NULL`, no default
       */
-      club: string;
+      ccid: string;
       /**
       * **transactions.created_at**
       * - `timestamptz` in database
@@ -303,12 +316,6 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       amount: number;
-      /**
-      * **transactions.ccid**
-      * - `text` in database
-      * - `NOT NULL`, no default
-      */
-      ccid: string;
     }
     export interface Whereable {
       /**
@@ -318,11 +325,17 @@ declare module 'zapatos/schema' {
       */
       id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
       /**
-      * **transactions.club**
+      * **transactions.clubid**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      clubid?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **transactions.ccid**
       * - `text` in database
       * - `NOT NULL`, no default
       */
-      club?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+      ccid?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
       /**
       * **transactions.created_at**
       * - `timestamptz` in database
@@ -335,12 +348,6 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       amount?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **transactions.ccid**
-      * - `text` in database
-      * - `NOT NULL`, no default
-      */
-      ccid?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
     }
     export interface Insertable {
       /**
@@ -350,11 +357,17 @@ declare module 'zapatos/schema' {
       */
       id?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment;
       /**
-      * **transactions.club**
+      * **transactions.clubid**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      clubid: number | db.Parameter<number> | db.SQLFragment;
+      /**
+      * **transactions.ccid**
       * - `text` in database
       * - `NOT NULL`, no default
       */
-      club: string | db.Parameter<string> | db.SQLFragment;
+      ccid: string | db.Parameter<string> | db.SQLFragment;
       /**
       * **transactions.created_at**
       * - `timestamptz` in database
@@ -367,12 +380,6 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       amount: number | db.Parameter<number> | db.SQLFragment;
-      /**
-      * **transactions.ccid**
-      * - `text` in database
-      * - `NOT NULL`, no default
-      */
-      ccid: string | db.Parameter<string> | db.SQLFragment;
     }
     export interface Updatable {
       /**
@@ -382,11 +389,17 @@ declare module 'zapatos/schema' {
       */
       id?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.DefaultType | db.SQLFragment>;
       /**
-      * **transactions.club**
+      * **transactions.clubid**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      clubid?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+      /**
+      * **transactions.ccid**
       * - `text` in database
       * - `NOT NULL`, no default
       */
-      club?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+      ccid?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
       /**
       * **transactions.created_at**
       * - `timestamptz` in database
@@ -399,12 +412,6 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       amount?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
-      /**
-      * **transactions.ccid**
-      * - `text` in database
-      * - `NOT NULL`, no default
-      */
-      ccid?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
     }
     export type UniqueIndex = 'transactions_pkey';
     export type Column = keyof Selectable;
@@ -427,6 +434,12 @@ declare module 'zapatos/schema' {
       */
       ccid: string;
       /**
+      * **users.isexec**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isexec: boolean;
+      /**
       * **users.full_name**
       * - `text` in database
       * - `NOT NULL`, no default
@@ -435,15 +448,15 @@ declare module 'zapatos/schema' {
       /**
       * **users.foip**
       * - `bool` in database
-      * - Nullable, no default
+      * - `NOT NULL`, default: `false`
       */
-      foip: boolean | null;
+      foip: boolean;
       /**
       * **users.balance**
       * - `float4` in database
-      * - Nullable, no default
+      * - `NOT NULL`, default: `0`
       */
-      balance: number | null;
+      balance: number;
     }
     export interface JSONSelectable {
       /**
@@ -453,6 +466,12 @@ declare module 'zapatos/schema' {
       */
       ccid: string;
       /**
+      * **users.isexec**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isexec: boolean;
+      /**
       * **users.full_name**
       * - `text` in database
       * - `NOT NULL`, no default
@@ -461,15 +480,15 @@ declare module 'zapatos/schema' {
       /**
       * **users.foip**
       * - `bool` in database
-      * - Nullable, no default
+      * - `NOT NULL`, default: `false`
       */
-      foip: boolean | null;
+      foip: boolean;
       /**
       * **users.balance**
       * - `float4` in database
-      * - Nullable, no default
+      * - `NOT NULL`, default: `0`
       */
-      balance: number | null;
+      balance: number;
     }
     export interface Whereable {
       /**
@@ -479,6 +498,12 @@ declare module 'zapatos/schema' {
       */
       ccid?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
       /**
+      * **users.isexec**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isexec?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
+      /**
       * **users.full_name**
       * - `text` in database
       * - `NOT NULL`, no default
@@ -487,13 +512,13 @@ declare module 'zapatos/schema' {
       /**
       * **users.foip**
       * - `bool` in database
-      * - Nullable, no default
+      * - `NOT NULL`, default: `false`
       */
       foip?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
       /**
       * **users.balance**
       * - `float4` in database
-      * - Nullable, no default
+      * - `NOT NULL`, default: `0`
       */
       balance?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
     }
@@ -505,6 +530,12 @@ declare module 'zapatos/schema' {
       */
       ccid: string | db.Parameter<string> | db.SQLFragment;
       /**
+      * **users.isexec**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isexec?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
+      /**
       * **users.full_name**
       * - `text` in database
       * - `NOT NULL`, no default
@@ -513,15 +544,15 @@ declare module 'zapatos/schema' {
       /**
       * **users.foip**
       * - `bool` in database
-      * - Nullable, no default
+      * - `NOT NULL`, default: `false`
       */
-      foip?: boolean | db.Parameter<boolean> | null | db.DefaultType | db.SQLFragment;
+      foip?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
       /**
       * **users.balance**
       * - `float4` in database
-      * - Nullable, no default
+      * - `NOT NULL`, default: `0`
       */
-      balance?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment;
+      balance?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
     }
     export interface Updatable {
       /**
@@ -531,6 +562,12 @@ declare module 'zapatos/schema' {
       */
       ccid?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
       /**
+      * **users.isexec**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isexec?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
+      /**
       * **users.full_name**
       * - `text` in database
       * - `NOT NULL`, no default
@@ -539,15 +576,15 @@ declare module 'zapatos/schema' {
       /**
       * **users.foip**
       * - `bool` in database
-      * - Nullable, no default
+      * - `NOT NULL`, default: `false`
       */
-      foip?: boolean | db.Parameter<boolean> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | null | db.DefaultType | db.SQLFragment>;
+      foip?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
       /**
       * **users.balance**
       * - `float4` in database
-      * - Nullable, no default
+      * - `NOT NULL`, default: `0`
       */
-      balance?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment>;
+      balance?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
     }
     export type UniqueIndex = 'users_pkey';
     export type Column = keyof Selectable;
@@ -558,25 +595,24 @@ declare module 'zapatos/schema' {
 
   /* === cross-table types === */
 
-  export type Table = clubs.Table | execs.Table | test.Table | transactions.Table | users.Table;
-  export type Selectable = clubs.Selectable | execs.Selectable | test.Selectable | transactions.Selectable | users.Selectable;
-  export type JSONSelectable = clubs.JSONSelectable | execs.JSONSelectable | test.JSONSelectable | transactions.JSONSelectable | users.JSONSelectable;
-  export type Whereable = clubs.Whereable | execs.Whereable | test.Whereable | transactions.Whereable | users.Whereable;
-  export type Insertable = clubs.Insertable | execs.Insertable | test.Insertable | transactions.Insertable | users.Insertable;
-  export type Updatable = clubs.Updatable | execs.Updatable | test.Updatable | transactions.Updatable | users.Updatable;
-  export type UniqueIndex = clubs.UniqueIndex | execs.UniqueIndex | test.UniqueIndex | transactions.UniqueIndex | users.UniqueIndex;
-  export type Column = clubs.Column | execs.Column | test.Column | transactions.Column | users.Column;
-  export type AllBaseTables = [clubs.Table, execs.Table, test.Table, transactions.Table, users.Table];
+  export type Table = clubs.Table | execs.Table | transactions.Table | users.Table;
+  export type Selectable = clubs.Selectable | execs.Selectable | transactions.Selectable | users.Selectable;
+  export type JSONSelectable = clubs.JSONSelectable | execs.JSONSelectable | transactions.JSONSelectable | users.JSONSelectable;
+  export type Whereable = clubs.Whereable | execs.Whereable | transactions.Whereable | users.Whereable;
+  export type Insertable = clubs.Insertable | execs.Insertable | transactions.Insertable | users.Insertable;
+  export type Updatable = clubs.Updatable | execs.Updatable | transactions.Updatable | users.Updatable;
+  export type UniqueIndex = clubs.UniqueIndex | execs.UniqueIndex | transactions.UniqueIndex | users.UniqueIndex;
+  export type Column = clubs.Column | execs.Column | transactions.Column | users.Column;
+  export type AllBaseTables = [clubs.Table, execs.Table, transactions.Table, users.Table];
   export type AllForeignTables = [];
   export type AllViews = [];
   export type AllMaterializedViews = [];
-  export type AllTablesAndViews = [clubs.Table, execs.Table, test.Table, transactions.Table, users.Table];
+  export type AllTablesAndViews = [clubs.Table, execs.Table, transactions.Table, users.Table];
 
 
   export type SelectableForTable<T extends Table> = {
     clubs: clubs.Selectable;
     execs: execs.Selectable;
-    test: test.Selectable;
     transactions: transactions.Selectable;
     users: users.Selectable;
   }[T];
@@ -584,7 +620,6 @@ declare module 'zapatos/schema' {
   export type JSONSelectableForTable<T extends Table> = {
     clubs: clubs.JSONSelectable;
     execs: execs.JSONSelectable;
-    test: test.JSONSelectable;
     transactions: transactions.JSONSelectable;
     users: users.JSONSelectable;
   }[T];
@@ -592,7 +627,6 @@ declare module 'zapatos/schema' {
   export type WhereableForTable<T extends Table> = {
     clubs: clubs.Whereable;
     execs: execs.Whereable;
-    test: test.Whereable;
     transactions: transactions.Whereable;
     users: users.Whereable;
   }[T];
@@ -600,7 +634,6 @@ declare module 'zapatos/schema' {
   export type InsertableForTable<T extends Table> = {
     clubs: clubs.Insertable;
     execs: execs.Insertable;
-    test: test.Insertable;
     transactions: transactions.Insertable;
     users: users.Insertable;
   }[T];
@@ -608,7 +641,6 @@ declare module 'zapatos/schema' {
   export type UpdatableForTable<T extends Table> = {
     clubs: clubs.Updatable;
     execs: execs.Updatable;
-    test: test.Updatable;
     transactions: transactions.Updatable;
     users: users.Updatable;
   }[T];
@@ -616,7 +648,6 @@ declare module 'zapatos/schema' {
   export type UniqueIndexForTable<T extends Table> = {
     clubs: clubs.UniqueIndex;
     execs: execs.UniqueIndex;
-    test: test.UniqueIndex;
     transactions: transactions.UniqueIndex;
     users: users.UniqueIndex;
   }[T];
@@ -624,7 +655,6 @@ declare module 'zapatos/schema' {
   export type ColumnForTable<T extends Table> = {
     clubs: clubs.Column;
     execs: execs.Column;
-    test: test.Column;
     transactions: transactions.Column;
     users: users.Column;
   }[T];
@@ -632,7 +662,6 @@ declare module 'zapatos/schema' {
   export type SQLForTable<T extends Table> = {
     clubs: clubs.SQL;
     execs: execs.SQL;
-    test: test.SQL;
     transactions: transactions.SQL;
     users: users.SQL;
   }[T];

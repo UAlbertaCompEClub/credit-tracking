@@ -1,0 +1,33 @@
+import { Pool, Client } from 'pg';
+import * as db from 'zapatos/db';
+import type * as schema from 'zapatos/schema';
+import connection from './dbConnection';
+import { encryptPass } from '../../auth/auth';
+
+const createUser = async (userParam: { ccid: string; full_name: string, foip: boolean, isexec: boolean; }) => {
+    console.log("Creating a User at the query stage")
+    const user: schema.users.Insertable = {
+        ccid: userParam.ccid,
+        full_name: userParam.full_name,
+        foip: userParam.foip,
+        isexec: userParam.isexec,
+        balance: 0
+    };
+    db.insert('users', user).run(connection);
+};
+
+const createExec = async (execParam: { ccid: string, password: string, clubid: number; }) => {
+    console.log("Creating an Exec at the query stage")
+    const encryptedPass = await encryptPass(execParam.password);
+    const exec: schema.execs.Insertable = {
+        ccid: execParam.ccid,
+        password: (encryptedPass || ''),
+        clubid: execParam.clubid
+    };
+    db.insert('execs', exec).run(connection);
+};
+
+export {
+    createExec,
+    createUser
+};

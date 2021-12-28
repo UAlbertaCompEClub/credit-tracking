@@ -3,39 +3,50 @@ import * as db from 'zapatos/db';
 import type * as schema from 'zapatos/schema';
 import connection from './dbConnection';
 
-const createTransaction = async (transactionParam: { ccid: string, club: string, amount: number; }) => {
+const createTransaction = async (transactionParam: { ccid: string, clubid: number, amount: number; }) => {
     const transaction: schema.transactions.Insertable = {
         ccid: transactionParam.ccid,
-        club: transactionParam.club,
+        clubid: transactionParam.clubid,
         amount: transactionParam.amount,
         id: db.Default,
         created_at: db.Default
     };
+    console.log("creating Transaction at the query level...")
     return db.insert('transactions', transaction).run(connection);
 };
 
-const transactionsUser = async (transaction: { club: string, ccid: string}) => {
+const transactionsUser = async (transaction: { clubid: number, ccid: string }) => {
     const where: schema.transactions.Whereable = {};
-    if (transaction.club !== 'any') {
-        where.ccid = transaction.ccid;
+    if (transaction.clubid !== 0) {
+        where.clubid = transaction.clubid;
     }
     if (transaction.ccid !== 'any') {
-        where.club = transaction.club;
+        where.ccid = transaction.ccid;
     }
     return db.select('transactions', where).run(connection);
 };
+
+
+
+
 
 const transactionsAll = async () => {
     const where: schema.transactions.Whereable = {};
     return db.select('transactions', where).run(connection);
 };
 
-const clubBalance = async (queryParams: { name: string }) => {
+const getClubs = async (queryParams: { clubid: number }) => {
     const where: schema.clubs.Whereable = {};
-    if (queryParams.name !== 'any') {
-        where.name = queryParams.name;
+    where.clubid = queryParams.clubid
+    return db.select('clubs', where).run(connection);
+};
+
+const clubBalance = async (queryParams: { clubid: number }) => {
+    const where: schema.clubs.Whereable = {};
+    if (queryParams.clubid !== 0) {
+        where.clubid = queryParams.clubid;
     }
-    // console.log(await db.select('transactions', where).run(connection));
+    
     return db.select('clubs', where).run(connection);
 };
 
@@ -49,7 +60,7 @@ const createUser = async (userParam: { ccid: string; full_name: string, foip: bo
     return db.insert('users', user).run(connection);
 };
 
-const getUser = async (userParam: { ccid: string}) => {
+const getUser = async (userParam: { ccid: string }) => {
     const where: schema.users.Whereable = {};
     if (userParam.ccid !== 'any') {
         where.ccid = userParam.ccid;
@@ -58,13 +69,32 @@ const getUser = async (userParam: { ccid: string}) => {
     return db.select('users', where).run(connection);
 };
 
-const getUsers = async (userParam: { club: string }) => {
+const getExec = async (userParam: { ccid: string }) => {
+    const where: schema.execs.Whereable = {};
+    if (userParam.ccid !== 'any') {
+        where.ccid = userParam.ccid;
+    }
+    return db.select('execs', where).run(connection);
+};
+
+const getUsers = async (userParam: { clubid: number }) => {
     const query = db.sql<schema.users.SQL | schema.transactions.SQL, schema.users.Selectable[]>`
         SELECT U.ccid, U.balance
         FROM ${"users"} U, ${"transactions"} T
-        WHERE U.ccid=T.ccid AND T.club=${db.param(userParam.club)}
+        WHERE U.ccid=T.ccid AND T.clubid=${db.param(userParam.clubid)}
         GROUP BY U.ccid
-        HAVING COUNT(T.club)>0
+        HAVING COUNT(T.clubid)>0
+    `.run(connection);
+    return query;
+};
+const getUsersRobust = async (userParam: { clubid: string }) => {
+    // console.log("club = " + userParam.club)
+    const query = db.sql<schema.users.SQL | schema.transactions.SQL, schema.users.Selectable[]>`
+        SELECT U.ccid, U.full_name, U.balance
+        FROM ${"users"} U, ${"transactions"} T
+        WHERE U.ccid=T.ccid AND T.clubid=${db.param(userParam.clubid)}
+        GROUP BY U.ccid, U.full_name
+        HAVING COUNT(T.clubid)>0
     `.run(connection);
     return query;
 };
@@ -75,6 +105,9 @@ export {
     transactionsUser,
     getUser,
     getUsers,
+    getUsersRobust,
     transactionsAll,
-    createUser
+    createUser,
+    getClubs,
+    getExec
 };
