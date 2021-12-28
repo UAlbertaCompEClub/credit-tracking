@@ -13,7 +13,7 @@ import "./style.css"
 
 function App() {
 
-  const [page,setPage] = useState("Auth")
+  const [page,setPage] = useState("UserProfile")
   const [ExecInfo, setExecInfo] = useState({ccid:'Default', token : 'Default', club:"Default",clubid:0})
   const [customerCcid,setCustomerCcid] = useState("cstm")
   const [isExec,setIsExec] = useState(false) //TODO Change to false for production

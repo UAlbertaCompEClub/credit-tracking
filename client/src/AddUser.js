@@ -80,7 +80,11 @@ export function AddUser(props) {
 
             <Stack direction = 'row' justifyContent="space-evenly">
                 <Button disabled = {isLoading}  className = "btn cyanBtn oval" type = "submit">Add</Button>
+<<<<<<< Updated upstream
                 <CustomButton disabled = {isLoading}  className = "btn cyanBtn oval" onClick = {(e)=>{props.setShowAddUser(false)}}>Close</CustomButton>
+=======
+                <Button disabled = {isLoading}  className = "btn cyanBtn oval" onClick = {(e)=>{props.setShowAddUser(false)}}>Close</Button>
+>>>>>>> Stashed changes
             </Stack>
             
         </Stack>
