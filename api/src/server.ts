@@ -8,14 +8,16 @@ import routes from './routes/routes';
 import userRoutes from './routes/auth/users';
 import authRoutes from './routes/auth/login';
 import transactionRoutes from './routes/auth/transaction';
+import forgotpassRoutes from './routes/forgotPassword/forgotPassword';
 import middleware from './controllers/middleware';
 
 import { computeActiveUsers, tick }  from './sync/queue';
-import { resetSendLimit, initializeState } from './sync/state';
+import { initializeState } from './sync/state';
+import { hourlyRun } from './sync/sync';
 
 import * as queries from './controllers/db/dbQueries';
 
-require('dotenv').config({ path: 'db.env' });
+require('dotenv').config({ path: 'api.env' });
 
 console.log("DB ACCESS\n",
 "USER:", process.env.PGUSER, "\n",
@@ -48,6 +50,7 @@ router.use('/api/v1', routes);
 router.use('/api/v1', userRoutes);
 router.use('/api/v1', authRoutes);
 router.use('/api/v1', transactionRoutes);
+router.use('/api/v1', forgotpassRoutes);
 
 //set up server state
 initializeState();
@@ -56,7 +59,7 @@ initializeState();
 setInterval(tick, 24*3600000);
 // setInterval(tick, 20000);
 setInterval(computeActiveUsers, 24*3600000);
-setInterval(resetSendLimit, 3600000);
+setInterval(hourlyRun, 3600000);
 
 
 router.get('/test-db', async (req: Request, res: Response) => {

@@ -4,7 +4,7 @@ import * as regQueries from '../../controllers/db/dbQueries';
 import { checkPass, verifyToken } from '../../auth/auth';
 import { assert } from 'console';
 
-export const router = express.Router();
+const router = express.Router();
 
 router.post('/user', async (req: Request, res: Response) => {
     new Promise<void>((resolve) => {
@@ -110,7 +110,6 @@ router.post('/update-password', async (req: Request, res: Response) => {
 
         const execParams = {
             ccid: params.ccid,
-            oldPassword: params.oldPassword,
             newPassword: params.newPassword
         };
         await queries.updatePass(execParams);

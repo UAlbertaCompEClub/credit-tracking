@@ -3,8 +3,54 @@ import * as db from 'zapatos/db';
 import type * as schema from 'zapatos/schema';
 import connection from './dbConnection';
 import { encryptPass } from '../../auth/auth';
+import crypto from 'crypto';
 
-const createUser = async (userParam: { ccid: string; full_name: string, foip: boolean, isexec: boolean; }) => {
+const deleteValidCode = (param: { code: string }) => {
+    const entry: schema.forgot_password.Whereable = {
+        code: param.code
+    };
+    return db.deletes('forgot_password', entry).run(connection);
+};
+
+const checkValidCode = (param: { code: string }) => {
+    const entry: schema.forgot_password.Whereable = {
+        code: param.code
+    };
+    return db.select('forgot_password', entry).run(connection);
+};
+
+const deletestaleResetCodes = () => {
+    db.sql`   
+        DELETE FROM forgot_password F
+        WHERE F.created_at > now() - interval '1 day'
+    `.run(connection);
+};
+
+const checkUserForgot = (param: { ccid: string }) => {
+    const entry: schema.forgot_password.Whereable = {
+        ccid: param.ccid
+    };
+    return db.select('forgot_password', entry).run(connection);
+};
+
+const createForgetPassCode = (userParam: { ccid: string }) => {
+    var code = crypto.randomBytes(10).toString('hex');
+    const entry: schema.forgot_password.Insertable = {
+        ccid: userParam.ccid,
+        code: code
+    };
+    db.insert('forgot_password', entry).run(connection);
+    return code;
+};
+
+const getForgetPassCode = (userParam: { ccid: string }) => {
+    const entry: schema.forgot_password.Whereable = {
+        ccid: userParam.ccid
+    };
+    return db.select('forgot_password', entry).run(connection);
+};
+
+const createUser = (userParam: { ccid: string; full_name: string, foip: boolean, isexec: boolean; }) => {
     const user: schema.users.Insertable = {
         ccid: userParam.ccid,
         full_name: userParam.full_name,
@@ -25,7 +71,7 @@ const createExec = async (execParam: { ccid: string, password: string, clubid: n
     db.insert('execs', exec).run(connection);
 };
 
-const updatePass = async (execParam: { ccid: string, oldPassword: string, newPassword: string; }) => {
+const updatePass = async (execParam: { ccid: string, newPassword: string; }) => {
     const exec: schema.execs.Whereable = {
         ccid: execParam.ccid
     };
@@ -47,7 +93,7 @@ const getActiveUsers = () => {
     return query;
 };
 
-const updateActiveUsers = async () => {
+const updateActiveUsers = () => {
     const query = db.sql<schema.users.SQL | schema.transactions.SQL>`
         UPDATE users
         SET active = True
@@ -85,5 +131,11 @@ export {
     createUser,
     updatePass,
     getActiveUsers,
-    updateActiveUsers
+    updateActiveUsers,
+    createForgetPassCode,
+    getForgetPassCode,
+    deletestaleResetCodes,
+    checkValidCode,
+    deleteValidCode,
+    checkUserForgot
 };

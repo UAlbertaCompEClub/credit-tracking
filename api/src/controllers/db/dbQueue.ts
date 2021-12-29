@@ -4,16 +4,16 @@ import * as db from 'zapatos/db';
 import type * as schema from 'zapatos/schema';
 import connection from './dbConnection';
 
-const queueUsers = async (users: schema.users.JSONSelectable[]) => {
+const queueUsers = (users: schema.users.JSONSelectable[]) => {
     db.insert('invoice_queue', users).run(connection);
 };
 
-const getQueue = async () => {
+const getQueue = () => {
     const where: schema.users.Whereable = {};
     return db.select('invoice_queue', where).run(connection);
 };
 
-const removeUser = async (ccid: string) => {
+const removeUser = (ccid: string) => {
     const where: schema.users.Whereable = {
         ccid:ccid
     };

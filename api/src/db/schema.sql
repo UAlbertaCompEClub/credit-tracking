@@ -38,9 +38,12 @@ CREATE TABLE IF NOT EXISTS invoice_queue (
     ccid TEXT NOT NULL PRIMARY KEY REFERENCES users
 );
 
+/* We want the option of repeats. Thus
+    no need for a primary key in this table */
 CREATE TABLE IF NOT EXISTS forgot_password (
-    ccid TEXT NOT NULL PRIMARY KEY REFERENCES users,
-    code TEXT NOT NULL
+    ccid TEXT NOT NULL REFERENCES execs,
+    code TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS state (

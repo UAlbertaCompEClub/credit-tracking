@@ -8,7 +8,7 @@ import assert from 'assert';
 require('dotenv').config({ path: './src/auth/secret-key.env' });
 
 
-export const router = express.Router();
+const router = express.Router();
 
 router.post('/login', async (req: Request, res: Response) => {
     const params = req.body;

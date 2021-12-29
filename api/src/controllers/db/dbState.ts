@@ -4,7 +4,7 @@ import * as db from 'zapatos/db';
 import type * as schema from 'zapatos/schema';
 import connection from './dbConnection';
 
-const updateState = async (param: {var: string, val: string}) => {
+const updateState = (param: {var: string, val: string}) => {
     const where: schema.state.Whereable = {
         var: param.var
     };

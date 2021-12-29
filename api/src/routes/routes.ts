@@ -4,7 +4,7 @@ import * as queries from '../controllers/db/dbQueries';
 import type * as schema from 'zapatos/schema';
 import middleWare from '../controllers/controllers';
 
-export const router = express.Router();
+const router = express.Router();
 
 
 

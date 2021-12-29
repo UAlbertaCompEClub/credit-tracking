@@ -4,7 +4,7 @@ import * as db from 'zapatos/db';
 import type * as schema from 'zapatos/schema';
 import connection from './dbConnection';
 
-const createTransaction = async (transactionParam: { ccid: string, clubid: number, amount: number, exec: string; }) => {
+const createTransaction = (transactionParam: { ccid: string, clubid: number, amount: number, exec: string; }) => {
     const transaction: schema.transactions.Insertable = {
         ccid: transactionParam.ccid,
         clubid: transactionParam.clubid,
@@ -16,7 +16,7 @@ const createTransaction = async (transactionParam: { ccid: string, clubid: numbe
     return db.insert('transactions', transaction).run(connection);
 };
 
-const transactionsUser = async (transaction: { clubid: number, ccid: string }) => {
+const transactionsUser = (transaction: { clubid: number, ccid: string }) => {
     const where: schema.transactions.Whereable = {};
     if (transaction.clubid === 0 && transaction.ccid === 'any') {
     }
@@ -33,7 +33,7 @@ const transactionsUser = async (transaction: { clubid: number, ccid: string }) =
     return db.select('transactions', where).run(connection);
 };
 
-const transactionUserWeekly = async (transactionParam: { clubid: number, ccid: string}) => {
+const transactionUserWeekly = (transactionParam: { clubid: number, ccid: string}) => {
     var today = new Date()
     var oneMonthAgo = new Date()
     oneMonthAgo.setMonth(oneMonthAgo.getMonth()-1);
@@ -51,17 +51,17 @@ const transactionUserWeekly = async (transactionParam: { clubid: number, ccid: s
     return query;
 };
 
-const transactionsAll = async () => {
+const transactionsAll = () => {
     const where: schema.transactions.Whereable = {};
     return db.select('transactions', where).run(connection);
 };
 
-const getClubs = async () => {
+const getClubs = () => {
     const where: schema.clubs.Whereable = {};
     return db.select('clubs', where).run(connection);
 };
 
-const clubBalance = async (queryParams: { clubid: number }) => {
+const clubBalance = (queryParams: { clubid: number }) => {
     const where: schema.clubs.Whereable = {};
     if (queryParams.clubid !== 0) {
         where.clubid = queryParams.clubid;
@@ -70,7 +70,7 @@ const clubBalance = async (queryParams: { clubid: number }) => {
     return db.select('clubs', where).run(connection);
 };
 
-const createUser = async (userParam: { ccid: string; full_name: string, foip: boolean; }) => {
+const createUser = (userParam: { ccid: string; full_name: string, foip: boolean; }) => {
     const user: schema.users.Insertable = {
         ccid: userParam.ccid,
         full_name: userParam.full_name,
@@ -80,7 +80,7 @@ const createUser = async (userParam: { ccid: string; full_name: string, foip: bo
     return db.insert('users', user).run(connection);
 };
 
-const getUser = async (userParam: { ccid: string }) => {
+const getUser = (userParam: { ccid: string }) => {
     const where: schema.users.Whereable = {};
     if (userParam.ccid !== 'any') {
         where.ccid = userParam.ccid;
@@ -89,7 +89,7 @@ const getUser = async (userParam: { ccid: string }) => {
     return db.select('users', where).run(connection);
 };
 
-const getExec = async (userParam: { ccid: string }) => {
+const getExec = (userParam: { ccid: string }) => {
     const where: schema.execs.Whereable = {};
     if (userParam.ccid !== 'any') {
         where.ccid = userParam.ccid;
@@ -97,7 +97,7 @@ const getExec = async (userParam: { ccid: string }) => {
     return db.select('execs', where).run(connection);
 };
 
-const getUsers = async (userParam: { clubid: number }) => {
+const getUsers = (userParam: { clubid: number }) => {
     const query = db.sql<schema.users.SQL | schema.transactions.SQL, schema.users.Selectable[]>`
         SELECT U.ccid, U.balance
         FROM ${"users"} U, ${"transactions"} T
