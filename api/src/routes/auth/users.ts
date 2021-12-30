@@ -32,10 +32,10 @@ router.post('/user', async (req: Request, res: Response) => {
         }
 
         const execExistsCheck = await regQueries.getExec({ ccid: params.ccid });
+        const userExistsCheck = await regQueries.getUser({ ccid: params.ccid });
         if (params.isexec === true) {
             if (execExistsCheck.length !== 0) {
                 console.log("Exec Already Exists!");
-                throw new Error();
             }
 
             const execParams = {
@@ -47,11 +47,9 @@ router.post('/user', async (req: Request, res: Response) => {
         }
 
         console.log("check if user exists");
-        const userExistsCheck = await regQueries.getUser({ ccid: params.ccid });
         if (userExistsCheck.length!==0) {
             if (execExistsCheck.length!==0) {
                 console.error("User Already Exists!");
-                throw new Error();
             }
         }
 
@@ -63,7 +61,12 @@ router.post('/user', async (req: Request, res: Response) => {
                 foip: foip,
                 balance: 0
             };
-            await queries.createUser(userParams);
+            queries.createUser(userParams);
+        }
+
+        if ((params.isexec === true && execExistsCheck.length !== 0) || userExistsCheck.length !== 0) {
+            res.status(200).json({ body: -1 });
+            return;
         }
     })
     .then(data =>

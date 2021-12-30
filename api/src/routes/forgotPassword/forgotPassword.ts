@@ -6,8 +6,9 @@ import { forgotPasswordEmail } from '../../controllers/mail/sendgrid';
 
 const router = express.Router();
 
-router.post('/forgot-password/', async (req: Request, res: Response, next: NextFunction) => {
+router.post('/forgot-password', async (req: Request, res: Response) => {
     const params = req.body;
+    console.log(params);
     const user = (await genQueries.getExec({ ccid: params.ccid }));
     const nEmailSent = parseInt(await stateQueries.getState({ var:'nEmailSent'}));
 
@@ -33,7 +34,7 @@ router.post('/forgot-password/', async (req: Request, res: Response, next: NextF
     }
 });
 
-router.post('/email-reset/', async (req: Request, res: Response, next: NextFunction) => {
+router.post('/email-reset', async (req: Request, res: Response, next: NextFunction) => {
     console.log('Reset Attempt')
     const params = req.body;
     const user = await queries.checkValidCode({ code: params.code });
@@ -44,7 +45,7 @@ router.post('/email-reset/', async (req: Request, res: Response, next: NextFunct
     }
     else {
         queries.updatePass({
-            ccid: params.ccid,
+            ccid: user[0].ccid,
             newPassword: params.password
         });
         queries.deleteValidCode({code: params.code})
