@@ -15,7 +15,6 @@ require('dotenv').config({ path: 'db.env' });
 console.log("DB ACCESS\n",
 "USER:", process.env.PGUSER, "\n",
 "HOST:", process.env.PGHOST, "\n",
-"PASS:", process.env.PGPASSWORD, "\n",
 "DB_NAME:", process.env.PGDATABASE, "\n",
 "PORT:", process.env.PGPORT);
 
