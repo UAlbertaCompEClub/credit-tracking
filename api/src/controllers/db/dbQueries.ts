@@ -70,16 +70,6 @@ const clubBalance = (queryParams: { clubid: number }) => {
     return db.select('clubs', where).run(connection);
 };
 
-const createUser = (userParam: { ccid: string; full_name: string, foip: boolean; }) => {
-    const user: schema.users.Insertable = {
-        ccid: userParam.ccid,
-        full_name: userParam.full_name,
-        foip: userParam.foip,
-        balance: 0
-    };
-    return db.insert('users', user).run(connection);
-};
-
 const getUser = (userParam: { ccid: string }) => {
     const where: schema.users.Whereable = {};
     if (userParam.ccid !== 'any') {
@@ -115,7 +105,6 @@ export {
     getUser,
     getUsers,
     transactionsAll,
-    createUser,
     getClubs,
     getExec,
     transactionUserWeekly
