@@ -12,13 +12,13 @@ const router = express.Router();
 
 router.post('/login', async (req: Request, res: Response) => {
     const params = req.body;
-    const execParams = {
+    const userParams = {
         ccid: params.ccid
     };
-    const exec = await regQueries.getExec(execParams);
-    if (exec.length===1) {
+    const user = await regQueries.getUser(userParams);
+    if (user.length===1) {
         const password = params.password;
-        const hashedPass = exec[0].password;
+        const hashedPass = user[0].password;
 
         const key = process.env.SECRETKEY;
         // console.log(key);
@@ -29,8 +29,8 @@ router.post('/login', async (req: Request, res: Response) => {
         const passwordSame = await auth.checkPass(password, hashedPass);
         if (passwordSame === true) {
             res.status(200).json({
-                body: exec[0],
-                token: jwt.sign(execParams, key, { expiresIn: '30d' })
+                body: user[0],
+                token: jwt.sign(userParams, key, { expiresIn: '30d' })
             });
         }   
         else {

@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/forgot-password', async (req: Request, res: Response) => {
     const params = req.body;
     console.log(params);
-    const user = (await genQueries.getExec({ ccid: params.ccid }));
+    const user = (await genQueries.getUser({ ccid: params.ccid }));
     const nEmailSent = parseInt(await stateQueries.getState({ var:'nEmailSent'}));
 
     if (user.length === 0 && params.ccid !== null) {

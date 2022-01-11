@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import * as queries from '../../controllers/db/dbUsers';
 import * as regQueries from '../../controllers/db/dbQueries';
 import { checkPass, verifyToken } from '../../auth/auth';
-import { assert } from 'console';
+import assert from 'assert';
 
 const router = express.Router();
 
@@ -21,7 +21,6 @@ router.post('/user', async (req: Request, res: Response) => {
         
         let key = process.env.SECRETKEY;
         assert(key !== undefined && key !== null);
-        key = key || '';
 
         //checks if user is verified
         verifyToken(token, key);
@@ -59,7 +58,8 @@ router.post('/user', async (req: Request, res: Response) => {
                 isexec: params.isexec,
                 full_name: params.full_name,
                 foip: foip,
-                balance: 0
+                balance: 0,
+                password: params.password
             };
             queries.createUser(userParams);
         }
@@ -101,8 +101,8 @@ router.post('/update-password', async (req: Request, res: Response) => {
         //checks if user is verified
         verifyToken(token, key);
 
-        const execExists = await regQueries.getExec({ ccid: params.ccid });
-        const hashPass = execExists[0].password;
+        const userExists = await regQueries.getUser({ ccid: params.ccid });
+        const hashPass = userExists[0].password;
 
         const passVerified = await checkPass(params.oldPassword, hashPass);
         console.log("pass", passVerified);

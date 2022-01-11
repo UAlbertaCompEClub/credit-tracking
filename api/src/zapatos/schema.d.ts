@@ -148,12 +148,6 @@ declare module 'zapatos/schema' {
       */
       ccid: string;
       /**
-      * **execs.password**
-      * - `text` in database
-      * - `NOT NULL`, no default
-      */
-      password: string;
-      /**
       * **execs.clubid**
       * - `int4` in database
       * - `NOT NULL`, no default
@@ -167,12 +161,6 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       ccid: string;
-      /**
-      * **execs.password**
-      * - `text` in database
-      * - `NOT NULL`, no default
-      */
-      password: string;
       /**
       * **execs.clubid**
       * - `int4` in database
@@ -188,12 +176,6 @@ declare module 'zapatos/schema' {
       */
       ccid?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
       /**
-      * **execs.password**
-      * - `text` in database
-      * - `NOT NULL`, no default
-      */
-      password?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-      /**
       * **execs.clubid**
       * - `int4` in database
       * - `NOT NULL`, no default
@@ -208,12 +190,6 @@ declare module 'zapatos/schema' {
       */
       ccid: string | db.Parameter<string> | db.SQLFragment;
       /**
-      * **execs.password**
-      * - `text` in database
-      * - `NOT NULL`, no default
-      */
-      password: string | db.Parameter<string> | db.SQLFragment;
-      /**
       * **execs.clubid**
       * - `int4` in database
       * - `NOT NULL`, no default
@@ -227,12 +203,6 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       ccid?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
-      /**
-      * **execs.password**
-      * - `text` in database
-      * - `NOT NULL`, no default
-      */
-      password?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
       /**
       * **execs.clubid**
       * - `int4` in database
@@ -748,6 +718,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `true`
       */
       active: boolean;
+      /**
+      * **users.password**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      password: string;
     }
     export interface JSONSelectable {
       /**
@@ -792,6 +768,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `true`
       */
       active: boolean;
+      /**
+      * **users.password**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      password: string;
     }
     export interface Whereable {
       /**
@@ -836,6 +818,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `true`
       */
       active?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **users.password**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      password?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
     }
     export interface Insertable {
       /**
@@ -880,6 +868,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `true`
       */
       active?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
+      /**
+      * **users.password**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      password: string | db.Parameter<string> | db.SQLFragment;
     }
     export interface Updatable {
       /**
@@ -924,6 +918,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `true`
       */
       active?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **users.password**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      password?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
     }
     export type UniqueIndex = 'users_pkey';
     export type Column = keyof Selectable;

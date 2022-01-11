@@ -26,7 +26,6 @@ router.post('/transaction', async (req: Request, res: Response) => {
 
             let key = process.env.SECRETKEY;
             assert(key !== undefined && key !== null);
-            key = key || '';
 
             //checks if user is verified
             verifyToken(token, key);

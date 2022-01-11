@@ -4,6 +4,19 @@ import type * as schema from 'zapatos/schema';
 import connection from './dbConnection';
 import { encryptPass } from '../../auth/auth';
 import crypto from 'crypto';
+import assert from 'assert';
+
+const setSubscribed = (param: { ccid: string, subscribed: boolean; }) => {
+    const user: schema.users.Whereable = {
+        ccid: param.ccid
+    };
+
+    const subStatus: schema.users.Updatable = {
+        subscribed: param.subscribed
+    };
+
+    db.update('users', subStatus, user).run(connection);
+};
 
 const deleteValidCode = (param: { code: string }) => {
     const entry: schema.forgot_password.Whereable = {
@@ -50,38 +63,70 @@ const getForgetPassCode = (userParam: { ccid: string }) => {
     return db.select('forgot_password', entry).run(connection);
 };
 
-const createUser = (userParam: { ccid: string; full_name: string, foip: boolean, isexec: boolean; }) => {
+const createUser = async (userParam: { ccid: string; full_name: string, foip: boolean, isexec: boolean, password: string; }) => {
+    const encryptedPass = await encryptPass(userParam.password);
+    assert(encryptedPass !== undefined && encryptedPass !== null);
     const user: schema.users.Insertable = {
         ccid: userParam.ccid,
         full_name: userParam.full_name,
         foip: userParam.foip,
         isexec: userParam.isexec,
-        balance: 0
+        balance: 0,
+        password: encryptedPass
     };
     db.insert('users', user).run(connection);
 };
 
 const createExec = async (execParam: { ccid: string, password: string, clubid: number; }) => {
-    const encryptedPass = await encryptPass(execParam.password);
+    /* Check if non-exec user with this ccid already exists */
+    const userParam: schema.users.Whereable = {
+        ccid: execParam.ccid
+    };
+    const user = await db.select('users', userParam).run(connection);
+    
+    if (user.length === 0) {
+        const encryptedPass = await encryptPass(execParam.password);
+        assert(encryptedPass !== undefined && encryptedPass !== null);
+        const userNew: schema.users.Insertable = {
+            ccid: execParam.ccid,
+            full_name: execParam.ccid,
+            foip: true,
+            isexec: true,
+            balance: 0,
+            password: encryptedPass
+        };
+        db.insert('users', userNew).run(connection);
+    }
+    if (user.length === 1 && user[0].isexec===false) {
+        const userWhere: schema.users.Whereable = {
+            ccid: execParam.ccid
+        };
+        const userUpdate: schema.users.Updatable = {
+            isexec: true
+        };
+        db.update('users', userUpdate, userWhere).run(connection);
+    }
+    
     const exec: schema.execs.Insertable = {
         ccid: execParam.ccid,
-        password: (encryptedPass || ''),
         clubid: execParam.clubid
     };
     db.insert('execs', exec).run(connection);
 };
 
-const updatePass = async (execParam: { ccid: string, newPassword: string; }) => {
-    const exec: schema.execs.Whereable = {
-        ccid: execParam.ccid
+const updatePass = async (userParam: { ccid: string, newPassword: string; }) => {
+    const user: schema.users.Whereable = {
+        ccid: userParam.ccid
     };
     
-    const encryptedPass = await encryptPass(execParam.newPassword);
-    const newPass: schema.execs.Updatable = {
-        password: (encryptedPass || ''),
+    const encryptedPass = await encryptPass(userParam.newPassword);
+    assert(encryptedPass !== undefined && encryptedPass !== null);
+
+    const newPass: schema.users.Updatable = {
+        password: encryptedPass
     };
 
-    db.update('execs', newPass, exec).run(connection);
+    db.update('users', newPass, user).run(connection);
 };
 
 const getActiveUsers = () => {
@@ -137,5 +182,6 @@ export {
     deletestaleResetCodes,
     checkValidCode,
     deleteValidCode,
-    checkUserForgot
+    checkUserForgot,
+    setSubscribed
 };
