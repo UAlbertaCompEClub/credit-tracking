@@ -9,9 +9,19 @@ import { Console } from 'console';
 require('dotenv').config({ path: './src/auth/secret-key.env' });
 
 
-export const router = express.Router();
+const router = express.Router();
 
 router.post('/login', async (req: Request, res: Response) => {
+<<<<<<< HEAD
+    const params = req.body;
+    const userParams = {
+        ccid: params.ccid
+    };
+    const user = await regQueries.getUser(userParams);
+    if (user.length===1) {
+        const password = params.password;
+        const hashedPass = user[0].password;
+=======
   
     const execParams = {
         ccid: String(req.get('ccid'))
@@ -21,6 +31,7 @@ router.post('/login', async (req: Request, res: Response) => {
     if (exec.length===1) {
         const password = String(req.get('password'));
         const hashedPass = exec[0].password;
+>>>>>>> main
 
         console.log(password)
         const key = process.env.SECRETKEY;
@@ -33,10 +44,15 @@ router.post('/login', async (req: Request, res: Response) => {
   
         if (passwordSame === true) {
             res.status(200).json({
+<<<<<<< HEAD
+                body: user[0],
+                token: jwt.sign(userParams, key, { expiresIn: '30d' })
+=======
                 ccid: exec[0].ccid,
                 token: jwt.sign(execParams, key, { expiresIn: '30d' }),
                 club: (await regQueries.getClubs({clubid:exec[0].clubid}))[0].clubname,
                 clubid:exec[0].clubid
+>>>>>>> main
             });
         }   
         else {

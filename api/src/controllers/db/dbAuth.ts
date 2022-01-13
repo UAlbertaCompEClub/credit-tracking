@@ -4,7 +4,7 @@ import type * as schema from 'zapatos/schema';
 import connection from './dbConnection';
 import { encryptPass } from '../../auth/auth';
 
-const returnExec = async (userParam: { ccid: string; }) => {
+const returnExec = (userParam: { ccid: string; }) => {
     const where: schema.execs.Whereable = {};
     where.ccid = userParam.ccid;
 

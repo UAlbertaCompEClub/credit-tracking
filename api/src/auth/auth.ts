@@ -1,8 +1,6 @@
-import { Pool, Client } from 'pg';
-import * as db from 'zapatos/db';
-import type * as schema from 'zapatos/schema';
-import connection from '../controllers/db/dbConnection';
+import * as queries from '../controllers/db/dbQueries';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import { assert } from 'console';
 
 const encryptPass = async (pass: string) => {
@@ -23,7 +21,24 @@ const checkPass = async (inputPass: string, hashPass: string) => {
         .catch(err => console.error(err.message));
 }
 
+const verifyToken = (token: string, key: string) => {
+    jwt.verify(token, key, (err: any, data: any) => {
+        if (err) {
+            console.log("User not Verified!");
+            throw new Error("");
+        }
+    });
+    jwt.verify(token, key, async (err: any, data: any) => {
+        const tokenCcidCheck = await queries.getExec({ ccid: data.ccid });
+        if (tokenCcidCheck.length !== 1) {
+            console.log("User in Token does not Exist!");
+            throw new Error("");
+        }
+    });
+}
+
 export {
     encryptPass,
-    checkPass
+    checkPass,
+    verifyToken
 };

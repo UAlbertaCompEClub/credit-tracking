@@ -1,12 +1,13 @@
 import express, { NextFunction, Request, Response } from 'express';
 import * as queries from '../../controllers/db/dbQueries';
+import { verifyToken } from '../../auth/auth';
 import jwt from 'jsonwebtoken';
 import assert from 'assert';
 
 require('dotenv').config({ path: './src/auth/secret-key.env' });
 
 
-export const router = express.Router();
+const router = express.Router();
 
 router.post('/transaction', async (req: Request, res: Response) => {
     const params = req.body;
@@ -25,21 +26,20 @@ router.post('/transaction', async (req: Request, res: Response) => {
 
             let key = process.env.SECRETKEY;
             assert(key !== undefined && key !== null);
-            key = key || '';
 
             //checks if user is verified
-            const verified = jwt.verify(token, key, (err: any, data: any) => {
-                if (err) {
-                    console.log("User not Verified!");
-                    throw new Error("");
-                }
-            });
+            verifyToken(token, key);
 
             if (params.hasOwnProperty('ccid')) {
                 const queryParams = {
                     ccid: params.ccid,
                     clubid: parseInt(params.clubid),
+<<<<<<< HEAD
+                    amount: parseInt(params.amount),
+                    exec: params.exec
+=======
                     amount: parseFloat(params.amount)
+>>>>>>> main
                 };
                 await queries.createTransaction(queryParams);
             }
