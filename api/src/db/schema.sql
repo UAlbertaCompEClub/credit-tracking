@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS transactions (
     amount REAL NOT NULL
 );
 
+/* email queue for invoices */
 CREATE TABLE IF NOT EXISTS invoice_queue (
     ccid TEXT NOT NULL PRIMARY KEY REFERENCES users
 );

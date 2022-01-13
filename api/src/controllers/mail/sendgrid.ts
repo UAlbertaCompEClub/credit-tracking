@@ -60,7 +60,7 @@ const forgotPasswordEmail = async (ccid: string) => {
     const forgotPassCheck = await queries.getForgetPassCode({ ccid: ccid });
     var code = '';
     if (forgotPassCheck.length===0) {
-        code = queries.createForgetPassCode({ ccid: ccid });
+        code = await queries.createForgetPassCode({ ccid: ccid });
     }
     else {
         code = forgotPassCheck[0].code;

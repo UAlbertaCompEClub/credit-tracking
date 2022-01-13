@@ -46,13 +46,13 @@ const checkUserForgot = (param: { ccid: string }) => {
     return db.select('forgot_password', entry).run(connection);
 };
 
-const createForgetPassCode = (userParam: { ccid: string }) => {
+const createForgetPassCode = async (userParam: { ccid: string }) => {
     var code = crypto.randomBytes(10).toString('hex');
     const entry: schema.forgot_password.Insertable = {
         ccid: userParam.ccid,
         code: code
     };
-    db.insert('forgot_password', entry).run(connection);
+    await db.insert('forgot_password', entry).run(connection);
     return code;
 };
 
@@ -134,6 +134,7 @@ const getActiveUsers = () => {
     SELECT U.ccid
     FROM ${"users"} U
     WHERE U.active = True
+    AND U.balance != 0
     `.run(connection);
     return query;
 };

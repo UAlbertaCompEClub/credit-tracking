@@ -7,11 +7,15 @@ const tick = () => {
     //get the mins of the current time
     var day = new Date().toString().substring(0,3);
     // console.log(day);
-    if (day === "Sat") {
+    if (day === "Mon") {
         // console.log("activeUsers");
-        queueAll();
-        beginDeployment();
+        queueRoutine();
     }
+}
+
+const queueRoutine = async () => {
+    await queueAll();
+    beginDeployment();
 }
 
 const queueAll = async () => {
@@ -29,5 +33,6 @@ const computeActiveUsers = async () => {
 
 export {
     tick,
-    computeActiveUsers
+    computeActiveUsers,
+    queueRoutine
 };
