@@ -26,7 +26,7 @@ router.post('/user', async (req: Request, res: Response) => {
         verifyToken(token, key);
 
         let foip = false;
-        if (params.foip === "t") {
+        if (params.foip === true) {
             foip = true;
         }
 
@@ -52,6 +52,7 @@ router.post('/user', async (req: Request, res: Response) => {
             }
         }
 
+<<<<<<< HEAD
         if (execExistsCheck.length!==0) {
             const userParams = {
                 ccid: params.ccid,
@@ -68,15 +69,27 @@ router.post('/user', async (req: Request, res: Response) => {
             res.status(200).json({ body: -1 });
             return;
         }
+=======
+        //Create User Row
+        const userParams = {
+            ccid: params.ccid,
+            isexec: params.isexec,
+            full_name: params.full_name,
+            foip: foip,
+            balance: 0
+        };
+        await queries.createUser(userParams);
+        
+>>>>>>> main
     })
     .then(data =>
         res.status(200).json({
-            body: 1
+            status: 0
         })
     )
     .catch(data =>
         res.status(400).json({
-            body: -1
+            status: -1
         })
     );
 });

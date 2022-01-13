@@ -13,6 +13,7 @@ const createTransaction = (transactionParam: { ccid: string, clubid: number, amo
         created_at: db.Default,
         created_by: transactionParam.exec,
     };
+    console.log("creating Transaction at the query level...")
     return db.insert('transactions', transaction).run(connection);
 };
 
@@ -66,7 +67,7 @@ const clubBalance = (queryParams: { clubid: number }) => {
     if (queryParams.clubid !== 0) {
         where.clubid = queryParams.clubid;
     }
-    // console.log(await db.select('transactions', where).run(connection));
+    
     return db.select('clubs', where).run(connection);
 };
 
@@ -97,6 +98,17 @@ const getUsers = (userParam: { clubid: number }) => {
     `.run(connection);
     return query;
 };
+const getUsersRobust = async (userParam: { clubid: string }) => {
+    // console.log("club = " + userParam.club)
+    const query = db.sql<schema.users.SQL | schema.transactions.SQL, schema.users.Selectable[]>`
+        SELECT U.ccid, U.full_name, U.balance
+        FROM ${"users"} U, ${"transactions"} T
+        WHERE U.ccid=T.ccid AND T.clubid=${db.param(userParam.clubid)}
+        GROUP BY U.ccid, U.full_name
+        HAVING COUNT(T.clubid)>0
+    `.run(connection);
+    return query;
+};
 
 export {
     createTransaction,
@@ -104,6 +116,7 @@ export {
     transactionsUser,
     getUser,
     getUsers,
+    getUsersRobust,
     transactionsAll,
     getClubs,
     getExec,

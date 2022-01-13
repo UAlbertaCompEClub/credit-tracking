@@ -9,26 +9,37 @@ export function AddExec(props) {
     const[alertType,setAlertType] = useState("error");
     const[alertText,setAlertText] = useState("You are not registered. Ask an executive to register!");
     const[showAlert,setShowAlert] = useState(false);
+    const[isLoading,setIsLoading] = useState(false)
 
-    function submitHandler(input){
+    async function submitHandler(input){
         input.preventDefault()
 
         if(ccid === "" || name === ""){
             setShowAlert(true);
             setAlertType("error")
             setAlertText("Please fill all fields")
-        }else if(RequestService.ccidCheckReq(ccid) !== -1 ){
+            setIsLoading(false)
+            return
+        }
+        
+        let ccidStatus
+        await RequestService.ccidCheckReq(ccid).then((res)=>{
+            ccidStatus = res
+        })
+        
+        if(ccidStatus !== -1 ){
             //ccid is registered already
             setShowAlert(true);
             setAlertType("error")
             setAlertText("Exec already exists")
         }else{
-            const status = RequestService.addExec(ccid,name)
-            if(status === 0){
+            const status = await RequestService.addExec(ccid,name,password,props.exec.clubid,props.exec.token)
+            if(parseInt(status) === 0){
                 //req succeded
                 setShowAlert(true);
                 setAlertType("success")
                 setAlertText("Exec Added")
+                await RequestService.newTransaction(ccid,0,props.exec.clubid,props.exec.token)
                 props.refresh()
             }else{
                 //req failed
@@ -37,8 +48,7 @@ export function AddExec(props) {
                 setAlertText("Exec could not be added.")
             }
         }
-
-        
+        setIsLoading(false)
     }
 
     return (
@@ -50,22 +60,22 @@ export function AddExec(props) {
             <FormControl>
               {/*ccid */}
               <InputLabel htmlFor = "ccid">ccid</InputLabel>
-                <Input id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
+                <Input autoComplete="off" id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
             </FormControl>
             <FormControl>
                 {/* name */}
                 <InputLabel htmlFor = "name">Name</InputLabel>
-                <Input id = "name" onChange = {(e) => setName(e.target.value)}/>
+                <Input autoComplete="off" disabled = {isLoading} id = "name" onChange = {(e) => setName(e.target.value)}/>
             </FormControl>
             <FormControl>
                 {/* password */}
                 <InputLabel htmlFor = "password">Password</InputLabel>
-                <Input id = "password" onChange = {(e) => setPassword(e.target.value)}/>
+                <Input autoComplete="off" disabled = {isLoading} id = "password" onChange = {(e) => setPassword(e.target.value)}/>
             </FormControl>
 
             <Stack direction = 'row' justifyContent="space-evenly">
-                <Button type = "submit">Add</Button>
-                <Button onClick = {(e)=>{props.setShowAddExec(false)}}>Close</Button>
+                <Button  disabled = {isLoading} type = "submit">Add</Button>
+                <Button  disabled = {isLoading} onClick = {(e)=>{props.setShowAddExec(false)}}>Close</Button>
             </Stack>
             
         </Stack>

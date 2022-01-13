@@ -1,0 +1,31 @@
+.nothing {
+    color: tomato;
+    border: 2px solid blue;
+    margin: 20px;
+    padding: 20px;
+}
+
+.normalText{
+    color: white;
+    margin: 5px;
+    padding: 5px;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.redText{
+    color: #ca0004;
+    margin: 5px;
+    padding: 5px;
+    background-color: transparent;
+    border-color: transparent;
+    border-width: 0.5px;
+}
+
+.greenText{
+    color: #00EEC7;
+    background-color: transparent;
+    border-color: transparent;
+    margin: 5px;
+    padding: 5px;
+}

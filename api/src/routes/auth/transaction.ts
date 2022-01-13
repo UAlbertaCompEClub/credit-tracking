@@ -34,8 +34,12 @@ router.post('/transaction', async (req: Request, res: Response) => {
                 const queryParams = {
                     ccid: params.ccid,
                     clubid: parseInt(params.clubid),
+<<<<<<< HEAD
                     amount: parseInt(params.amount),
                     exec: params.exec
+=======
+                    amount: parseFloat(params.amount)
+>>>>>>> main
                 };
                 await queries.createTransaction(queryParams);
             }
@@ -43,15 +47,37 @@ router.post('/transaction', async (req: Request, res: Response) => {
         })
         .then(data =>
             res.status(200).json({
-                body: 1
+                status: 0
             })
         )
         .catch(data =>
             res.status(400).json({
-                body: -1
+                status: -1
             })
         );
 });
+
+// // POST REQUESTS
+// router.post('/transaction', async (req: Request, res: Response) => {
+//     const params = req.body;
+//     console.log(params)
+
+//     const Transactions: schema.transactions.JSONSelectable[] = [];
+//     if (params.ccid) {
+//         const queryParams = {
+//             ccid:params.ccid,
+//             clubid: parseInt(params.clubid),
+//             amount: parseInt(params.amount)
+//         };
+//         await queries.createTransaction(queryParams);
+//     }
+
+    
+//     res.status(200).json({
+//         status:0 //return the balance
+//     });
+// });
+
 
 
 export default router;
