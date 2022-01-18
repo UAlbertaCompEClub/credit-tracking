@@ -52,7 +52,6 @@ router.post('/user', async (req: Request, res: Response) => {
             }
         }
 
-<<<<<<< HEAD
         if (execExistsCheck.length!==0) {
             const userParams = {
                 ccid: params.ccid,
@@ -69,18 +68,6 @@ router.post('/user', async (req: Request, res: Response) => {
             res.status(200).json({ body: -1 });
             return;
         }
-=======
-        //Create User Row
-        const userParams = {
-            ccid: params.ccid,
-            isexec: params.isexec,
-            full_name: params.full_name,
-            foip: foip,
-            balance: 0
-        };
-        await queries.createUser(userParams);
-        
->>>>>>> main
     })
     .then(data =>
         res.status(200).json({
@@ -93,6 +80,59 @@ router.post('/user', async (req: Request, res: Response) => {
         })
     );
 });
+
+
+router.post('/set-subscribed', async (req: Request, res: Response) => {
+    new Promise<void>((resolve) => {
+        resolve();
+        console.log('user subscription setting change begin!')
+    })
+        .then(async () => {
+            const params = req.body;
+            const token = params.token;
+            assert(token !== undefined && token !== null);
+
+            console.log('token', token);
+            console.log(params);
+
+            let key = process.env.SECRETKEY;
+            assert(key !== undefined && key !== null);
+            key = key || '';
+
+            //checks if user is verified
+            verifyToken(token, key);
+
+            const userExists = await regQueries.getUser({ ccid: params.ccid });
+            const hashPass = userExists[0].password;
+
+            const passVerified = await checkPass(params.oldPassword, hashPass);
+            console.log("pass", passVerified);
+            if (passVerified === false) {
+                console.error("Password could not be verified!");
+                throw new Error();
+            }
+
+            const userParams = {
+                ccid: params.ccid,
+                subscribed: params.subscribed
+            };
+
+            queries.setSubscribed(userParams);
+        })
+        .then(data =>
+            res.status(200).json({
+                body: 1
+            })
+        )
+        .catch(data =>
+            res.status(400).json({
+                body: -1
+            })
+        );
+});
+
+
+
 
 router.post('/update-password', async (req: Request, res: Response) => {
     new Promise<void>((resolve) => {
@@ -124,11 +164,11 @@ router.post('/update-password', async (req: Request, res: Response) => {
             throw new Error();
         }
 
-        const execParams = {
+        const userParams = {
             ccid: params.ccid,
             newPassword: params.newPassword
         };
-        await queries.updatePass(execParams);
+        await queries.updatePass(userParams);
     })
     .then(data =>
         res.status(200).json({
