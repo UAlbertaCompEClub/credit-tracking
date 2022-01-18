@@ -34,12 +34,8 @@ router.post('/transaction', async (req: Request, res: Response) => {
                 const queryParams = {
                     ccid: params.ccid,
                     clubid: parseInt(params.clubid),
-<<<<<<< HEAD
                     amount: parseInt(params.amount),
                     exec: params.exec
-=======
-                    amount: parseFloat(params.amount)
->>>>>>> main
                 };
                 await queries.createTransaction(queryParams);
             }

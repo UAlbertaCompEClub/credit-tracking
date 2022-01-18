@@ -57,6 +57,13 @@ const transactionsAll = () => {
     return db.select('transactions', where).run(connection);
 };
 
+const getClub = ( queryParams: {clubid: number}) => {
+    const where: schema.clubs.Whereable = {
+        clubid: queryParams.clubid
+    };
+    return db.select('clubs', where).run(connection);
+};
+
 const getClubs = () => {
     const where: schema.clubs.Whereable = {};
     return db.select('clubs', where).run(connection);
@@ -118,6 +125,7 @@ export {
     getUsers,
     getUsersRobust,
     transactionsAll,
+    getClub,
     getClubs,
     getExec,
     transactionUserWeekly

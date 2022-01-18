@@ -15,8 +15,16 @@ export function AddUser(props) {
 
     async function submitHandler(input){
         setIsLoading(true)
-
         input.preventDefault()
+        var forbiddenChars = /[$^&'()\=\\{}:"\\|<>\/?]+/;
+        if (forbiddenChars.test(ccid) || forbiddenChars.test(name)) {
+            setShowAlert(true);
+            setAlertType("error")
+            setAlertText("You have entered illegal characters")
+            setIsLoading(false)
+            return
+        }
+
         
         if(ccid === "" || name === ""){
             setShowAlert(true);
