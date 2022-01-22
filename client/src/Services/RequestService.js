@@ -140,7 +140,7 @@ export const RequestService = {
     ccidCheckReq: async (ccid)=>{
       //The method returns -1 for no user found
       // 1 for exec and 0 for customer
-      let status = "Default"
+      let status 
       await fetch(path+"/check-ccid", {headers:{ccid:ccid}})
       .then((res)=>{
         status = res
@@ -156,6 +156,25 @@ export const RequestService = {
         //customer
         window.localStorage.setItem('customerCcid',ccid)
       }
+
+      return status.body
+
+    },
+    ccidCheckReq: async (ccid)=>{
+      //The method returns clubs an exec is an exec for
+      let status 
+      await fetch(path+"/check-ccid", {headers:{ccid:ccid}})
+      .then((res)=>{
+        status = res
+        console.log("Exec club get succ")
+        
+      }).catch(()=>{
+        console.log("Exec club get Failed")
+      })
+      status = await getResponse(status)
+      console.log(status)
+
+      status.club
 
       return status.body
 

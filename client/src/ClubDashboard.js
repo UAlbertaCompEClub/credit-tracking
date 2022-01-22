@@ -26,6 +26,7 @@ function ClubDashboard(props){
   const [showAddUser,setShowAddUser] = useState(false)
   const [showAddExec,setShowAddExec] = useState(false)
 
+  const[clubs,setClubs] = useState(["default"])
   
   const [users, setUsers] = useState({allUsers:[],table:"",isLoading:true })
   
@@ -180,6 +181,17 @@ function ClubDashboard(props){
           </Stack>
           
           <Typography variant = "h1">{props.exec.club}</Typography>
+          <FormControl>
+                    <InputLabel  id="club">club</InputLabel>
+                    <Select 
+                        labelId="club"
+                        id="clubSelect"
+                        value={userState.club}
+                        label="club"
+                        onChange={changeClub}>
+                        {[...(Object.keys(userState.user.clubs))].map( clubName => <MenuItem key = {clubName} value={clubName}>{clubName}</MenuItem>)}
+                    </Select>
+          </FormControl>
 
           <Stack direction = "row" justifyContent = "space-between" width = "100%">
               <FormControl>
