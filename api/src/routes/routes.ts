@@ -5,7 +5,7 @@ import type * as schema from 'zapatos/schema';
 import middleWare from '../controllers/controllers';
 import { transaction } from 'zapatos/db';
 
-export const router = express.Router();
+const router = express.Router();
 
 
 
@@ -48,9 +48,18 @@ router.post('/get-user', async (req: Request, res: Response) => {
         const queryParams = {
             ccid: params.ccid
         };
-        const User = await queries.getUser(queryParams);
+        const user = (await queries.getUser(queryParams))[0];
+        user.subscribed
+        const userCleaned = {
+            ccid: user.ccid,
+            isexec: user.isexec,
+            active: user.active,
+            full_name: user.full_name,
+            subscribed: user.subscribed,
+            balance: user.balance,
+        }
         res.status(200).json({
-            body: User
+            body: [userCleaned]
         });
     }
     else if (params.hasOwnProperty('clubid')) {
@@ -58,9 +67,18 @@ router.post('/get-user', async (req: Request, res: Response) => {
         const queryParams = {
             clubid: parseInt(params.clubid)
         };
-        const User = await queries.getUsers(queryParams);
+        const usersGet = await queries.getUsers(queryParams);
+        var users = Array();
+        usersGet.forEach((element: schema.users.Selectable) => {
+            users.push({
+                ccid: element.ccid,
+                full_name: element.full_name,
+                isexec: element.isexec,
+                balance: element.balance
+            });
+        });
         res.status(200).json({
-            body: User
+            body: users
         });
     }
     else {
@@ -94,12 +112,23 @@ async function buildUserTransactions(Transactions:schema.transactions.JSONSelect
 
         }
         //replace clubID with club name
-        for(let clubid of Object.keys(clubs) ){
-            let clubData = await queries.getClubs({clubid:parseInt(clubid)})
-            clubs[clubData[0].clubname] = clubs[clubid]
-            delete clubs[clubid]
-        }
+        // for(let clubid of Object.keys(clubs) ){
+        //     let clubData = await queries.getClubs({clubid:parseInt(clubid)})
+        //     clubs[clubData[0].clubname] = clubs[clubid]
+        //     delete clubs[clubid]
+        // }
         
+        let clubNameDict = Object()
+        let clubData = await queries.getClubs();
+        clubData.forEach((element: schema.clubs.JSONSelectable) => {
+            clubNameDict[element.clubid] = element.clubname;
+        });
+
+        for (let clubid of Object.keys(clubs)) {
+            clubs[clubNameDict[clubid]] = clubs[clubid];
+            delete clubs[clubid];
+        }
+
         let name= (await queries.getUser({'ccid':String(ccid)}))[0].full_name
 
         return {name:name,clubs:clubs}
@@ -216,13 +245,13 @@ router.post('/get-club-balance', async (req: Request, res: Response) => {
     });
 });
 
-router.get('/club', async (req: Request, res: Response) => {
+router.post('/club', async (req: Request, res: Response) => {
     //returns all customers of a club in the format:
     // [{name:string,ccid:string,transactions:string}]
     //Headers should also contain exec token
 
     
-    const clubid:any = req.get('clubid');
+    const clubid:any = req.body.clubid;
     console.log("club in router.get = " + clubid)
 
     const users:any = await queries.getUsersRobust({clubid:clubid});

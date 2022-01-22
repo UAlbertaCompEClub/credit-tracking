@@ -119,8 +119,12 @@ export const RequestService = {
       let resp;
       let body;
 
-      await fetch(path+"/club", {method:"get", headers:{'clubid':clubid,'token':token}})
-      .then((res)=>{ 
+      await fetch(path+"/club",
+      {
+        method:"POST", 
+        headers: { "Content-type": "application/json" },
+        body:JSON.stringify({'clubid':clubid,'token':token})                          
+      }).then((res)=>{ 
         console.log("Club request success.")
         resp = res
       }).catch(()=>{
@@ -186,8 +190,10 @@ export const RequestService = {
       await wait(1000)
 
       let response
-      await fetch(path+"/login", {method:'POST',headers:{ccid:ccid,password:pw}})
-      .then((res)=>{
+      await fetch(path+"/login", {method:'POST',
+                                    headers: { "Content-type": "application/json" },
+                                    body:JSON.stringify({ccid:ccid,password:pw})
+      }).then((res)=>{
         response = res
         console.log("Ccid Check Success")
       }).catch(()=>{

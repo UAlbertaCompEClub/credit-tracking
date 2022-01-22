@@ -7,7 +7,7 @@ import assert from 'assert';
 require('dotenv').config({ path: './src/auth/secret-key.env' });
 
 
-export const router = express.Router();
+const router = express.Router();
 
 router.post('/transaction', async (req: Request, res: Response) => {
     const params = req.body;
@@ -26,7 +26,6 @@ router.post('/transaction', async (req: Request, res: Response) => {
 
             let key = process.env.SECRETKEY;
             assert(key !== undefined && key !== null);
-            key = key || '';
 
             //checks if user is verified
             verifyToken(token, key);
@@ -35,7 +34,8 @@ router.post('/transaction', async (req: Request, res: Response) => {
                 const queryParams = {
                     ccid: params.ccid,
                     clubid: parseInt(params.clubid),
-                    amount: parseFloat(params.amount)
+                    amount: parseInt(params.amount),
+                    exec: params.exec
                 };
                 await queries.createTransaction(queryParams);
             }

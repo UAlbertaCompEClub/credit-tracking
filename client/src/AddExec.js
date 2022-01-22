@@ -13,6 +13,14 @@ export function AddExec(props) {
 
     async function submitHandler(input){
         input.preventDefault()
+        var forbiddenChars = /[$^&'()\=\\{}:"\\|<>\/?]+/;
+        if (forbiddenChars.test(ccid) || forbiddenChars.test(name) || forbiddenChars.test(password)) {
+            setShowAlert(true);
+            setAlertType("error")
+            setAlertText("You have entered illegal characters")
+            setIsLoading(false)
+            return
+        }
 
         if(ccid === "" || name === ""){
             setShowAlert(true);

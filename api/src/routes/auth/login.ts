@@ -9,18 +9,19 @@ import { Console } from 'console';
 require('dotenv').config({ path: './src/auth/secret-key.env' });
 
 
-export const router = express.Router();
+const router = express.Router();
 
 router.post('/login', async (req: Request, res: Response) => {
-  
-    const execParams = {
-        ccid: String(req.get('ccid'))
+    console.log(req.body);
+    const params = req.body;
+    const userParams = {
+        ccid: params.ccid
     };
-    console.log(execParams)
-    const exec = await regQueries.getExec(execParams);
-    if (exec.length===1) {
-        const password = String(req.get('password'));
-        const hashedPass = exec[0].password;
+
+    const user = (await regQueries.getUser(userParams));
+    if (user.length === 1 && user[0].isexec===true) {
+        const password = params.password;
+        const hashedPass = user[0].password;
 
         console.log(password)
         const key = process.env.SECRETKEY;
@@ -28,17 +29,19 @@ router.post('/login', async (req: Request, res: Response) => {
 
         //we need to ensure that the key has been supplied here!
         assert(key !== undefined && key !== null);
-    
+        
         const passwordSame = await auth.checkPass(password, hashedPass);
-  
+        const exec = (await regQueries.getExec(userParams))[0];
+        const club = (await regQueries.getClub({ clubid: exec.clubid}))[0];
         if (passwordSame === true) {
+            // TO-DO: change to generalized user solution soon, currently only setup for exec use
             res.status(200).json({
-                ccid: exec[0].ccid,
-                token: jwt.sign(execParams, key, { expiresIn: '30d' }),
-                club: (await regQueries.getClubs({clubid:exec[0].clubid}))[0].clubname,
-                clubid:exec[0].clubid
+                clubid: exec.clubid,
+                ccid: exec.ccid,
+                club: club.clubname,
+                token: jwt.sign(userParams, key, { expiresIn: '30d' })
             });
-        }   
+        }
         else {
             res.status(200).json({
                 ccid: -1

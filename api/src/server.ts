@@ -8,9 +8,16 @@ import routes from './routes/routes';
 import userRoutes from './routes/auth/users';
 import authRoutes from './routes/auth/login';
 import transactionRoutes from './routes/auth/transaction';
+import forgotpassRoutes from './routes/forgotPassword/forgotPassword';
 import middleware from './controllers/middleware';
 
-require('dotenv').config({ path: 'db.env' });
+import { computeActiveUsers, tick }  from './sync/queue';
+import { initializeState } from './sync/state';
+import { hourlyRun } from './sync/sync';
+
+import * as queries from './controllers/db/dbQueries';
+
+require('dotenv').config({ path: 'api.env' });
 
 console.log("DB ACCESS\n",
 "USER:", process.env.PGUSER, "\n",
@@ -19,7 +26,6 @@ console.log("DB ACCESS\n",
 "DB_NAME:", process.env.PGDATABASE, "\n",
 "PORT:", process.env.PGPORT);
 
-import * as queries from './controllers/db/dbQueries';
 
 const router = express();
 const port = process.env.PORT || "8000";
@@ -45,10 +51,18 @@ router.use('/api/v1', routes);
 router.use('/api/v1', userRoutes);
 router.use('/api/v1', authRoutes);
 router.use('/api/v1', transactionRoutes);
+router.use('/api/v1', forgotpassRoutes);
 
-router.get('/add-entry', (req: Request, res: Response) => {
-    res.send('Hello World!')
-});
+//set up server state
+initializeState();
+
+//timed method set-up
+setInterval(tick, 24*3600000);
+// setInterval(tick, 20000);
+setInterval(computeActiveUsers, 24*3600000);
+setInterval(hourlyRun, 3600000);
+
+
 router.get('/test-db', async (req: Request, res: Response) => {
     // const transactions = await transactionsUser({ club: 'CompE', ccid: 'mfiaz' });
     const getUsers = await queries.getUsers({ clubid: 1 });
