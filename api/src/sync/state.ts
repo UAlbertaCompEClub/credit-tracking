@@ -7,6 +7,10 @@ const initializeState = async () => {
             var: 'nEmailSent',
             val: '0'
         })
+        stateQueries.createVar({
+            var: 'deploying',
+            val: '0'
+        })
     }
     else {
         console.log("Server state has been already been initialized!");
