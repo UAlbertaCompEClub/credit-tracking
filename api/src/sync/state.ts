@@ -1,10 +1,14 @@
 import * as stateQueries from '../controllers/db/dbState';
 
 const initializeState = async () => {
-    const checkInitialized = (await stateQueries.getState({var: 'any'})).length===0;
-    if (checkInitialized) {
+    const checkInitialized = await stateQueries.getInitialized();
+    if (!checkInitialized) {
         stateQueries.createVar({
             var: 'nEmailSent',
+            val: '0'
+        })
+        stateQueries.createVar({
+            var: 'deploying',
             val: '0'
         })
     }
