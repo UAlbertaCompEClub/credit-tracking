@@ -1,10 +1,10 @@
-
 import Auth from './Auth'
 import {Stack,Container,ThemeProvider,CssBaseline} from '@mui/material'
 import {useState,useEffect} from 'react'
 import ClubDashboard from './ClubDashboard';
 import UserProfile from './UserProfile';
 import { mainTheme } from './theme';
+import TermsDialog from './TermsDialog.js'
 
 
 //TO DO: INPUT VERIFICATION
@@ -15,6 +15,7 @@ function App() {
   const [ExecInfo, setExecInfo] = useState({ccid:'Default', token : 'Default', club:"Default",clubid:0})
   const [customerCcid,setCustomerCcid] = useState("cstm")
   const [isExec,setIsExec] = useState(false) //TODO Change to false for production
+  const [dialogVisible, setDialogVisible] = useState(false);
   // RequestService.testRequest()
 
  
@@ -86,6 +87,9 @@ function App() {
     setExecInfo(info)
   }
 
+  function toggleDialog() {
+    dialogVisible ? setDialogVisible(false) : setDialogVisible(true)
+  }
 
   return (
     <ThemeProvider theme = {mainTheme}>
@@ -94,16 +98,20 @@ function App() {
         <Container  maxWidth = "sm" >
           <Stack >
             {/* If page = Auth show auth data */}
+            {dialogVisible && <TermsDialog setDialogVisible={setDialogVisible}></TermsDialog> }
             {page === "Auth" && <Auth openUser ={openUser} setPage = {setPage}
-               customerCcid = {setCustomerCcid}
-               setExecInfo = {setExec}
-               autoLogout = {autoLogout}/>}
+              customerCcid = {setCustomerCcid}
+              setExecInfo = {setExec}
+              autoLogout = {autoLogout}
+              toggleDialog = {toggleDialog}
+               />}
             {page === "ClubDashboard" && <ClubDashboard theme = {mainTheme}
-             exec = {ExecInfo}  
-              openUser = {openUser} logout = {logout} />}
+              exec={ExecInfo} 
+              openUser={openUser} logout={logout} toggleDialog={toggleDialog}/>}
             {page === "UserProfile" && <UserProfile  
               exec = {ExecInfo}  isExec = {isExec} customerCcid = {customerCcid}
-              setPage = {setPage}  logout = {logout} />}
+              setPage = {setPage}  logout = {logout}
+              toggleDialog={toggleDialog}/>}
           </Stack>
         </Container>
       </Container>

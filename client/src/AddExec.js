@@ -1,5 +1,6 @@
-import {Button, FormControl,Alert, Input, InputLabel,Stack,Typography} from '@mui/material'
+import { Button, FormControl, Alert, Input, InputLabel, Stack, Typography, Checkbox, FormControlLabel } from '@mui/material'
 import {useState} from 'react'
+import { AddUser } from './AddUser'
 import {RequestService} from "./Services/RequestService"
 
 export function AddExec(props) {
@@ -9,7 +10,8 @@ export function AddExec(props) {
     const[alertType,setAlertType] = useState("error");
     const[alertText,setAlertText] = useState("You are not registered. Ask an executive to register!");
     const[showAlert,setShowAlert] = useState(false);
-    const[isLoading,setIsLoading] = useState(false)
+    const[isLoading,setIsLoading] = useState(false);
+    const[acceptFOIP,setAcceptFOIP] = useState(false);
 
     async function submitHandler(input){
         input.preventDefault()
@@ -26,6 +28,13 @@ export function AddExec(props) {
             setShowAlert(true);
             setAlertType("error")
             setAlertText("Please fill all fields")
+            setIsLoading(false)
+            return
+        }
+        if(!acceptFOIP) {
+            setShowAlert(true);
+            setAlertType("error")
+            setAlertText("You have not accepted the terms of service")
             setIsLoading(false)
             return
         }
@@ -80,7 +89,14 @@ export function AddExec(props) {
                 <InputLabel htmlFor = "password">Password</InputLabel>
                 <Input autoComplete="off" disabled = {isLoading} id = "password" onChange = {(e) => setPassword(e.target.value)}/>
             </FormControl>
+            <FormControl>
+            <Button onClick={props.toggleDialog} sx = {{'margin': '2vh 0 0 2vw'}}
+                variant="p" >View the Terms of Service Here</Button>
+            <FormControlLabel id = 'foip' control={<Checkbox/>} onChange = {(e) => setAcceptFOIP(e.target.checked)}
+            label="I, the user, accept the terms of service" />        
+            </FormControl>
 
+            {props.showAddUser && <AddUser exec={props.exec} setShowAddUser={props.setShowAddUser} refresh={props.refresh} />}
             <Stack direction = 'row' justifyContent="space-evenly">
                 <Button  disabled = {isLoading} type = "submit">Add</Button>
                 <Button  disabled = {isLoading} onClick = {(e)=>{props.setShowAddExec(false)}}>Close</Button>

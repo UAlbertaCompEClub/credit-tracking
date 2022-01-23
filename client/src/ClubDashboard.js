@@ -196,8 +196,10 @@ function ClubDashboard(props) {
         <Button onClick={(e) => { toggleAddPerson("Exec") }}> Add Exec</Button>
       </Stack>
 
-      {showAddUser && <AddUser exec={props.exec} setShowAddUser={setShowAddUser} refresh={refresh} />}
-      {showAddExec && <AddExec exec={props.exec} setShowAddExec={setShowAddExec} refresh={refresh} />}
+      {showAddUser && <AddUser exec={props.exec} toggleDialog={props.toggleDialog} 
+          setShowAddUser={setShowAddUser} refresh={refresh} />}
+      {showAddExec && <AddExec exec={props.exec} toggleDialog={props.toggleDialog}
+          setShowAddExec={setShowAddExec} refresh={refresh} />}
 
       {/* Show table when not loading and show text when loading */}
       {users.isLoading && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
