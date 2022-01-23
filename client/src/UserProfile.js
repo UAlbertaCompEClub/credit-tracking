@@ -1,4 +1,4 @@
-import AddTransaction from './AddTransaction'
+import AddTransaction from './AddUser'
 import {useState,useEffect} from 'react'
 import {Button, FormControl, MenuItem, LinearProgress, Select, InputLabel, Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography} from '@mui/material'
 import {RequestService} from "./Services/RequestService"
@@ -65,7 +65,7 @@ function UserProfile(props){
 
       let info
       if(props.isExec){
-        await RequestService.userRequest(props.customerCcid,props.exec.clubid)
+        await RequestService.userRequest(props.customerCcid,props.user.clubid)
         .then((res)=>{
           info = res
         })
@@ -157,7 +157,7 @@ function UserProfile(props){
             {!userState.isLoading && userState.table}
 
 
-            {props.isExec && <AddTransaction customerCcid = {props.customerCcid} exec = {props.exec} refresh = {getUserInfo}></AddTransaction>}
+            {props.isExec && <AddTransaction customerCcid = {props.customerCcid} exec = {props.user} refresh = {getUserInfo}></AddTransaction>}
             {/* Only show the add transaction if current user is an exec */}
         </Stack>
         

@@ -178,12 +178,12 @@ export const RequestService = {
       status = await getResponse(status)
       console.log(status)
 
-      status.club
+      // status.club
 
       return status.body
 
     },
-    execLogin: async (ccid,pw)=>{
+    login: async (ccid,pw)=>{
       //The method...
 
       //Manual wait time to show we received their input
@@ -201,24 +201,24 @@ export const RequestService = {
       })
       let status = await getResponse(response)
       if(status.ccid !== -1){
-        const execData =  {
+        const userData =  {
           ccid:status.ccid,
           club:status.club,
           clubid:status.clubid,
           token:status.token}
-        console.log(execData)
+        console.log(userData)
 
         //store data locally
         const storage = window.localStorage
 
         storage.clear() //Logout any customer logged in
-        storage.setItem('execCcid',execData.ccid)
-        storage.setItem('execClub',execData.club)
-        storage.setItem('execClubid',execData.clubid)
-        storage.setItem('execToken',execData.token)
-        storage.setItem('execExpiry', Date.now()+2592000)//30 days expiry
+        storage.setItem('userCcid',userData.ccid)
+        storage.setItem('userClub',userData.club)
+        storage.setItem('userClubid',userData.clubid)
+        storage.setItem('token',userData.token)
+        storage.setItem('userExpiry', Date.now()+2592000)//30 days expiry
         
-        return execData
+        return userData
       }else{
         return null
       }
@@ -251,7 +251,7 @@ export const RequestService = {
       //TEST RETURN
       return 0
     },
-    addExec: async (ccid,full_name,password,clubid,token)=>{
+    addUser: async (ccid,full_name,password,clubid,token)=>{
       //The method returns 0 if succ -1 if fail
 
       let status
@@ -266,10 +266,10 @@ export const RequestService = {
                   token:token
               })})
       .then((res)=>{
-        console.log("Exec Creation Succ")
+        console.log("User Creation Succ")
         status = res
       }).catch(()=>{
-        console.log("Exec Creation Failure")
+        console.log("User Creation Failure")
           return null
       })
 
@@ -278,6 +278,28 @@ export const RequestService = {
 
       return (status)
 
+    },
+    emailResetPassword: async (ccid) => {
+      console.log("attempting to send email...")
+      let res = await fetch(path + "/forgot-password",
+          {headers:{"Content-type":"application/json"},
+          method:"POST", 
+            body: JSON.stringify({
+                  ccid:ccid
+                  })
+          })
+      return await getResponse(res)
+    },
+    resetPassword: async (code,newPass) =>{
+      let res = await fetch(path + "/forgot-password",
+          {headers:{"Content-type":"application/json"},
+          method:"POST", 
+            body: JSON.stringify({
+                  verifyCode:code,
+                  newPassword:newPass
+                  })
+          })
+      return await getResponse(res)
     }
 
 }

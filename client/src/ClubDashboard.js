@@ -1,8 +1,8 @@
-import { Button, FormControl, Input, LinearProgress, InputLabel, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material'
+import { Button, FormControl, Input, Select, LinearProgress, InputLabel, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material'
 import { useState, useEffect } from 'react'
 import { RequestService } from "./Services/RequestService"
 import { AddUser } from './AddUser'
-import { AddExec } from './AddExec'
+
 
 function request() {
   const requestOptions = {
@@ -24,7 +24,6 @@ function ClubDashboard(props) {
   const [ccid, setCcid] = useState("")
   const [users, setUsers] = useState({allUsers:[],table:"",isLoading:true })
   const [showAddUser, setShowAddUser] = useState(false)
-  const [showAddExec, setShowAddExec] = useState(false)
 
 
   function getTable(users) {
@@ -66,7 +65,7 @@ function ClubDashboard(props) {
   }
   async function firstCall() {
     // First API call
-    await RequestService.clubRequest(props.exec.clubid, props.exec.token)
+    await RequestService.clubRequest(props.user.clubid, props.user.token)
       .then((res) => {
         console.log(res)
         //Set initial users and shown users
@@ -97,7 +96,7 @@ function ClubDashboard(props) {
     })
 
     setTimeout(() => {
-      RequestService.clubRequest(props.exec.clubid, props.exec.token)
+      RequestService.clubRequest(props.user.clubid, props.user.token)
         .then((res) => {
           setUsers({
             allUsers: res,
@@ -142,48 +141,29 @@ function ClubDashboard(props) {
     //Open a user's page
     props.openUser(ccid)
   }
-  function toggleAddPerson(personType) {
-    //Shows or hides add Exec and add User
+  function toggleAddPerson() {
+    //Shows or hides add User
     //only one can display at a time.
+    if (showAddUser) {
+      //Toggle closed
+      setShowAddUser(false)
 
-    if (personType === "Exec") {
-      if (showAddExec) {
-        //toggle closed
-        setShowAddExec(false)
-
-      } else {
-        //toggle open
-        setShowAddExec(true)
-        if (setShowAddUser) {
-          //hide add user when we open add exec
-          setShowAddUser(false)
-        }
-      }
-    } else if (personType === "customer") {
-      if (showAddUser) {
-        //Toggle closed
-        setShowAddUser(false)
-
-      } else {
-        //toggle open
-        setShowAddUser(true)
-        if (setShowAddExec) {
-          //hide add user when we open add exec
-          setShowAddExec(false)
-        }
-      }
+    } else {
+      //toggle open
+      setShowAddUser(true)
     }
+    
   }
   
   return(
       <Stack>
           <Stack direction = 'row' justifyContent="space-evenly">
             <Button onClick = {props.logout} >Logout</Button>
-            <Button onClick = {(e)=>{selectUser(props.exec.ccid)}} >My Profile</Button>
+            <Button onClick = {(e)=>{selectUser(props.user.ccid)}} >My Profile</Button>
           </Stack>
           
-          <Typography variant = "h1">{props.exec.club}</Typography>
-          <FormControl>
+          <Typography variant = "h1">{props.user.club}</Typography>
+          {/* <FormControl>
                     <InputLabel  id="club">club</InputLabel>
                     <Select 
                         labelId="club"
@@ -193,36 +173,25 @@ function ClubDashboard(props) {
                         onChange={changeClub}>
                         {[...(Object.keys(userState.user.clubs))].map( clubName => <MenuItem key = {clubName} value={clubName}>{clubName}</MenuItem>)}
                     </Select>
-          </FormControl>
+          </FormControl> */}
 
           <Stack direction = "row" justifyContent = "space-between" width = "100%">
               <FormControl>
                   <InputLabel htmlFor = "ccid">ccid or name</InputLabel>
                   <Input autoComplete="off" id = "ccid" value = {ccid} onChange= {(e) => {setCcid(e.target.value); searchUsers(e.target.value)}} />
               </FormControl>
-              <Button onClick = {(e)=>{toggleAddPerson("customer")}}> Add Customer</Button>
-              <Button onClick = {(e)=>{toggleAddPerson("Exec")}}> Add Exec</Button>
+              <Button onClick = {(e)=>{toggleAddPerson()}}> Add User</Button>
           </Stack>
 
-          {showAddUser && <AddUser   exec = {props.exec} setShowAddUser ={setShowAddUser} refresh = {refresh} />}
-          {showAddExec && <AddExec exec = {props.exec} setShowAddExec ={setShowAddExec} refresh = {refresh} />}
+          {showAddUser && <AddUser   user = {props.user} setShowAddUser ={setShowAddUser} refresh = {refresh} />}
 
           {/* Show table when not loading and show text when loading */}
           {users.isLoading && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
             <LinearProgress color="inherit" />
           </Stack>}
           {!users.isLoading && users.table} 
+
       </Stack>
-
-      {showAddUser && <AddUser exec={props.exec} setShowAddUser={setShowAddUser} refresh={refresh} />}
-      {showAddExec && <AddExec exec={props.exec} setShowAddExec={setShowAddExec} refresh={refresh} />}
-
-      {/* Show table when not loading and show text when loading */}
-      {users.isLoading && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
-        <LinearProgress color="inherit" />
-      </Stack>}
-      {!users.isLoading && users.table}
-    </Stack>
 
   );
 
