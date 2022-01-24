@@ -6,7 +6,7 @@ import {RequestService} from './Services/RequestService'
 function ResetPassword(props){
 
     //state vars
-    const[isEmailSent,setIsEmailSent] = useState(false);
+    const[resetMode, setResetMode] = useState(false);
     const[ccid,setCcid] = useState("");
     const[password,setPassword] = useState("");
     const[code,setCode] = useState("")
@@ -15,9 +15,13 @@ function ResetPassword(props){
     const[showAlert,setShowAlert] = useState(false);
     const[isLoading,setIsLoading] = useState(false)
 
+    function toggleResetMode() {
+        resetMode? setResetMode(false) : setResetMode(true)
+    }
+
     function submitHandler(input){
         input.preventDefault()
-        if(isEmailSent){
+        if(resetMode){
             resetPassword()
         }else{
             sendEmail()
@@ -36,7 +40,7 @@ function ResetPassword(props){
         let response 
         setIsLoading(true)
         await RequestService.resetPassword(code,password).then((res)=>{
-            response = res;
+            response = res.body;
         })
         if(response == 1){
             setShowAlert(true);
@@ -59,14 +63,18 @@ function ResetPassword(props){
         let response 
         setIsLoading(true)
         await RequestService.emailResetPassword(ccid).then((res)=>{
-            response = res;
+            response = res.body;
         })
-        if(response == 1){
+        if (response === 0) {
+            setShowAlert(true);
+            setAlertType("error")
+            setAlertText("Password Reset Code already sent. Please wait 24hrs or check your inbox for the code")
+        }
+        else if(response === 1){
             setShowAlert(true);
             setAlertType("success")
             setAlertText("Check your ualberta email to continue...")
             props.autoLogout()
-
         }else{
             setShowAlert(true);
             setAlertType("error")
@@ -90,19 +98,19 @@ function ResetPassword(props){
             {/* show alert if showAlert is true */}
             {showAlert && <Alert severity = {alertType}> {alertText}!</Alert>} 
 
-            {!isEmailSent &&<FormControl >
+            {!resetMode &&<FormControl >
                 {/* ccid */}
                 <InputLabel htmlFor = "ccid">ccid</InputLabel>
                 <Input autoComplete="off" disabled = {isLoading} id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
                 <FormHelperText id = "ccidHelperText">Please enter your ccid</FormHelperText>
             </FormControl>}
-            {isEmailSent && <FormControl >
+            {resetMode && <FormControl >
                 {/* code */}
                 <InputLabel htmlFor = "code">Verification code</InputLabel>
                 <Input autoComplete="off" type = "text" disabled = {isLoading} id = "code" onChange = {(e) => setCode(e.target.value)}/>
                 <FormHelperText id = "codeHelperText">Please enter the code sent to your email</FormHelperText>
             </FormControl>}
-            {isEmailSent &&<FormControl >
+            {resetMode &&<FormControl >
                 {/* Password */}
                 <InputLabel htmlFor = "password">Password</InputLabel>
                 <Input autoComplete="off" type = "password" disabled = {isLoading} id = "password" onChange = {(e) => setPassword(e.target.value)}/>
@@ -113,8 +121,9 @@ function ResetPassword(props){
             </Stack>}
 
             <Stack direction = 'row' justifyContent="space-evenly">
+                <Button onClick={toggleResetMode} type="submit">I've got my Code</Button>
                 <Button  disabled = {isLoading} type = "submit">Submit</Button>
-                 <Button onClick = {backHandler}>Back</Button>
+                <Button onClick = {backHandler}>Back</Button>
             </Stack>
         </Stack>
 

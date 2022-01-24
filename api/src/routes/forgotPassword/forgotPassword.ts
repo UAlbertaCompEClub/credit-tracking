@@ -19,16 +19,21 @@ router.post('/forgot-password', async (req: Request, res: Response) => {
     }
     else if (nEmailSent >= 95) {
         res.status(400).json({
-            body: {
-                success: -1,
-                msg: "Message Limit Reached, try again tomorrow!"
-            }
+            body: -1
         })
     }
     else {
         const forgot = await forgotPasswordEmail(params.ccid);
         if (forgot === 0) {
             console.log('Email to', params.ccid, 'already sent!');
+            res.status(200).json({
+                body: 0
+            })
+        }
+        else {
+            res.status(200).json({
+                body: 1
+            })
         }
         await stateQueries.updateState({ var: 'nEmailSent', val: (nEmailSent+1).toString()});
     }
@@ -39,11 +44,13 @@ router.post('/email-reset', async (req: Request, res: Response, next: NextFuncti
     const params = req.body;
     const user = await queries.checkValidCode({ code: params.code });
     if (user.length === 0) {
+        console.log("Password Reset Failed!")
         res.status(400).json({
             body: -1
         })
     }
     else {
+        console.log("Password Reset Successful!")
         queries.updatePass({
             ccid: user[0].ccid,
             newPassword: params.password

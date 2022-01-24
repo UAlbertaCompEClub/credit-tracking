@@ -295,12 +295,12 @@ export const RequestService = {
       return await getResponse(res)
     },
     resetPassword: async (code,newPass) =>{
-      let res = await fetch(path + "/forgot-password",
+      let res = await fetch(path + "/email-reset",
           {headers:{"Content-type":"application/json"},
           method:"POST", 
             body: JSON.stringify({
-                  verifyCode:code,
-                  newPassword:newPass
+                  code:code,
+                  password:newPass
                   })
           })
       return await getResponse(res)

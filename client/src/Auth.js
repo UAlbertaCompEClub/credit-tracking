@@ -74,7 +74,6 @@ function Auth(props){
                 <InputLabel htmlFor = "password">Password</InputLabel>
                 <Input autoComplete="off" type = "password" disabled = {isLoading} id = "password" onChange = {(e) => setPassword(e.target.value)}/>
                 <FormHelperText id = "passwordHelperText">Please enter your password</FormHelperText>
-                <Typography onClick = {switchToResetPassword}>Forgot password</Typography>
             </FormControl>
             
             </FormControl>
@@ -83,7 +82,8 @@ function Auth(props){
             </Stack>}
 
             <Stack direction = 'row' justifyContent="space-evenly">
-                <Button  disabled = {isLoading} type = "submit">Submit</Button>
+                <Button disabled = {isLoading} type = "submit">Submit</Button>
+                <Button onClick={switchToResetPassword}>Forgot password</Button>
             </Stack>
         </Stack>
 
