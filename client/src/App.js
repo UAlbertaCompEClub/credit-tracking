@@ -7,8 +7,6 @@ import { mainTheme } from './theme';
 import TermsDialog from './TermsDialog.js'
 
 
-//TO DO: INPUT VERIFICATION
-
 function App() {
 
   const [page,setPage] = useState("Auth")

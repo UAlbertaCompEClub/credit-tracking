@@ -1,12 +1,21 @@
-import express, { NextFunction, Request, Response } from 'express';
+import { Request, Response, NextFunction } from "express";
 
-// type controller = (req: Request, res: Response, next: NextFunction) => void;
 
-class Controller {
-    constructor() {
+/**
+ *  This is a wrapper to provide exception handling to express routes.
+ *  Helps to reduce boilerplate.
+ *  @param Express handler to wrap with exception handling.
+ *  @returns A Wrapped Express Handler.
+*/
+const controller = (f: any) => {
+    return async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.status(200).json({
+                body: await f.call(this, req, res, next)
+            });
+        } catch (e) {
+            next(e);
+        }
     }
 }
-
-export default {
-    Controller
-};
+export default controller;
