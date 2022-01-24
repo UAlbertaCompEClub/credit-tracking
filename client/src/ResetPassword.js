@@ -121,7 +121,7 @@ function ResetPassword(props){
             </Stack>}
 
             <Stack direction = 'row' justifyContent="space-evenly">
-                <Button onClick={toggleResetMode} type="submit">I've got my Code</Button>
+                {!resetMode && <Button onClick={toggleResetMode} type="submit">I've got my Code</Button>}
                 <Button  disabled = {isLoading} type = "submit">Submit</Button>
                 <Button onClick = {backHandler}>Back</Button>
             </Stack>
