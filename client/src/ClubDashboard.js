@@ -178,7 +178,7 @@ function ClubDashboard(props) {
               <Button onClick = {(e)=>{toggleAddPerson()}}> Add User to Club</Button>
           </Stack>
 
-          {showAddUser && <AddUser   user = {props.user} setShowAddUser ={setShowAddUser} refresh = {refresh} />}
+          {showAddUser && <AddUser  toggleDialog={props.toggleDialog} user = {props.user} setShowAddUser ={setShowAddUser} refresh = {refresh} />}
 
           {/* Show table when not loading and show text when loading */}
           {users.isLoading && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>

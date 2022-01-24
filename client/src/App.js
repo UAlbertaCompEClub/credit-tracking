@@ -1,4 +1,3 @@
-
 import Auth from './Auth'
 import {Stack,Container,ThemeProvider,CssBaseline} from '@mui/material'
 import {useState,useEffect} from 'react'
@@ -6,6 +5,7 @@ import ClubDashboard from './ClubDashboard';
 import UserProfile from './UserProfile';
 import { mainTheme } from './theme';
 import ResetPassword from './ResetPassword'
+import TermsDialog from './TermsDialog.js'
 
 
 //TO DO: INPUT VERIFICATION
@@ -15,7 +15,9 @@ function App() {
   const [page,setPage] = useState("ResetPassword")
   const [userInfo, setUserInfo] = useState({ccid:'Default', token : 'Default', club:"Default",clubid:0})
   const [customerCcid,setCustomerCcid] = useState("cstm")
-  const [isExec,setIsExec] = useState(true) //TODO Change to false for production
+  const [isExec,setIsExec] = useState(false) //TODO Change to false for production
+  const [dialogVisible, setDialogVisible] = useState(false);
+  // RequestService.testRequest()
 
  
   function checkLoggedIn(){
@@ -89,6 +91,10 @@ function App() {
   }
 
 
+  function toggleDialog() {
+    dialogVisible ? setDialogVisible(false) : setDialogVisible(true)
+  }
+
   return (
     <ThemeProvider theme = {mainTheme}>
       <CssBaseline/>
@@ -96,6 +102,7 @@ function App() {
         <Container  maxWidth = "sm" >
           <Stack >
             {/* If page = Auth show auth data */}
+            {dialogVisible && <TermsDialog setDialogVisible={setDialogVisible}></TermsDialog> }
             {page === "Auth" && <Auth openUser ={openUser} setPage = {setPage}
                customerCcid = {setCustomerCcid}
                setUserInfo = {setUserInfo}
@@ -104,8 +111,10 @@ function App() {
                autoLogout = {autoLogout}/>}
             {page === "ClubDashboard" && <ClubDashboard theme = {mainTheme}
              user = {userInfo}  
+             toggleDialog={toggleDialog}
               openUser = {openUser} logout = {logout} />}
             {page === "UserProfile" && <UserProfile  
+             toggleDialog={toggleDialog}
               user = {userInfo}  isExec = {isExec} customerCcid = {customerCcid}
               setPage = {setPage}  logout = {logout} />}
           </Stack>

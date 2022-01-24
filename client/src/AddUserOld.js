@@ -1,5 +1,7 @@
 import {Button, FormControl,Alert,LinearProgress, Input, InputLabel,Stack,Typography} from '@mui/material'
+import { Button, FormControl, Alert, Input, InputLabel, Stack, Typography, Checkbox, FormControlLabel } from '@mui/material'
 import {useState} from 'react'
+import { AddUser } from './AddUser'
 import {RequestService} from "./Services/RequestService"
 import "./style.css"
 import ButtonUnstyled, { buttonUnstyledClasses } from '@mui/core/ButtonUnstyled';
@@ -11,7 +13,8 @@ export function AddUser(props) {
     const[alertType,setAlertType] = useState("error");
     const[alertText,setAlertText] = useState("You are not registered. Ask an executive to register!");
     const[showAlert,setShowAlert] = useState(false);
-    const[isLoading,setIsLoading] = useState(false)
+    const[isLoading,setIsLoading] = useState(false);
+    const[acceptFOIP,setAcceptFOIP] = useState(false);
 
     async function submitHandler(input){
         setIsLoading(true)
@@ -30,6 +33,13 @@ export function AddUser(props) {
             setShowAlert(true);
             setAlertType("error")
             setAlertText("Please fill all fields")
+            setIsLoading(false)
+            return
+        }
+        if(!acceptFOIP) {
+            setShowAlert(true);
+            setAlertType("error")
+            setAlertText("You have not accepted the terms of service")
             setIsLoading(false)
             return
         }
@@ -125,7 +135,19 @@ export function AddUser(props) {
             {isLoading && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
               <LinearProgress color="inherit" />
             </Stack>}
+            <FormControl>
+                {/* password */}
+                <InputLabel htmlFor = "password">Password</InputLabel>
+                <Input autoComplete="off" disabled = {isLoading} id = "password" onChange = {(e) => setPassword(e.target.value)}/>
+            </FormControl>
+            <FormControl>
+            <Button onClick={props.toggleDialog} sx = {{'margin': '2vh 0 0 2vw'}}
+                variant="p" >View the Terms of Service Here</Button>
+            <FormControlLabel id = 'foip' control={<Checkbox/>} onChange = {(e) => setAcceptFOIP(e.target.checked)}
+            label="I, the user, accept the terms of service" />        
+            </FormControl>
 
+            {props.showAddUser && <AddUser exec={props.exec} setShowAddUser={props.setShowAddUser} refresh={props.refresh} />}
             <Stack direction = 'row' justifyContent="space-evenly">
                 <Button disabled = {isLoading} class = "redText" type = "submit">Add</Button>
                 <CustomButton disabled = {isLoading} onClick = {(e)=>{props.setShowAddUser(false)}}>Close</CustomButton>
