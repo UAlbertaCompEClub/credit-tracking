@@ -61,6 +61,9 @@ export default {
     saySomething,
     consoleDisplay,
     bodyParser,
-    cors_call,
-    secure
+    cors_call
 };
+
+export {
+    secure
+}

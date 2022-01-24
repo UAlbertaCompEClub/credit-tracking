@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import * as queries from '../../controllers/db/dbQueries';
 import { verifyToken } from '../../auth/auth';
 import jwt from 'jsonwebtoken';
+import { secure } from '../../controllers/middleware';
 import assert from 'assert';
 
 require('dotenv').config({ path: './src/auth/secret-key.env' });
@@ -52,28 +53,5 @@ router.post('/transaction', async (req: Request, res: Response) => {
             })
         );
 });
-
-// // POST REQUESTS
-// router.post('/transaction', async (req: Request, res: Response) => {
-//     const params = req.body;
-//     console.log(params)
-
-//     const Transactions: schema.transactions.JSONSelectable[] = [];
-//     if (params.ccid) {
-//         const queryParams = {
-//             ccid:params.ccid,
-//             clubid: parseInt(params.clubid),
-//             amount: parseInt(params.amount)
-//         };
-//         await queries.createTransaction(queryParams);
-//     }
-
-    
-//     res.status(200).json({
-//         status:0 //return the balance
-//     });
-// });
-
-
 
 export default router;
