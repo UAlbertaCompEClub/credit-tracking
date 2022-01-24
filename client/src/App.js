@@ -36,18 +36,20 @@ function App() {
       })
 
       //is user an exec?
-      if(clubId){
+      if(storage.getItem("isExec")=="true"){
         setIsExec(true)
-        setPage("ClubDashboard")
+        setTimeout(()=>{
+          setPage("ClubDashboard")
+        },100)
+        
       }
       else{
         //if club id is null user is a customer
-        setCustomerCcid(storage.getItem('userCcid'))
         setIsExec(false)
-        setPage('UserProfile') 
+        console.log(storage.getItem('userCcid'))
+        openUser(storage.getItem('userCcid'));
       }
 
-      // setIsExec(true);
     }
     else{
       storage.clear()
@@ -75,7 +77,10 @@ function App() {
 
   function openUser(ccid){
     setCustomerCcid(ccid)
-    setPage("UserProfile")
+    setTimeout(()=>{
+      setPage("UserProfile")
+    },100)
+    
     console.log(isExec)
     //Get user info from Backend and set it
   } 
@@ -102,8 +107,9 @@ function App() {
             {/* If page = Auth show auth data */}
             {dialogVisible && <TermsDialog setDialogVisible={setDialogVisible}></TermsDialog> }
             {page === "Auth" && <Auth openUser ={openUser} setPage = {setPage}
-               customerCcid = {setCustomerCcid}
+               openUser = {openUser}
                setUserInfo = {setUserInfo}
+               setIsExec = {setIsExec}
                autoLogout = {autoLogout}/>}
             {page === "ResetPassword" && <ResetPassword openUser ={openUser} setPage = {setPage}
                autoLogout = {autoLogout}/>}

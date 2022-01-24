@@ -107,7 +107,8 @@ async function buildUserTransactions(Transactions:schema.transactions.JSONSelect
             //Add transaction and add to club balance
             clubs[transaction.clubid].transactions.push({
                 date:transaction.created_at.slice(0,10),
-                amount:transaction.amount});
+                amount:transaction.amount,
+                approver:transaction.created_by});
             clubs[transaction.clubid].balance = clubs[transaction.clubid].balance + transaction.amount;
 
         }
@@ -144,6 +145,7 @@ function clean(Transactions:schema.transactions.JSONSelectable[]){
             amount:transaction.amount,
             approver:transaction.created_by});
         club.balance = club.balance + transaction.amount;
+        console.log(transaction.created_by)
     }
     return club;
 }
@@ -255,7 +257,13 @@ router.post('/club', async (req: Request, res: Response) => {
     const clubid:any = req.body.clubid;
     console.log("club in router.get = " + clubid)
 
-    const users:any = await queries.getUsersRobust({clubid:clubid});
+    let users:any;
+    if(clubid == -1){
+        users = await queries.getAllUsers();
+    }else{
+        users= await queries.getUsersRobust({clubid:clubid});
+    }
+    
     console.log(users);
     let usersArray:any = []
     let usersHash:any = {}

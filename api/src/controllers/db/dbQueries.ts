@@ -117,6 +117,18 @@ const getUsersRobust = async (userParam: { clubid: string }) => {
     return query;
 };
 
+const getAllUsers = async () => {
+    // console.log("club = " + userParam.club)
+    const query = db.sql<schema.users.SQL | schema.transactions.SQL, schema.users.Selectable[]>`
+        SELECT U.ccid, U.full_name, U.balance
+        FROM ${"users"} U, ${"transactions"} T
+        WHERE U.ccid=T.ccid 
+        GROUP BY U.ccid, U.full_name
+        HAVING COUNT(T.clubid)>0
+    `.run(connection);
+    return query;
+};
+
 export {
     createTransaction,
     clubBalance,
@@ -128,5 +140,6 @@ export {
     getClub,
     getClubs,
     getExec,
-    transactionUserWeekly
+    transactionUserWeekly,
+    getAllUsers
 };

@@ -38,7 +38,14 @@ function Auth(props){
             setAlertText("Welcome! Logging in...")
             props.autoLogout()
             setTimeout(()=>{
-                props.setPage('ClubDashboard')
+                if(window.localStorage.getItem("isExec") == "true"){
+                    console.log("test")
+                    props.setIsExec(true)
+                    props.setPage('ClubDashboard')
+                }else{
+                    props.openUser(ccid)
+                }
+                
             },300)
         }else{
             setShowAlert(true);

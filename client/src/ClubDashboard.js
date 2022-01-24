@@ -1,4 +1,4 @@
-import { Button, FormControl, Input, Select, LinearProgress, InputLabel, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material'
+import { FormControlLabel, Checkbox, Button, FormControl, Input, Select, LinearProgress, InputLabel, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material'
 import { useState, useEffect } from 'react'
 import { RequestService } from "./Services/RequestService"
 import { AddUser } from './AddUser'
@@ -22,6 +22,7 @@ function request() {
 
 function ClubDashboard(props) {
   const [ccid, setCcid] = useState("")
+  const [allUsers, setAllUsers] = useState(false)
   const [users, setUsers] = useState({allUsers:[],table:"",isLoading:true })
   const [showAddUser, setShowAddUser] = useState(false)
 
@@ -74,6 +75,22 @@ function ClubDashboard(props) {
 
   }
 
+  async function getAllClubs() {
+    // First API call
+    await RequestService.allClubRequest(props.user.token)
+      .then((res) => {
+        console.log(res)
+        //Set initial users and shown users
+
+        setUsers({
+          allUsers: res,
+          table: getTable(res),
+          isLoading: false
+        })
+      })
+
+  }
+
   useEffect(() => {
     firstCall()
   }, [])
@@ -91,7 +108,18 @@ function ClubDashboard(props) {
     })
 
     setTimeout(() => {
-      RequestService.clubRequest(props.user.clubid, props.user.token)
+      if(allUsers){
+        RequestService.allClubRequest( props.user.token)
+        .then((res) => {
+          setUsers({
+            allUsers: res,
+            table: getTable(res),
+            isLoading: false
+          })
+  
+        })
+      }else{
+        RequestService.clubRequest(props.user.clubid, props.user.token)
         .then((res) => {
           setUsers({
             allUsers: res,
@@ -100,6 +128,8 @@ function ClubDashboard(props) {
           })
 
         })
+      }
+      
     }, 1000)
   }
 
@@ -150,6 +180,18 @@ function ClubDashboard(props) {
     
   }
   
+  function toggleAllUsers(){
+    setAllUsers((prevState)=>{
+        return !prevState
+    })
+    setTimeout(()=>{
+      console.log("all users")
+      console.log(allUsers)
+      refresh()
+    },200)
+    
+  }
+  
   return(
       <Stack>
           <Stack direction = 'row' justifyContent="space-evenly">
@@ -171,10 +213,14 @@ function ClubDashboard(props) {
           </FormControl> */}
 
           <Stack direction = "row" justifyContent = "space-between" width = "100%">
+            <Stack>
+            <FormControlLabel onClick = {toggleAllUsers} control={<Checkbox  onClick = {toggleAllUsers}/>} label="show users from all clubs" />
               <FormControl>
-                  <InputLabel htmlFor = "ccid">ccid or name</InputLabel>
-                  <Input autoComplete="off" id = "ccid" value = {ccid} onChange= {(e) => {setCcid(e.target.value); searchUsers(e.target.value)}} />
-              </FormControl>
+                    <InputLabel htmlFor = "ccid">ccid or name</InputLabel>
+                    <Input autoComplete="off" id = "ccid" value = {ccid} onChange= {(e) => {setCcid(e.target.value); searchUsers(e.target.value)}} />
+                </FormControl>
+            </Stack>
+              
               <Button onClick = {(e)=>{toggleAddPerson()}}> Add User to Club</Button>
           </Stack>
 

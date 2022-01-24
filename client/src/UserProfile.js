@@ -17,6 +17,7 @@ function UserProfile(props){
 
     //run on startup only
     useEffect(()=>{
+      console.log(props.isExec)
       getUserInfo(true)
     },[])
 

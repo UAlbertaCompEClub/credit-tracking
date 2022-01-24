@@ -141,6 +141,32 @@ export const RequestService = {
 
       return body;
     },
+    allClubRequest:async (token)=>{
+
+      let resp;
+      let body;
+
+      await fetch(path+"/club",
+      {
+        method:"POST", 
+        headers: { "Content-type": "application/json" },
+        body:JSON.stringify({'clubid':-1,'token':token})                          
+      }).then((res)=>{ 
+        console.log("Club request success.")
+        resp = res
+      }).catch(()=>{
+        console.log("Club request Failed.")
+        //Dummy Data
+        return([{name:'Failed Request', ccid:"adp",transactions:"23, +123, 23 ..."}])
+      })
+
+      await resp.json().then((Jres)=>{
+        console.log(Jres.body)
+        body = Jres.body
+      })
+
+      return body;
+    },
     //Auth.js
     ccidCheckReq: async (ccid)=>{
       //The method returns -1 for no user found
@@ -220,6 +246,11 @@ export const RequestService = {
         storage.setItem('userClubid',userData.clubid)
         storage.setItem('token',userData.token)
         storage.setItem('userExpiry', Date.now()+2592000)//30 days expiry
+        if(userData.club == null ){
+          storage.setItem('isExec', false)
+        }else{
+          storage.setItem('isExec',true)
+        }
         
         return userData
       }else{
