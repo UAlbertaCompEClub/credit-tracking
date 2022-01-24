@@ -6,6 +6,53 @@ import {RequestService} from "./Services/RequestService"
 
 function UserProfile(props){
     // Show user information and allows transaction adding if the user is logged in
+    const [viewMode, setViewMode] = useState(0);
+
+    function baseMode() {
+      setViewMode(0)
+    }
+    function creditMode() {
+      setViewMode(1)
+    }
+    function transactionMode() {
+      setViewMode(2)
+    }
+
+    
+    function renderBase() {
+      return (
+              <Stack>
+                <FormControl>
+                    <InputLabel  id="club">club</InputLabel>
+                    <Select 
+                        labelId="club"
+                        id="clubSelect"
+                        value={userState.club}
+                        label="club"
+                        onChange={changeClub}>
+                        {[...(Object.keys(userState.user.clubs))].map( clubName => <MenuItem key = {clubName} value={clubName}>{clubName}</MenuItem>)}
+                    </Select>
+                </FormControl>
+              </Stack>
+        );
+      }
+      
+      function renderCredit() {
+        return ( <Stack>
+          <Typography variant="h2">{balanceMessage()}</Typography>
+          { props.isExec && <Typography variant="h4">Debt payed back: {getDebtPayed()}</Typography> }
+        </Stack>
+        )
+      }
+
+      function renderTransaction() {
+        return (
+          <Stack>
+          { props.isExec && <AddTransaction customerCcid={props.customerCcid} user={props.user} refresh={getUserInfo}></AddTransaction> }
+          </Stack>      
+        );
+      }
+
 
     // Holds all data dependent on async calls for user data
     const [userState, setUserState] = useState({
@@ -160,35 +207,25 @@ function UserProfile(props){
     return (
         <Stack >
           <Stack direction='row' justifyContent="space-evenly">
-            <Button onClick = {props.logout} >Logout</Button>
+            { !props.isExec && <Button onClick = {props.logout} >Logout</Button> }
+            { viewMode !== 0 && props.isExec && <Button onClick={baseMode} >History</Button>}
+            { viewMode !== 1 && props.isExec && <Button onClick={creditMode} >Summary</Button>}
+            { viewMode !== 2 && props.isExec && <Button onClick={transactionMode} >New Transaction</Button>}
             { props.isExec && <Button onClick = {closeUser} >Close</Button>}
           </Stack>
-            {!userState.isLoading && <Stack>
-                <Typography variant = "h1">{userState.user.name}</Typography>
-                <Typography variant = "h2">{balanceMessage()}</Typography>
-                {props.isExec && <Typography variant = "h4">Debt payed back: {getDebtPayed()}</Typography>}
-                <Typography variant = "p">For</Typography>
-                
-                <FormControl>
-                    <InputLabel  id="club">club</InputLabel>
-                    <Select 
-                        labelId="club"
-                        id="clubSelect"
-                        value={userState.club}
-                        label="club"
-                        onChange={changeClub}>
-                        {[...(Object.keys(userState.user.clubs))].map( clubName => <MenuItem key = {clubName} value={clubName}>{clubName}</MenuItem>)}
-                    </Select>
-                </FormControl>
+            <Typography variant = "h1">{userState.user.name}</Typography>
+            { !userState.isLoading &&
+              <Stack>
+                {viewMode === 0 && renderBase()}
+                {viewMode === 1 && renderCredit()}
+                {viewMode === 2 && renderTransaction()}
+                {/* <Typography variant = "p">For</Typography> */}
               </Stack>
             }
             {userState.isLoading && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
               <LinearProgress color="inherit" />
             </Stack>}
-            {!userState.isLoading && userState.table}
-
-
-            {props.isExec && <AddTransaction customerCcid = {props.customerCcid} user = {props.user} refresh = {getUserInfo}></AddTransaction>}
+            {viewMode === 0 && !userState.isLoading && userState.table}
             {/* Only show the add transaction if current user is an exec */}
         </Stack>
         
