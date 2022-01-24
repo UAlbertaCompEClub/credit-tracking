@@ -28,7 +28,7 @@ ClubDashboard component
     USER (GET)
         //For returning customer Data
         Type: GET
-        Inputs: querystring with club=clubName, token=ExecToken, search=ccidToSearchBY
+        Inputs: querystring with club=clubName, token=token, search=ccidToSearchBY
         Return: Transaction history of user (per club), user name, user balances (per club) of searched ccid. (Format currently unkown,needs to be seperated by club)
         If ccid = "" return all names of customers paired with a string containing the first three transactions followed by ...(ex: "+1.75 -10 +5.5 ...")
         Endpoint: domain.com/user
@@ -37,7 +37,7 @@ ClubDashboard component
     USER (post) 
         //For creating a customer 
         Type: POST
-        Inputs: object with {ccid:ccid, name:name, token:execToken}
+        Inputs: object with {ccid:ccid, name:name, token:token}
         Return: -1 if failed, 0 if succesful
         Endpoint: domain.com/user
         NOTE: use the exec token to verify that the EXEC has permission to add users
@@ -47,7 +47,7 @@ Transaction Component
     USER (Put)
         //for adding a transaction
         Type:Put
-        Inputs: object with{amount:transactionAmount,ccid:customerccid,token:ExecToken}
+        Inputs: object with{amount:transactionAmount,ccid:customerccid,token:token}
         Return: -1 if failed, 0 if success
         Endpoint: domain.com/user
         NOTE: use the exec token to verify that the EXEC has permission to add

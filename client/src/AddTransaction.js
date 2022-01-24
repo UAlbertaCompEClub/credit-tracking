@@ -42,7 +42,7 @@ function AddTransaction(props){
         }
 
         let confirmation 
-        await RequestService.newTransaction(props.customerCcid, realAmount,props.exec.clubid, props.exec.token)
+        await RequestService.newTransaction(props.customerCcid, realAmount,props.user.clubid, props.user.token,props.user.ccid)
         .then((res )=>{
             confirmation = res
         }) //holds the new user balance if successful

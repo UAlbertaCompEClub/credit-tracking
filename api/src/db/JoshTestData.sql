@@ -1,15 +1,12 @@
-INSERT INTO users (ccid,isExec,full_name,foip,balance)
-VALUES ('cstm',false, 'Customer C',true,20),
-('CompEEXEC',true,'larry',true,10),
-('ElecEEXEC',true,'Barry',true,10)
-('fiaz',true,'M.Fiaz',true,20);
+INSERT INTO users (ccid,isExec,full_name,foip,balance,password)
+VALUES ('jyw2',true,'Josh',true,20, '$2b$10$87WU0jq76BcNqbAAyev30evZnsC8YRkWUgWaQriOKummAqMWK/eRe');
 
-INSERT INTO execs (ccid, password,clubid)
-VALUES ('CompEEXEC','execPassword',1),
+INSERT INTO execs (ccid, clubid)
+VALUES ('jyw2',0);
 ('ElecEEXEC','execPassword',0);
 
 INSERT INTO clubs(clubid,clubname,amount)
-VALUES (0,'ElectricalE',20),
+VALUES (0,'CompE',20);
 (1,'CompE',20);
 
 INSERT INTO transactions ( clubid, amount, ccid)

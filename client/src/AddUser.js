@@ -1,13 +1,13 @@
-import { Button, FormControl, Alert, Input, InputLabel, Stack, Typography, Checkbox, FormControlLabel, LinearProgress } from '@mui/material'
+import {Button, FormControl,Checkbox,Alert, Input, InputLabel,Stack,Typography,FormControlLabel,LinearProgress} from '@mui/material'
 import {useState} from 'react'
 import {RequestService} from "./Services/RequestService"
-import "./style.css"
-import ButtonUnstyled, { buttonUnstyledClasses } from '@mui/core/ButtonUnstyled';
-import { styled } from '@mui/system';
 
 export function AddUser(props) {
     const[ccid,setCcid] = useState("")
     const[name,setName] = useState("")
+    const[password,setPassword] = useState("")
+    const[isExec,setIsExec] = useState(false);
+    const[emailInvoices,setEmailInvoices] = useState(false);
     const[alertType,setAlertType] = useState("error");
     const[alertText,setAlertText] = useState("You are not registered. Ask an executive to register!");
     const[showAlert,setShowAlert] = useState(false);
@@ -15,10 +15,9 @@ export function AddUser(props) {
     const[acceptFOIP,setAcceptFOIP] = useState(false);
 
     async function submitHandler(input){
-        setIsLoading(true)
         input.preventDefault()
         var forbiddenChars = /[$^&'()\=\\{}:"\\|<>\/?]+/;
-        if (forbiddenChars.test(ccid) || forbiddenChars.test(name)) {
+        if (forbiddenChars.test(ccid) || forbiddenChars.test(name) || forbiddenChars.test(password)) {
             setShowAlert(true);
             setAlertType("error")
             setAlertText("You have entered illegal characters")
@@ -26,7 +25,6 @@ export function AddUser(props) {
             return
         }
 
-        
         if(ccid === "" || name === ""){
             setShowAlert(true);
             setAlertType("error")
@@ -46,21 +44,27 @@ export function AddUser(props) {
         await RequestService.ccidCheckReq(ccid).then((res)=>{
             ccidStatus = res
         })
-
+        
         if(ccidStatus !== -1 ){
             //ccid is registered already
             setShowAlert(true);
             setAlertType("error")
             setAlertText("User already exists")
         }else{
-            const status = await RequestService.addUser(ccid,name,props.exec.token)
-            if(status === 0){
+            let status
+            if(isExec){
+                status = await RequestService.addExec(ccid,name,password,props.user.clubid,props.user.token)
+            }
+            else{
+                status = await RequestService.addUser(ccid,name,password,props.user.token)
+            }
+            
+            if(parseInt(status) === 0){
                 //req succeded
-                await RequestService.newTransaction(ccid,0,props.exec.clubid,props.exec.token)
                 setShowAlert(true);
                 setAlertType("success")
                 setAlertText("User Added")
-                
+                await RequestService.newTransaction(ccid,0,props.user.clubid,props.user.token,props.user.ccid)
                 props.refresh()
             }else{
                 //req failed
@@ -69,67 +73,49 @@ export function AddUser(props) {
                 setAlertText("User could not be added.")
             }
         }
-
         setIsLoading(false)
     }
 
-    //-------------------Button shinnanigins--------------//
-    const CustomButtonRoot = styled('button')`
-    background-color: transparent;
-    padding: 15px 20px;
-    border-radius: 10px;
-    color: #fff;
-    font-weight: 600;
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    transition: all 200ms ease;
-    cursor: pointer;
-    border: 0.5px;
-    border-colour: grey;
-
-    &:hover {
-        background-color: transparent;
+    function toggleIsExec(){
+        setIsExec((prevState)=>{
+            return !prevState
+        })
     }
 
-    &.${buttonUnstyledClasses.active} {
-        background-color: transparent;
+    function toggleInvoices(){
+        setEmailInvoices((prevState)=>{
+            return !prevState
+        })
     }
 
-    &.${buttonUnstyledClasses.focusVisible} {
-        box-shadow: transparent;
-        outline: none;
-    }
-
-    &.${buttonUnstyledClasses.disabled} {
-        opacity: 0.5;
-        cursor: not-allowed;
-        box-shadow: 0 0 0 0 rgba(0, 127, 255, 0);
-    }
-    `;
-    function CustomButton(props) {
-        return <ButtonUnstyled {...props} component={CustomButtonRoot} />;
-    }
-    //----------------------------------------------------//
-
-
- 
     return (
         <form onSubmit = {submitHandler}>
         <Stack>
-            <Typography variant = "p" class = "normalText">Add Customer</Typography>
+            <Typography variant = "h3" >Add User</Typography>
+
+            <Stack direction="row">
+                <FormControlLabel onClick = {toggleIsExec} control={<Checkbox  onClick = {toggleIsExec}/>} label="User is an Executive" />
+                <FormControlLabel onClick = {toggleInvoices} control={< Checkbox onClick = {toggleInvoices}/>} label="Enable email invoices" />
+            </Stack>
+            
+
              {/* show alert if showAlert is true */}
              {showAlert && <Alert severity = {alertType}> {alertText}!</Alert>} 
             <FormControl>
               {/*ccid */}
-              <InputLabel htmlFor = "ccid" class = "normalText">ccid</InputLabel>
-                <Input autoComplete="off" disabled = {isLoading} id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
+              <InputLabel htmlFor = "ccid">ccid</InputLabel>
+                <Input autoComplete="off" id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
             </FormControl>
             <FormControl>
                 {/* name */}
-                <InputLabel htmlFor = "name" class = "normalText">Name</InputLabel>
+                <InputLabel htmlFor = "name">Name</InputLabel>
                 <Input autoComplete="off" disabled = {isLoading} id = "name" onChange = {(e) => setName(e.target.value)}/>
             </FormControl>
             <FormControl>
+                {/* password */}
+                <InputLabel htmlFor = "password">Password</InputLabel>
+                <Input autoComplete="off" disabled = {isLoading} id = "password" onChange = {(e) => setPassword(e.target.value)}/>
+                
                 <Button onClick={props.toggleDialog} sx = {{'margin': '2vh 0 0 2vw'}}
                     variant="p" >View the Terms of Service Here</Button>
                 <FormControlLabel id = 'foip' control={<Checkbox/>} onChange = {(e) => setAcceptFOIP(e.target.checked)}
@@ -141,11 +127,13 @@ export function AddUser(props) {
             </Stack>}
 
             <Stack direction = 'row' justifyContent="space-evenly">
-                <Button disabled = {isLoading} class = "redText" type = "submit">Add</Button>
-                <CustomButton disabled = {isLoading} onClick = {(e)=>{props.setShowAddUser(false)}}>Close</CustomButton>
+                <Button  disabled = {isLoading} type = "submit">Add</Button>
+                <Button  disabled = {isLoading} onClick = {(e)=>{props.setShowAddUser(false)}}>Close</Button>
             </Stack>
 
         </Stack>
         </form>
     )
 }
+
+export default AddUser

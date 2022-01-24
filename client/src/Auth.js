@@ -6,7 +6,6 @@ import {RequestService} from './Services/RequestService'
 function Auth(props){
 
     //state vars
-    const[isExec,setIsExec] = useState(props.isExec);
     const[ccid,setCcid] = useState("");
     const[password,setPassword] = useState("");
     const[alertType,setAlertType] = useState("error");
@@ -15,17 +14,8 @@ function Auth(props){
     const[isLoading,setIsLoading] = useState(false)
 
     function submitHandler(input){
-        //checks if ccid is valid and prompts for PW if they are execs
-        //if user is identified as an exec already attempt to login exec
         input.preventDefault()
-
-        if(isExec){
-            //we have verified they are an exec so try exec login
-            Execlogin()
-        }else{
-            //check if they are execs and try logging in if they are customers
-            checkUser()
-        }
+        login()
     }
 
     function clearFields(){
@@ -34,15 +24,15 @@ function Auth(props){
         setPassword("")
     }
 
-    async function Execlogin(){
+    async function login(){
         //Attemps login
         let response 
         setIsLoading(true)
-        await RequestService.execLogin(ccid,password).then((res)=>{
+        await RequestService.login(ccid,password).then((res)=>{
             response = res;
         })
         if(response){
-            props.setExecInfo(response)
+            props.setUserInfo(response)
             setShowAlert(true);
             setAlertType("success")
             setAlertText("Welcome! Logging in...")
@@ -53,55 +43,14 @@ function Auth(props){
         }else{
             setShowAlert(true);
             setAlertType("error")
-            setAlertText("Your password is incorrect")
+            setAlertText("Your password or ccid is incorrect")
         }
         setIsLoading(false)
     }
 
-    async function checkUser(){
-        // Checks if a user (using ccid only) is an exec or not and whether they have any records if they are a customer
-        //if they are valid customers, log in
-        //server call returns 1 for EXEC, 0 for customer, -1 if they are not in the system.
-
-        setIsLoading(true)
-
-        //set this value from the server
-        let status = await RequestService.ccidCheckReq(ccid)
-        // let status = fetch(path + "checkUser"+"?ccid="+ccid)
-   
-        //open PW if you are an exec
-        if( status === 1){ 
-            //ccid is exec
-            setIsExec(true);
-            setShowAlert(true);
-            setAlertType("success")
-            setAlertText("Welcome Exec! Please enter your password.")
-            
-        }else if (status === 0){
-            //ccid is customer
-            setShowAlert(true);
-            setAlertType("success")
-            setAlertText("Welcome! Logging in...")
-            
-            //attempt customer login
-             props.openUser(ccid)
-        }else{
-            //ccid is not registered
-            setShowAlert(true);
-            setAlertType("error")
-            setTimeout(()=>{
-                setAlertText("You are not registered or the ccid is incorrect. Ask an executive to register")
-            },300)
-        }
-
-        setIsLoading(false)
-    }
-
-    function backHandler(){
-        //go back from exec login
-        setShowAlert(false)
-        clearFields()
-        setIsExec(false)
+    function switchToResetPassword()
+    {
+        props.setPage('ResetPassword')
     }
 
     return (
@@ -114,25 +63,20 @@ function Auth(props){
             {/* show alert if showAlert is true */}
             {showAlert && <Alert severity = {alertType}> {alertText}!</Alert>} 
 
-            <FormControl  disabled = {isExec}>
-                {/* on ccid submit, if ccid is associated with an exec,
-                prompt for password. */}
-
-                {/* Exec and customer ccid */}
+            <FormControl >
+                {/* ccid */}
                 <InputLabel htmlFor = "ccid">ccid</InputLabel>
-                <Input autoComplete="off" disabled = {isLoading || isExec} id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
-                <FormHelperText id = "ccidHelperText">For customers and Execs</FormHelperText>
-            
+                <Input autoComplete="off" disabled = {isLoading} id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
+                <FormHelperText id = "ccidHelperText"></FormHelperText>
 
-            
-            {isExec && //only show if ccid is exec
              <FormControl >
-                {/* Exec Password */}
+                {/* Password */}
                 <InputLabel htmlFor = "password">Password</InputLabel>
                 <Input autoComplete="off" type = "password" disabled = {isLoading} id = "password" onChange = {(e) => setPassword(e.target.value)}/>
-                <FormHelperText id = "passwordHelperText">Please enter your Exec password</FormHelperText>
+                <FormHelperText id = "passwordHelperText">Please enter your password</FormHelperText>
+                <Typography onClick = {switchToResetPassword}>Forgot password</Typography>
             </FormControl>
-            }
+            
             </FormControl>
             {isLoading && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
               <LinearProgress color="inherit" />
@@ -140,7 +84,6 @@ function Auth(props){
 
             <Stack direction = 'row' justifyContent="space-evenly">
                 <Button  disabled = {isLoading} type = "submit">Submit</Button>
-                {isExec && <Button onClick = {backHandler}>Back</Button>}
             </Stack>
         </Stack>
 

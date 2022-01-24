@@ -11,18 +11,20 @@ CREATE TABLE IF NOT EXISTS users (
     password TEXT NOT NULL
 );
 
-/* execs table */
-CREATE TABLE IF NOT EXISTS execs (
-    ccid TEXT NOT NULL PRIMARY KEY,
-    clubid INT NOT NULL REFERENCES clubs
-);
-
 /* clubs table */
 CREATE TABLE IF NOT EXISTS clubs (
     clubid INT NOT NULL PRIMARY KEY,
     clubname TEXT NOT NULL,
     amount REAL NOT NULL DEFAULT 0
 );
+
+/* execs table */
+CREATE TABLE IF NOT EXISTS execs (
+    ccid TEXT NOT NULL PRIMARY KEY,
+    clubid INT NOT NULL REFERENCES clubs
+);
+
+
 
 /* transations table */
 CREATE TABLE IF NOT EXISTS transactions (

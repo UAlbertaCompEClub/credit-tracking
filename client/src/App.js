@@ -4,13 +4,14 @@ import {useState,useEffect} from 'react'
 import ClubDashboard from './ClubDashboard';
 import UserProfile from './UserProfile';
 import { mainTheme } from './theme';
+import ResetPassword from './ResetPassword'
 import TermsDialog from './TermsDialog.js'
 
 
 function App() {
 
-  const [page,setPage] = useState("Auth")
-  const [ExecInfo, setExecInfo] = useState({ccid:'Default', token : 'Default', club:"Default",clubid:0})
+  const [page,setPage] = useState("ResetPassword")
+  const [userInfo, setUserInfo] = useState({ccid:'Default', token : 'Default', club:"Default",clubid:0})
   const [customerCcid,setCustomerCcid] = useState("cstm")
   const [isExec,setIsExec] = useState(false) //TODO Change to false for production
   const [dialogVisible, setDialogVisible] = useState(false);
@@ -20,27 +21,33 @@ function App() {
   function checkLoggedIn(){
     console.log("checking login...")
     const storage = window.localStorage 
-    const expiry = storage.getItem('execExpiry')
-    const customerCcid = storage.getItem('customerCcid')
+    const expiry = storage.getItem('userExpiry')
+    const clubId = storage.getItem('userClubId')
     if( expiry && parseInt(expiry) > Date.now()+30000){
       //If exec token will be valid for at least 30 more seconds
       //Show exec club dashboard
-      console.log("exec is logged in")
+      console.log("User is logged in")
       autoLogout()
-      setExecInfo({
-        ccid:storage.getItem('execCcid'),
-        club:storage.getItem('execClub'),
-        clubid:storage.getItem('execClubid'),
-        token:storage.getItem('execToken')
+      setUserInfo({
+        ccid:storage.getItem('userCcid'),
+        club:storage.getItem('userClub'),
+        clubid:storage.getItem('userClubid'),
+        token:storage.getItem('token')
       })
-      setIsExec(true)
-      setPage("ClubDashboard")
-    }else if(customerCcid){
-      //if customerCcid exists show their profile
-      console.log("customer is logged in")
-      setCustomerCcid(customerCcid)
-      setPage('UserProfile')
-      setIsExec(false)
+
+      //is user an exec?
+      if(clubId){
+        setIsExec(true)
+        setPage("ClubDashboard")
+      }
+      else{
+        //if club id is null user is a customer
+        setCustomerCcid(storage.getItem('userCcid'))
+        setIsExec(false)
+        setPage('UserProfile') 
+      }
+
+      // setIsExec(true);
     }
     else{
       storage.clear()
@@ -51,11 +58,11 @@ function App() {
 
   useEffect(()=>{
     checkLoggedIn()
-  },[])
+  },[]) //[] means run one time only on startup
 
 
   async function autoLogout(){
-    const timeRemaining = parseInt(window.localStorage.getItem('execExpiry'))-Date.now()
+    const timeRemaining = parseInt(window.localStorage.getItem('userExpiry'))-Date.now()
       
     if(timeRemaining < 2147483647){
       console.log("set Auto logout in "+timeRemaining+" milliseconds" )
@@ -69,21 +76,18 @@ function App() {
   function openUser(ccid){
     setCustomerCcid(ccid)
     setPage("UserProfile")
+    console.log(isExec)
     //Get user info from Backend and set it
   } 
 
   function logout(){
     setPage("Auth")
-    setExecInfo({})
+    setUserInfo({})
     setCustomerCcid(null)
     setIsExec(false)
     window.localStorage.clear()
   }
 
-  function setExec(info){
-    setIsExec(true)
-    setExecInfo(info)
-  }
 
   function toggleDialog() {
     dialogVisible ? setDialogVisible(false) : setDialogVisible(true)
@@ -98,18 +102,19 @@ function App() {
             {/* If page = Auth show auth data */}
             {dialogVisible && <TermsDialog setDialogVisible={setDialogVisible}></TermsDialog> }
             {page === "Auth" && <Auth openUser ={openUser} setPage = {setPage}
-              customerCcid = {setCustomerCcid}
-              setExecInfo = {setExec}
-              autoLogout = {autoLogout}
-              toggleDialog = {toggleDialog}
-               />}
+               customerCcid = {setCustomerCcid}
+               setUserInfo = {setUserInfo}
+               autoLogout = {autoLogout}/>}
+            {page === "ResetPassword" && <ResetPassword openUser ={openUser} setPage = {setPage}
+               autoLogout = {autoLogout}/>}
             {page === "ClubDashboard" && <ClubDashboard theme = {mainTheme}
-              exec={ExecInfo} 
-              openUser={openUser} logout={logout} toggleDialog={toggleDialog}/>}
+             user = {userInfo}  
+             toggleDialog={toggleDialog}
+              openUser = {openUser} logout = {logout} />}
             {page === "UserProfile" && <UserProfile  
-              exec = {ExecInfo}  isExec = {isExec} customerCcid = {customerCcid}
-              setPage = {setPage}  logout = {logout}
-              toggleDialog={toggleDialog}/>}
+             toggleDialog={toggleDialog}
+              user = {userInfo}  isExec = {isExec} customerCcid = {customerCcid}
+              setPage = {setPage}  logout = {logout} />}
           </Stack>
         </Container>
       </Container>

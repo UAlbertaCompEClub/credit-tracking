@@ -91,7 +91,7 @@ export const RequestService = {
         return transactions
     },
     //AddTransaction
-    newTransaction: async (ccid, amount, clubid, token)=>{
+    newTransaction: async (ccid, amount, clubid, token,execCcid)=>{
         //add transaction. Return balance for succ, null for fail
         let status
         await fetch(path+"/transaction",
@@ -99,10 +99,11 @@ export const RequestService = {
                     ccid:ccid,
                     clubid:clubid,
                     amount:amount,
-                    token:token
+                    token:token,
+                    exec:execCcid
                 })})
         .then((res)=>{
-          console.log("Transaction Creation Succ")
+          console.log("Transaction Creation for "+amount+" Succ")
           status = res
         }).catch(()=>{
           console.log("Transaction Creation Failure")
@@ -144,7 +145,7 @@ export const RequestService = {
     ccidCheckReq: async (ccid)=>{
       //The method returns -1 for no user found
       // 1 for exec and 0 for customer
-      let status = "Default"
+      let status 
       await fetch(path+"/check-ccid", {headers:{ccid:ccid}})
       .then((res)=>{
         status = res
@@ -164,7 +165,26 @@ export const RequestService = {
       return status.body
 
     },
-    execLogin: async (ccid,pw)=>{
+    getExecClubs: async (ccid)=>{
+      //The method returns clubs an exec is an exec for
+      let status 
+      await fetch(path+"/check-ccid", {headers:{ccid:ccid}})
+      .then((res)=>{
+        status = res
+        console.log("Exec club get succ")
+        
+      }).catch(()=>{
+        console.log("Exec club get Failed")
+      })
+      status = await getResponse(status)
+      console.log(status)
+
+      // status.club
+
+      return status.body
+
+    },
+    login: async (ccid,pw)=>{
       //The method...
 
       //Manual wait time to show we received their input
@@ -181,37 +201,40 @@ export const RequestService = {
         console.log("Ccid Check Failed")
       })
       let status = await getResponse(response)
+      console.log(status)
       if(status.ccid !== -1){
-        const execData =  {
+        
+        const userData =  {
           ccid:status.ccid,
           club:status.club,
           clubid:status.clubid,
           token:status.token}
-        console.log(execData)
+        
 
         //store data locally
         const storage = window.localStorage
 
         storage.clear() //Logout any customer logged in
-        storage.setItem('execCcid',execData.ccid)
-        storage.setItem('execClub',execData.club)
-        storage.setItem('execClubid',execData.clubid)
-        storage.setItem('execToken',execData.token)
-        storage.setItem('execExpiry', Date.now()+2592000)//30 days expiry
+        storage.setItem('userCcid',ccid)
+        storage.setItem('userClub',userData.club)
+        storage.setItem('userClubid',userData.clubid)
+        storage.setItem('token',userData.token)
+        storage.setItem('userExpiry', Date.now()+2592000)//30 days expiry
         
-        return execData
+        return userData
       }else{
         return null
       }
       
     },
-    addUser: async (ccid,full_name,token)=>{
+    addUser: async (ccid,full_name,password,token)=>{
       //The method returns 0 if succ 1 if fail
 
       let status
       await fetch(path+"/user",
               {method:"POST", headers:{"Content-type":"application/json"},body:JSON.stringify({
                   ccid:ccid,
+                  password:password,
                   full_name:full_name,
                   isexec:false,
                   foip:true, //may need to be changed later
@@ -259,7 +282,30 @@ export const RequestService = {
 
       return (status)
 
-    }
+    },
+    emailResetPassword: async (ccid) => {
+      console.log("attempting to send email...")
+      let res = await fetch(path + "/forgot-password",
+          {headers:{"Content-type":"application/json"},
+          method:"POST", 
+            body: JSON.stringify({
+                  ccid:ccid
+                  })
+          })
+      return await getResponse(res)
+    },
+    resetPassword: async (code,newPass) =>{
+      let res = await fetch(path + "/forgot-password",
+          {headers:{"Content-type":"application/json"},
+          method:"POST", 
+            body: JSON.stringify({
+                  verifyCode:code,
+                  newPassword:newPass
+                  })
+          })
+      return await getResponse(res)
+    },
+    
 
 }
 
