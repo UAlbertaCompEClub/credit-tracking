@@ -30,34 +30,17 @@ function Auth(props){
         setIsLoading(true)
         await RequestService.login(ccid,password).then((res)=>{
             response = res;
-            console.log('response', response)
         })
-        if (response.isExec) {
-            props.setIsExec(true)
+        if(response){
             props.setUserInfo(response)
             setShowAlert(true);
             setAlertType("success")
-            setAlertText("Welcome Exec! Logging in...")
-            console.log("Welcome Exec! Logging in...")
+            setAlertText("Welcome! Logging in...")
             props.autoLogout()
             setTimeout(()=>{
                 props.setPage('ClubDashboard')
             },300)
-        }
-        else if (!response.isExec) {
-            props.setIsExec(false)
-            props.setUserInfo(response)
-            props.customerCcid(response.ccid)
-            setShowAlert(true);
-            setAlertType("success")
-            console.log("Welcome Customer! Logging in...")
-            setAlertText("Welcome Customer! Logging in...")
-            props.autoLogout()
-            setTimeout(() => {
-                props.setPage('UserProfile')
-            }, 300)
-        }
-        else{
+        }else{
             setShowAlert(true);
             setAlertType("error")
             setAlertText("Your password or ccid is incorrect")

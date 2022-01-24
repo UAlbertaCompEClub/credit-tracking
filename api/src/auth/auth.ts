@@ -31,7 +31,7 @@ const verifyToken = (token: string, key: string) => {
     jwt.verify(token, key, async (err: any, data: any) => {
         const tokenCcidCheck = await queries.getExec({ ccid: data.ccid });
         if (tokenCcidCheck.length !== 1) {
-            console.log("Exec in Token does not Exist!");
+            console.log("User in Token does not Exist!");
             throw new Error("");
         }
     });

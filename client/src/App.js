@@ -104,7 +104,6 @@ function App() {
             {page === "Auth" && <Auth openUser ={openUser} setPage = {setPage}
                customerCcid = {setCustomerCcid}
                setUserInfo = {setUserInfo}
-               setIsExec={setIsExec}
                autoLogout = {autoLogout}/>}
             {page === "ResetPassword" && <ResetPassword openUser ={openUser} setPage = {setPage}
                autoLogout = {autoLogout}/>}
