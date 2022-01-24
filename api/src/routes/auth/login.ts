@@ -18,27 +18,33 @@ router.post('/login', async (req: Request, res: Response) => {
         ccid: params.ccid
     };
 
+    const key = process.env.SECRETKEY;
     const user = (await regQueries.getUser(userParams));
-    if (user.length === 1 && user[0].isexec===true) {
+
+    //we need to ensure that the key has been supplied here!
+    assert(key !== undefined && key !== null);
+
+    if (user.length === 1) {
         const password = params.password;
         const hashedPass = user[0].password;
 
-        console.log(password)
-        const key = process.env.SECRETKEY;
-        // console.log(key);
-
-        //we need to ensure that the key has been supplied here!
-        assert(key !== undefined && key !== null);
         
         const passwordSame = await auth.checkPass(password, hashedPass);
         const exec = (await regQueries.getExec(userParams))[0];
-        const club = (await regQueries.getClub({ clubid: exec.clubid}))[0];
-        if (passwordSame === true) {
-            // TO-DO: change to generalized user solution soon, currently only setup for exec use
+        if (passwordSame === true && user[0].isexec===true) {
+            const club = (await regQueries.getClub({ clubid: exec.clubid}))[0];
             res.status(200).json({
                 clubid: exec.clubid,
                 ccid: exec.ccid,
                 club: club.clubname,
+                isExec: user[0].isexec,
+                token: jwt.sign(userParams, key, { expiresIn: '30d' })
+            });
+        }
+        else if (passwordSame === true && user[0].isexec !== true) {
+            res.status(200).json({
+                ccid: params.ccid,
+                isExec: user[0].isexec,
                 token: jwt.sign(userParams, key, { expiresIn: '30d' })
             });
         }
@@ -47,11 +53,6 @@ router.post('/login', async (req: Request, res: Response) => {
                 ccid: -1
             });
         }
-    }
-    else if (user.length === 1){
-        res.status(200).json({
-            ccid: params.ccid
-        });
     }
     else {
         res.status(200).json({

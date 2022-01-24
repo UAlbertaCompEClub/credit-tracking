@@ -160,8 +160,8 @@ function UserProfile(props){
     return (
         <Stack >
           <Stack direction='row' justifyContent="space-evenly">
-            { !props.isExec && <Button onClick = {props.logout} >Logout</Button>}
-            { !props.isExec && <Button onClick = {closeUser} >Close</Button>}
+            <Button onClick = {props.logout} >Logout</Button>
+            { props.isExec && <Button onClick = {closeUser} >Close</Button>}
           </Stack>
             {!userState.isLoading && <Stack>
                 <Typography variant = "h1">{userState.user.name}</Typography>

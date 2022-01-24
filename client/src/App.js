@@ -36,7 +36,7 @@ function App() {
       })
 
       //is user an exec?
-      if(storage.getItem("isExec")=="true"){
+      if(storage.getItem("isExec")==="true"){
         setIsExec(true)
         setTimeout(()=>{
           setPage("ClubDashboard")
