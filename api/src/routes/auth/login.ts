@@ -48,6 +48,11 @@ router.post('/login', async (req: Request, res: Response) => {
             });
         }
     }
+    else if (user.length === 1){
+        res.status(200).json({
+            ccid: params.ccid
+        });
+    }
     else {
         res.status(200).json({
             ccid: -1

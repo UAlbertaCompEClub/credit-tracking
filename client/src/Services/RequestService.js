@@ -91,7 +91,7 @@ export const RequestService = {
         return transactions
     },
     //AddTransaction
-    newTransaction: async (ccid, amount, clubid, token)=>{
+    newTransaction: async (ccid, amount, clubid, token,execCcid)=>{
         //add transaction. Return balance for succ, null for fail
         let status
         await fetch(path+"/transaction",
@@ -99,10 +99,11 @@ export const RequestService = {
                     ccid:ccid,
                     clubid:clubid,
                     amount:amount,
-                    token:token
+                    token:token,
+                    exec:execCcid
                 })})
         .then((res)=>{
-          console.log("Transaction Creation Succ")
+          console.log("Transaction Creation for "+amount+" Succ")
           status = res
         }).catch(()=>{
           console.log("Transaction Creation Failure")
@@ -164,7 +165,7 @@ export const RequestService = {
       return status.body
 
     },
-    ccidCheckReq: async (ccid)=>{
+    getExecClubs: async (ccid)=>{
       //The method returns clubs an exec is an exec for
       let status 
       await fetch(path+"/check-ccid", {headers:{ccid:ccid}})
@@ -200,19 +201,21 @@ export const RequestService = {
         console.log("Ccid Check Failed")
       })
       let status = await getResponse(response)
+      console.log(status)
       if(status.ccid !== -1){
+        
         const userData =  {
           ccid:status.ccid,
           club:status.club,
           clubid:status.clubid,
           token:status.token}
-        console.log(userData)
+        
 
         //store data locally
         const storage = window.localStorage
 
         storage.clear() //Logout any customer logged in
-        storage.setItem('userCcid',userData.ccid)
+        storage.setItem('userCcid',ccid)
         storage.setItem('userClub',userData.club)
         storage.setItem('userClubid',userData.clubid)
         storage.setItem('token',userData.token)
@@ -224,13 +227,14 @@ export const RequestService = {
       }
       
     },
-    addUser: async (ccid,full_name,token)=>{
+    addUser: async (ccid,full_name,password,token)=>{
       //The method returns 0 if succ 1 if fail
 
       let status
       await fetch(path+"/user",
               {method:"POST", headers:{"Content-type":"application/json"},body:JSON.stringify({
                   ccid:ccid,
+                  password:password,
                   full_name:full_name,
                   isexec:false,
                   foip:true, //may need to be changed later
@@ -251,7 +255,7 @@ export const RequestService = {
       //TEST RETURN
       return 0
     },
-    addUser: async (ccid,full_name,password,clubid,token)=>{
+    addExec: async (ccid,full_name,password,clubid,token)=>{
       //The method returns 0 if succ -1 if fail
 
       let status
@@ -266,10 +270,10 @@ export const RequestService = {
                   token:token
               })})
       .then((res)=>{
-        console.log("User Creation Succ")
+        console.log("Exec Creation Succ")
         status = res
       }).catch(()=>{
-        console.log("User Creation Failure")
+        console.log("Exec Creation Failure")
           return null
       })
 
@@ -300,7 +304,8 @@ export const RequestService = {
                   })
           })
       return await getResponse(res)
-    }
+    },
+    
 
 }
 

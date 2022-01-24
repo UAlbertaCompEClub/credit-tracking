@@ -1,4 +1,4 @@
-import AddTransaction from './AddUser'
+import AddTransaction from './AddTransaction'
 import {useState,useEffect} from 'react'
 import {Button, FormControl, MenuItem, LinearProgress, Select, InputLabel, Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography} from '@mui/material'
 import {RequestService} from "./Services/RequestService"
@@ -39,6 +39,7 @@ function UserProfile(props){
               <TableRow>
                 <TableCell>Date</TableCell>
                 <TableCell >Amount</TableCell>
+                <TableCell >Approved by</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -46,6 +47,7 @@ function UserProfile(props){
                 <TableRow key={row.date+row.amount+keyHelper++} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" scope="row"> {row.date} </TableCell>
                   <TableCell >{row.amount}</TableCell>
+                  <TableCell >{row.approver}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -77,6 +79,7 @@ function UserProfile(props){
       }
       console.log(info)
       const table = getTableElement(isFirstTime,info)
+
 
       if(isFirstTime){
         setUserState((prevState)=>{
@@ -126,6 +129,29 @@ function UserProfile(props){
         
     }
 
+    function getDebtPayed(){
+      let netDebt  = 0
+      let netPay = 0
+      for (let row of userState.user.clubs[userState.club].transactions){
+        if(row.amount <= 0 ){
+          netDebt += row.amount
+        }else{
+          netPay += row.amount
+        }
+      }
+      console.log(netDebt)
+      console.log(netPay)
+
+
+      if(netPay >= Math.abs(netDebt)){
+        return  Math.abs(netDebt)
+      }else{
+        return  Math.abs(netPay)
+      }
+
+        
+    }
+
     function closeUser(){
       props.setPage("ClubDashboard")
     }
@@ -137,7 +163,9 @@ function UserProfile(props){
             {!userState.isLoading && <Stack>
                 <Typography variant = "h1">{userState.user.name}</Typography>
                 <Typography variant = "h2">{balanceMessage()}</Typography>
+                {props.isExec && <Typography variant = "h4">Debt payed back: {getDebtPayed()}</Typography>}
                 <Typography variant = "p">For</Typography>
+                
                 <FormControl>
                     <InputLabel  id="club">club</InputLabel>
                     <Select 
@@ -157,7 +185,7 @@ function UserProfile(props){
             {!userState.isLoading && userState.table}
 
 
-            {props.isExec && <AddTransaction customerCcid = {props.customerCcid} exec = {props.user} refresh = {getUserInfo}></AddTransaction>}
+            {props.isExec && <AddTransaction customerCcid = {props.customerCcid} user = {props.user} refresh = {getUserInfo}></AddTransaction>}
             {/* Only show the add transaction if current user is an exec */}
         </Stack>
         

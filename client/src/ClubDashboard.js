@@ -38,11 +38,6 @@ function ClubDashboard(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-           {/*
-              fiaz here, I changed the key of the table to be
-              ccid instead of name. Names can be repeated. When this happens
-              it causes errors in your table.
-             */}
           {users.map((row) => (
             <TableRow
               key={row.ccid}
@@ -180,7 +175,7 @@ function ClubDashboard(props) {
                   <InputLabel htmlFor = "ccid">ccid or name</InputLabel>
                   <Input autoComplete="off" id = "ccid" value = {ccid} onChange= {(e) => {setCcid(e.target.value); searchUsers(e.target.value)}} />
               </FormControl>
-              <Button onClick = {(e)=>{toggleAddPerson()}}> Add User</Button>
+              <Button onClick = {(e)=>{toggleAddPerson()}}> Add User to Club</Button>
           </Stack>
 
           {showAddUser && <AddUser   user = {props.user} setShowAddUser ={setShowAddUser} refresh = {refresh} />}

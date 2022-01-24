@@ -1,4 +1,4 @@
-import {Button, FormControl,Alert, Input, InputLabel,Stack,Typography} from '@mui/material'
+import {Button, FormControl,Checkbox,Alert, Input, InputLabel,Stack,Typography,FormControlLabel} from '@mui/material'
 import {useState} from 'react'
 import {RequestService} from "./Services/RequestService"
 
@@ -6,6 +6,8 @@ export function AddUser(props) {
     const[ccid,setCcid] = useState("")
     const[name,setName] = useState("")
     const[password,setPassword] = useState("")
+    const[isExec,setIsExec] = useState(false);
+    const[emailInvoices,setEmailInvoices] = useState(false);
     const[alertType,setAlertType] = useState("error");
     const[alertText,setAlertText] = useState("You are not registered. Ask an executive to register!");
     const[showAlert,setShowAlert] = useState(false);
@@ -41,13 +43,20 @@ export function AddUser(props) {
             setAlertType("error")
             setAlertText("User already exists")
         }else{
-            const status = await RequestService.addUser(ccid,name,password,props.user.clubid,props.user.token)
+            let status
+            if(isExec){
+                status = await RequestService.addExec(ccid,name,password,props.user.clubid,props.user.token)
+            }
+            else{
+                status = await RequestService.addUser(ccid,name,password,props.user.token)
+            }
+            
             if(parseInt(status) === 0){
                 //req succeded
                 setShowAlert(true);
                 setAlertType("success")
                 setAlertText("User Added")
-                await RequestService.newTransaction(ccid,0,props.user.clubid,props.user.token,user.ccid)
+                await RequestService.newTransaction(ccid,0,props.user.clubid,props.user.token,props.user.ccid)
                 props.refresh()
             }else{
                 //req failed
@@ -59,10 +68,29 @@ export function AddUser(props) {
         setIsLoading(false)
     }
 
+    function toggleIsExec(){
+        setIsExec((prevState)=>{
+            return !prevState
+        })
+    }
+
+    function toggleInvoices(){
+        setEmailInvoices((prevState)=>{
+            return !prevState
+        })
+    }
+
     return (
         <form onSubmit = {submitHandler}>
         <Stack>
-            <Typography variant = "p" >Add User</Typography>
+            <Typography variant = "h3" >Add User</Typography>
+
+            <Stack direction="row">
+                <FormControlLabel onClick = {toggleIsExec} control={<Checkbox  onClick = {toggleIsExec}/>} label="User is an Executive" />
+                <FormControlLabel onClick = {toggleInvoices} control={< Checkbox onClick = {toggleInvoices}/>} label="Enable email invoices" />
+            </Stack>
+            
+
              {/* show alert if showAlert is true */}
              {showAlert && <Alert severity = {alertType}> {alertText}!</Alert>} 
             <FormControl>
@@ -90,3 +118,5 @@ export function AddUser(props) {
         </form>
     )
 }
+
+export default AddUser

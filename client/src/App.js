@@ -15,7 +15,7 @@ function App() {
   const [page,setPage] = useState("ResetPassword")
   const [userInfo, setUserInfo] = useState({ccid:'Default', token : 'Default', club:"Default",clubid:0})
   const [customerCcid,setCustomerCcid] = useState("cstm")
-  const [isExec,setIsExec] = useState(false) //TODO Change to false for production
+  const [isExec,setIsExec] = useState(true) //TODO Change to false for production
 
  
   function checkLoggedIn(){
@@ -46,6 +46,8 @@ function App() {
         setIsExec(false)
         setPage('UserProfile') 
       }
+
+      // setIsExec(true);
     }
     else{
       storage.clear()
@@ -74,6 +76,7 @@ function App() {
   function openUser(ccid){
     setCustomerCcid(ccid)
     setPage("UserProfile")
+    console.log(isExec)
     //Get user info from Backend and set it
   } 
 
@@ -83,11 +86,6 @@ function App() {
     setCustomerCcid(null)
     setIsExec(false)
     window.localStorage.clear()
-  }
-
-  function setExec(info){
-    setIsExec(true)
-    setUserInfo(info)
   }
 
 

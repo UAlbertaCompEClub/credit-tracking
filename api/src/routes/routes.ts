@@ -141,7 +141,8 @@ function clean(Transactions:schema.transactions.JSONSelectable[]){
         //Add transaction and add to club balance
         club.transactions.push({
             date:transaction.created_at.slice(0,10),
-            amount:transaction.amount});
+            amount:transaction.amount,
+            approver:transaction.created_by});
         club.balance = club.balance + transaction.amount;
     }
     return club;
