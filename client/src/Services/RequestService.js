@@ -201,13 +201,14 @@ export const RequestService = {
         console.log("Ccid Check Failed")
       })
       let status = await getResponse(response)
-      console.log(status)
+      console.log('login data', status)
       if(status.ccid !== -1){
         
         const userData =  {
           ccid:status.ccid,
           club:status.club,
           clubid:status.clubid,
+          isExec:status.isExec,
           token:status.token}
         
 
@@ -219,6 +220,7 @@ export const RequestService = {
         storage.setItem('userClub',userData.club)
         storage.setItem('userClubid',userData.clubid)
         storage.setItem('token',userData.token)
+        storage.setItem('isExec', userData.isExec)
         storage.setItem('userExpiry', Date.now()+2592000)//30 days expiry
         
         return userData

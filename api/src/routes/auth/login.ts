@@ -18,17 +18,16 @@ router.post('/login', async (req: Request, res: Response) => {
         ccid: params.ccid
     };
 
+    const key = process.env.SECRETKEY;
+    // console.log(key);
+
+    //we need to ensure that the key has been supplied here!
+    assert(key !== undefined && key !== null);
+
     const user = (await regQueries.getUser(userParams));
     if (user.length === 1 && user[0].isexec===true) {
         const password = params.password;
         const hashedPass = user[0].password;
-
-        console.log(password)
-        const key = process.env.SECRETKEY;
-        // console.log(key);
-
-        //we need to ensure that the key has been supplied here!
-        assert(key !== undefined && key !== null);
         
         const passwordSame = await auth.checkPass(password, hashedPass);
         const exec = (await regQueries.getExec(userParams))[0];
@@ -39,6 +38,7 @@ router.post('/login', async (req: Request, res: Response) => {
                 clubid: exec.clubid,
                 ccid: exec.ccid,
                 club: club.clubname,
+                isExec: user[0].isexec,
                 token: jwt.sign(userParams, key, { expiresIn: '30d' })
             });
         }
@@ -50,7 +50,9 @@ router.post('/login', async (req: Request, res: Response) => {
     }
     else if (user.length === 1){
         res.status(200).json({
-            ccid: params.ccid
+            ccid: params.ccid,
+            isExec: user[0].isexec,
+            token: jwt.sign(userParams, key, { expiresIn: '7d' })
         });
     }
     else {
