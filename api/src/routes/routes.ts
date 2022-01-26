@@ -56,10 +56,10 @@ router.post('/get-user', async (req: Request, res: Response) => {
             active: user.active,
             full_name: user.full_name,
             subscribed: user.subscribed,
-            balance: user.balance,
+            balance: user.balance
         }
         res.status(200).json({
-            body: [userCleaned]
+            body: userCleaned
         });
     }
     else if (params.hasOwnProperty('clubid')) {
@@ -264,7 +264,7 @@ router.post('/club', async (req: Request, res: Response) => {
         users= await queries.getUsersRobust({clubid:clubid});
     }
     
-    console.log(users);
+    // console.log(users);
     let usersArray:any = []
     let usersHash:any = {}
 
@@ -278,7 +278,7 @@ router.post('/club', async (req: Request, res: Response) => {
         let counter:number = 0;
         for(let trans in allTrans){
             //add + or - signs
-            const amount:number = allTrans[trans].amount
+            const amount:number = allTrans[trans].amount;
             let amountString:string = '';
             if(amount >= 0){
                 amountString = '+' + amount;
@@ -293,9 +293,9 @@ router.post('/club', async (req: Request, res: Response) => {
             }
             counter++;
         }
-        transactions = transactions + " ..."
+        transactions = transactions + " ...";
         //build element and add it to array
-        usersArray.push({name:userObj.full_name,ccid:userObj.ccid,transactions:transactions})
+        usersArray.push({ name:userObj.full_name, ccid:userObj.ccid, transactions:transactions, subscribed: userObj.subscribed});
     }
 
 

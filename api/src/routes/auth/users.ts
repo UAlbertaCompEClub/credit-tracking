@@ -17,7 +17,6 @@ router.post('/user', async (req: Request, res: Response) => {
         assert(token !== undefined && token !== null);
 
         console.log('token', token);
-        console.log(params);
         
         let key = process.env.SECRETKEY;
         assert(key !== undefined && key !== null);
@@ -98,7 +97,6 @@ router.post('/set-subscribed', async (req: Request, res: Response) => {
             assert(token !== undefined && token !== null);
 
             console.log('token', token);
-            console.log(params);
 
             let key = process.env.SECRETKEY;
             assert(key !== undefined && key !== null);
@@ -107,21 +105,10 @@ router.post('/set-subscribed', async (req: Request, res: Response) => {
             //checks if user is verified
             verifyToken(token, key);
 
-            const userExists = await regQueries.getUser({ ccid: params.ccid });
-            const hashPass = userExists[0].password;
-
-            const passVerified = await checkPass(params.oldPassword, hashPass);
-            console.log("pass", passVerified);
-            if (passVerified === false) {
-                console.error("Password could not be verified!");
-                throw new Error();
-            }
-
             const userParams = {
                 ccid: params.ccid,
                 subscribed: params.subscribed
             };
-
             queries.setSubscribed(userParams);
         })
         .then(data =>
@@ -150,7 +137,6 @@ router.post('/update-password', async (req: Request, res: Response) => {
         assert(token !== undefined && token !== null);
 
         console.log('token', token);
-        console.log(params);
 
         let key = process.env.SECRETKEY;
         assert(key !== undefined && key !== null);
@@ -163,7 +149,6 @@ router.post('/update-password', async (req: Request, res: Response) => {
         const hashPass = userExists[0].password;
 
         const passVerified = await checkPass(params.oldPassword, hashPass);
-        console.log("pass", passVerified);
         if (passVerified===false) {
             console.error("Password could not be verified!");
             throw new Error();

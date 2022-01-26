@@ -114,8 +114,8 @@ function App() {
             {page === "ResetPassword" && <ResetPassword openUser ={openUser} setPage = {setPage}
                autoLogout = {autoLogout}/>}
             {page === "ClubDashboard" && <ClubDashboard theme = {mainTheme}
-             user = {userInfo}  
-             toggleDialog={toggleDialog}
+              user={userInfo}
+              toggleDialog={toggleDialog}
               openUser = {openUser} logout = {logout} />}
             {page === "UserProfile" && <UserProfile  
              toggleDialog={toggleDialog}

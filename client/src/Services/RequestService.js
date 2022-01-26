@@ -141,6 +141,45 @@ export const RequestService = {
 
       return body;
     },
+    //UserProfile.js
+    getUserCleaned: async (ccid)=>{
+      //Returned a customer
+      let response 
+      await fetch(path+"/get-user",{
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body:JSON.stringify({ccid:ccid})
+      })
+      .then((res)=>{
+        response = res
+        console.log("Get user details success")
+      }).catch(()=>{
+        console.log("Get user details failed")
+      })
+      response = await getResponse(response)
+      return response.body
+    },
+    setSubscribed: async (ccid, subscribed, token)=>{
+      //Returned a customer
+      let response 
+      await fetch(path+"/set-subscribed",{
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body:JSON.stringify({
+            ccid: ccid,
+            subscribed: subscribed,
+            token: token
+          }),
+      })
+      .then((res)=>{
+        response = res
+        console.log("Get user details success")
+      }).catch(()=>{
+        console.log("Get user details failed")
+      })
+      response = await getResponse(response)
+      return response.body
+    },
     allClubRequest:async (token)=>{
 
       let resp;

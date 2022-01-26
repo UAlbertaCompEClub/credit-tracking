@@ -1,12 +1,14 @@
 import AddTransaction from './AddTransaction'
-import {useState,useEffect} from 'react'
-import {Button, FormControl, MenuItem, LinearProgress, Select, InputLabel, Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography} from '@mui/material'
-import {RequestService} from "./Services/RequestService"
+import { useState, useEffect } from 'react'
+import { Button, FormControlLabel, FormControl, MenuItem, LinearProgress, Select, InputLabel, Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography, Checkbox} from '@mui/material'
+import { RequestService } from "./Services/RequestService"
 
 
 function UserProfile(props){
     // Show user information and allows transaction adding if the user is logged in
     const [viewMode, setViewMode] = useState(0);
+    const [user, setUser] = useState({});
+    const [subscribed, setSubscribed] = useState({});
 
     function baseMode() {
       setViewMode(0)
@@ -18,6 +20,9 @@ function UserProfile(props){
       setViewMode(2)
     }
 
+    function toggleSubscribed() {
+      subscribed ? setSubscribed(false) : setSubscribed(true)
+    }
     
     function renderBase() {
       return (
@@ -38,9 +43,17 @@ function UserProfile(props){
       }
       
       function renderCredit() {
+        console.log('you are subscribed', subscribed)
+        console.log('you are', user)
         return ( <Stack>
           <Typography variant="h2">{balanceMessage()}</Typography>
-          { props.isExec && <Typography variant="h4">Debt payed back: {getDebtPayed()}</Typography> }
+          { props.isExec && <Typography variant="h4">Debt payed back: ${getDebtPayed()}</Typography> }
+          { props.isExec && <FormControlLabel
+              control={<Checkbox defaultChecked={subscribed}
+                onClick={e => {
+                    toggleSubscribed()
+                    RequestService.setSubscribed(props.customerCcid, e.target.checked, props.user.token)
+                }} />} label="Subscribed to Email Invoices" />}
         </Stack>
         )
       }
@@ -128,6 +141,9 @@ function UserProfile(props){
       console.log(info)
       const table = getTableElement(isFirstTime,info)
 
+      const userCleaned = await RequestService.getUserCleaned(props.customerCcid)
+      setUser(userCleaned)
+      setSubscribed(userCleaned.subscribed)
 
       if(isFirstTime){
         setUserState((prevState)=>{
@@ -207,10 +223,10 @@ function UserProfile(props){
     return (
         <Stack >
           <Stack direction='row' justifyContent="space-evenly">
-            { !props.isExec && <Button onClick = {props.logout} >Logout</Button> }
-            { viewMode !== 0 && props.isExec && <Button onClick={baseMode} >History</Button>}
-            { viewMode !== 1 && props.isExec && <Button onClick={creditMode} >Summary</Button>}
+            { viewMode !== 0 && <Button onClick={baseMode} >History</Button>}
+            { viewMode !== 1 && <Button onClick={creditMode} >Summary</Button>}
             { viewMode !== 2 && props.isExec && <Button onClick={transactionMode} >New Transaction</Button>}
+            { !props.isExec && <Button onClick = {props.logout} >Logout</Button> }
             { props.isExec && <Button onClick = {closeUser} >Close</Button>}
           </Stack>
             <Typography variant = "h1">{userState.user.name}</Typography>

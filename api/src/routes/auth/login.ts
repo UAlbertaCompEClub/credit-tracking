@@ -49,13 +49,13 @@ router.post('/login', async (req: Request, res: Response) => {
             });
         }
         else {
-            res.status(200).json({
+            res.status(400).json({
                 ccid: -1
             });
         }
     }
     else {
-        res.status(200).json({
+        res.status(400).json({
             ccid: -1
         });
     }

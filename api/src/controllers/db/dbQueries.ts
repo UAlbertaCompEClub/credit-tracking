@@ -108,7 +108,7 @@ const getUsers = (userParam: { clubid: number }) => {
 const getUsersRobust = async (userParam: { clubid: string }) => {
     // console.log("club = " + userParam.club)
     const query = db.sql<schema.users.SQL | schema.transactions.SQL, schema.users.Selectable[]>`
-        SELECT U.ccid, U.full_name, U.balance
+        SELECT U.ccid, U.full_name, U.balance, U.subscribed
         FROM ${"users"} U, ${"transactions"} T
         WHERE U.ccid=T.ccid AND T.clubid=${db.param(userParam.clubid)}
         GROUP BY U.ccid, U.full_name
@@ -120,7 +120,7 @@ const getUsersRobust = async (userParam: { clubid: string }) => {
 const getAllUsers = async () => {
     // console.log("club = " + userParam.club)
     const query = db.sql<schema.users.SQL | schema.transactions.SQL, schema.users.Selectable[]>`
-        SELECT U.ccid, U.full_name, U.balance
+        SELECT U.ccid, U.full_name, U.balance, U.subscribed
         FROM ${"users"} U, ${"transactions"} T
         WHERE U.ccid=T.ccid 
         GROUP BY U.ccid, U.full_name
