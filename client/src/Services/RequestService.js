@@ -246,7 +246,7 @@ export const RequestService = {
         storage.setItem('userClub',userData.club)
         storage.setItem('userClubid',userData.clubid)
         storage.setItem('token',userData.token)
-        storage.setItem('userExpiry', Date.now()+2592000)//30 days expiry
+        storage.setItem('userExpiry', Date.now()+2592000000)//30 days expiry
 
         if(userData.club == null ){
           storage.setItem('isExec', false)
