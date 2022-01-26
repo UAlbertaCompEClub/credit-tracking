@@ -27,17 +27,22 @@ function UserProfile(props){
     function renderBase() {
       return (
               <Stack>
-                <FormControl>
-                    <InputLabel  id="club">club</InputLabel>
-                    <Select 
-                        labelId="club"
-                        id="clubSelect"
-                        value={userState.club}
-                        label="club"
-                        onChange={changeClub}>
-                        {[...(Object.keys(userState.user.clubs))].map( clubName => <MenuItem key = {clubName} value={clubName}>{clubName}</MenuItem>)}
-                    </Select>
-                </FormControl>
+                {!props.isExec && <Typography variant="h4" color ="#c2c7af">{balanceMessage()}</Typography>}
+                <Stack mt = "5vh">
+                  <FormControl >
+                      <InputLabel  id="club">club</InputLabel>
+                      <Select 
+                          labelId="club"
+                          id="clubSelect"
+                          value={userState.club}
+                          label="club"
+                          onChange={changeClub}>
+                          {[...(Object.keys(userState.user.clubs))].map( clubName => <MenuItem key = {clubName} value={clubName}>{clubName}</MenuItem>)}
+                      </Select>
+                      
+                  </FormControl>
+                </Stack>
+               
               </Stack>
         );
       }
@@ -46,6 +51,7 @@ function UserProfile(props){
         console.log('you are subscribed', subscribed)
         console.log('you are', user)
         return ( <Stack>
+<<<<<<< HEAD
           <Typography variant="h2">{balanceMessage()}</Typography>
           { props.isExec && <Typography variant="h4">Debt payed back: ${getDebtPayed()}</Typography> }
           { props.isExec && <FormControlLabel
@@ -54,6 +60,10 @@ function UserProfile(props){
                     toggleSubscribed()
                     RequestService.setSubscribed(props.customerCcid, e.target.checked, props.user.token)
                 }} />} label="Subscribed to Email Invoices" />}
+=======
+          <Typography variant="h2" color ="#c2c7af" >{balanceMessage()}</Typography>
+          { props.isExec && <Typography variant="h4">Debt payed back: {getDebtPayed()}</Typography> }
+>>>>>>> client_routes
         </Stack>
         )
       }
@@ -86,11 +96,13 @@ function UserProfile(props){
       let club
       if(isFirstTime){
         club = Object.keys(info.clubs)[0]
-      }else if( clubExplicit == null){
+      }
+      else if( clubExplicit === null){
         club = userState.club
       }else{
         club = clubExplicit
       }
+      console.log("club is :" + club.toString());
 
 
       const table = 
@@ -127,17 +139,11 @@ function UserProfile(props){
       })
 
       let info
-      if(props.isExec){
-        await RequestService.userRequest(props.customerCcid,props.user.clubid)
-        .then((res)=>{
-          info = res
-        })
-      }else{
-        await RequestService.userRequest(props.customerCcid)
-        .then((res)=>{
-          info = res
-        })
-      }
+      await RequestService.userRequest(props.customerCcid)
+      .then((res)=>{
+        info = res
+      })
+      
       console.log(info)
       const table = getTableElement(isFirstTime,info)
 
@@ -146,11 +152,13 @@ function UserProfile(props){
       setSubscribed(userCleaned.subscribed)
 
       if(isFirstTime){
+        console.log(props.user.club)
         setUserState((prevState)=>{
           return{...prevState,
           user:info,
           table:table,
-          club:(Object.keys(info.clubs))[0]
+          club:(info.clubs.hasOwnProperty(props.user.club)?props.user.club :Object.keys(info.clubs)[0])
+          
         }
         })
       }else{
@@ -232,8 +240,9 @@ function UserProfile(props){
             <Typography variant = "h1">{userState.user.name}</Typography>
             { !userState.isLoading &&
               <Stack>
-                {viewMode === 0 && renderBase()}
                 {viewMode === 1 && renderCredit()}
+                {(viewMode === 0 ||viewMode === 1 )&&  renderBase()}
+                
                 {viewMode === 2 && renderTransaction()}
                 {/* <Typography variant = "p">For</Typography> */}
               </Stack>

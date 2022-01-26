@@ -101,14 +101,9 @@ function ClubDashboard(props) {
 
   async function refresh() {
     //get updated list of users
-
-
-    setUsers((prevState) => {
-      return { ...prevState, isLoading: true }
-    })
-
+    console.log("allusers: "+ allUsers.toString())
     setTimeout(() => {
-      if(allUsers){
+      if(!allUsers){
         RequestService.allClubRequest( props.user.token)
         .then((res) => {
           setUsers({
@@ -129,8 +124,11 @@ function ClubDashboard(props) {
 
         })
       }
+      setUsers((prevState) => {
+        return { ...prevState, isLoading: true }
+      })
       
-    }, 1000)
+    },0)
   }
 
   function searchUsers(ccidName) {
@@ -185,8 +183,8 @@ function ClubDashboard(props) {
         return !prevState
     })
     setTimeout(()=>{
-      console.log("all users")
-      console.log(allUsers)
+      console.log("all users in toggle: "+allUsers.toString())
+
       refresh()
     },200)
     
@@ -214,7 +212,7 @@ function ClubDashboard(props) {
 
           <Stack direction = "row" justifyContent = "space-between" width = "100%">
             <Stack>
-            <FormControlLabel onClick = {toggleAllUsers} control={<Checkbox  onClick = {toggleAllUsers}/>} label="show users from all clubs" />
+            <FormControlLabel  control={<Checkbox onClick = {toggleAllUsers}/>} label="show users from all clubs" />
               <FormControl>
                     <InputLabel htmlFor = "ccid">ccid or name</InputLabel>
                     <Input autoComplete="off" id = "ccid" value = {ccid} onChange= {(e) => {setCcid(e.target.value); searchUsers(e.target.value)}} />

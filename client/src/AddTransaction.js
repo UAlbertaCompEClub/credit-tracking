@@ -52,7 +52,7 @@ function AddTransaction(props){
             setAlertType("success")
             setAlertText("Transaction Success")
             setShowAlert(true)
-            props.refresh(false) // refresh the transaction list and balance
+            props.refresh(true) // refresh the transaction list and balance
         }else{
             //transaction failed
             setAlertType("error")

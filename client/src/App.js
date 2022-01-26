@@ -17,8 +17,12 @@ function App() {
   const [dialogVisible, setDialogVisible] = useState(false);
   // RequestService.testRequest()
 
+  
  
   function checkLoggedIn(){
+    // setInterval(()=>{
+    //   console.log("Time remaining ="+ (storage.getItem('userExpiry')-Date.now()))
+    // },1000)
     console.log("checking login...")
     const storage = window.localStorage 
     const expiry = storage.getItem('userExpiry')
