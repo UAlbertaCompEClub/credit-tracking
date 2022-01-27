@@ -42,9 +42,7 @@ const secure = (f: any) => {
             verifyToken(token, key);
 
             //continues with remainder of route function call
-            controller(async (req: Request, res: Response, next: NextFunction) => {
-                f.call(this, req, res, next);
-            })
+            controller(f.call(this, req, res, next));
         } catch (e) {
             next(e);
         }
@@ -56,5 +54,9 @@ export default {
     consoleDisplay,
     bodyParser,
     cors_call,
+    secure
+};
+
+export {
     secure
 };

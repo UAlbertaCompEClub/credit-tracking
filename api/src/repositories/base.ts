@@ -121,10 +121,8 @@ const getAllUsers = async () => {
     // console.log("club = " + userParam.club)
     const query = db.sql<schema.users.SQL | schema.transactions.SQL, schema.users.Selectable[]>`
         SELECT U.ccid, U.full_name, U.balance, U.subscribed
-        FROM ${"users"} U, ${"transactions"} T
-        WHERE U.ccid=T.ccid 
+        FROM ${"users"} U
         GROUP BY U.ccid, U.full_name
-        HAVING COUNT(T.clubid)>0
     `.run(connection);
     return query;
 };

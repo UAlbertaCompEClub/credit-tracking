@@ -51,7 +51,6 @@ function UserProfile(props){
         console.log('you are subscribed', subscribed)
         console.log('you are', user)
         return ( <Stack>
-<<<<<<< HEAD
           <Typography variant="h2">{balanceMessage()}</Typography>
           { props.isExec && <Typography variant="h4">Debt payed back: ${getDebtPayed()}</Typography> }
           { props.isExec && <FormControlLabel
@@ -60,10 +59,6 @@ function UserProfile(props){
                     toggleSubscribed()
                     RequestService.setSubscribed(props.customerCcid, e.target.checked, props.user.token)
                 }} />} label="Subscribed to Email Invoices" />}
-=======
-          <Typography variant="h2" color ="#c2c7af" >{balanceMessage()}</Typography>
-          { props.isExec && <Typography variant="h4">Debt payed back: {getDebtPayed()}</Typography> }
->>>>>>> client_routes
         </Stack>
         )
       }
@@ -103,8 +98,6 @@ function UserProfile(props){
         club = clubExplicit
       }
       console.log("club is :" + club.toString());
-
-
       const table = 
       (<TableContainer component={Paper}>
         <Table  aria-label="simple table">
@@ -116,7 +109,8 @@ function UserProfile(props){
               </TableRow>
             </TableHead>
             <TableBody>
-              {info.clubs[club].transactions.map((row) => (
+              {/* This was added here to allow for displaying users with no transactions in any clubs */}
+              {!(Object.keys(info.clubs[club]).length === 0) && info.clubs[club].transactions.map((row) => (
                 <TableRow key={row.date+row.amount+keyHelper++} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" scope="row"> {row.date} </TableCell>
                   <TableCell >{row.amount}</TableCell>
