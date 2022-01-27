@@ -1,5 +1,5 @@
 import assert from 'assert';
-import * as queries from '../db/dbQueries';
+import * as queries from '../../repositories/base';
 
 const renderBalances = async (clubs:any, ccid: string) => {
     var balanceDict = Object();

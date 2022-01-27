@@ -1,4 +1,4 @@
-import * as queries from '../controllers/db/dbQueries';
+import * as queries from '../repositories/base';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { assert } from 'console';

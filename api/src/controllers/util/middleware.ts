@@ -1,7 +1,7 @@
 import assert from 'assert';
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
-import { verifyToken } from '../auth/auth';
+import { verifyToken } from '../../auth/auth';
 
 type middleware = (req: Request, res: Response, next: NextFunction) => void;
 

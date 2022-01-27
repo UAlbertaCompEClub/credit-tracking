@@ -2,7 +2,7 @@ import { timeStamp } from 'console';
 import { Pool, Client } from 'pg';
 import * as db from 'zapatos/db';
 import type * as schema from 'zapatos/schema';
-import connection from './dbConnection';
+import connection from './connection';
 
 const createTransaction = (transactionParam: { ccid: string, clubid: number, amount: number, exec: string; }) => {
     const transaction: schema.transactions.Insertable = {

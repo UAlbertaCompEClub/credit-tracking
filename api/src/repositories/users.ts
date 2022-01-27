@@ -1,8 +1,8 @@
 import { Pool, Client } from 'pg';
 import * as db from 'zapatos/db';
 import type * as schema from 'zapatos/schema';
-import connection from './dbConnection';
-import { encryptPass } from '../../auth/auth';
+import connection from './connection';
+import { encryptPass } from '../auth/auth';
 import crypto from 'crypto';
 import assert from 'assert';
 

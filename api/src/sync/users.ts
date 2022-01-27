@@ -1,4 +1,4 @@
-import * as userQueries from '../controllers/db/dbUsers';
+import * as userQueries from '../repositories/users';
 
 const computeActiveUsers = async () => {
     var day = new Date().getDay();

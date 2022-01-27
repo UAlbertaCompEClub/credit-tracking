@@ -1,5 +1,5 @@
-import * as stateQueries from '../controllers/db/dbState';
-import * as userQueries from '../controllers/db/dbUsers';
+import * as stateQueries from '../repositories/state';
+import * as userQueries from '../repositories/users';
 
 const hourlyRun = () => {
     //get the mins of the current time
