@@ -4,8 +4,9 @@ import * as forgotPass from '../../controllers/users/forgotPass';
 
 const router = express.Router();
 
+router.post('/get-user', users.getUser);
 router.post('/user', users.createUser);
 router.post('/set-subscribed', users.setSubscribed);
-router.post('/update-password', forgotPass.updatePass);
+router.get('/check-ccid', users.checkCcid);
 
 export default router;

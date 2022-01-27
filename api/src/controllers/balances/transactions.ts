@@ -10,6 +10,7 @@ import middleWare from '../util/controllerUtil';
 import { transaction } from 'zapatos/db';
 
 require('dotenv').config({ path: './src/auth/secret-key.env' });
+
 const buildUserTransactions = (async (Transactions: schema.transactions.JSONSelectable[], ccid: any) => {
     //Organize transactions by club and compute totals
     //This is kinda un optimized - could be fixed with a 

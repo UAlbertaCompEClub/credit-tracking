@@ -5,10 +5,10 @@ import path from 'path';
 import dotenv from 'dotenv'
 
 import routes from './routes/routes';
-import userRoutes from './routes/auth/users';
-import authRoutes from './routes/auth/login';
-import transactionRoutes from './routes/auth/transaction';
-import forgotpassRoutes from './routes/forgotPassword/forgotPassword';
+import userRoutes from './routes/auth/usersRoutes';
+import authRoutes from './routes/auth/loginRoutes';
+import transactionRoutes from './routes/auth/transactionRoutes';
+import forgotpassRoutes from './routes/forgotPassword/passwordRoutes';
 import middleware from './controllers/util/middleware';
 
 import { computeActiveUsers, tick }  from './sync/queue';
