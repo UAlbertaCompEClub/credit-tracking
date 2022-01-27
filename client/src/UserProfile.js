@@ -53,7 +53,7 @@ function UserProfile(props){
         return ( <Stack>
           <Typography variant="h2">{balanceMessage()}</Typography>
           { props.isExec && <Typography variant="h4">Debt payed back: ${getDebtPayed()}</Typography> }
-          { props.isExec && <FormControlLabel
+          { <FormControlLabel
               control={<Checkbox defaultChecked={subscribed}
                 onClick={e => {
                     toggleSubscribed()
