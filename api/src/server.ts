@@ -8,7 +8,7 @@ import routes from './routes/routes';
 import userRoutes from './routes/auth/usersRoutes';
 import authRoutes from './routes/auth/loginRoutes';
 import transactionRoutes from './routes/auth/transactionRoutes';
-import forgotpassRoutes from './routes/forgotPassword/passwordRoutes';
+import forgotPassRoutes from './routes/forgotPassword/passwordRoutes';
 import middleware from './controllers/util/middleware';
 
 import { computeActiveUsers, tick }  from './sync/queue';
@@ -51,7 +51,7 @@ router.use('/api/v1', routes);
 router.use('/api/v1', userRoutes);
 router.use('/api/v1', authRoutes);
 router.use('/api/v1', transactionRoutes);
-router.use('/api/v1', forgotpassRoutes);
+router.use('/api/v1', forgotPassRoutes);
 
 //set up server state
 initializeState();

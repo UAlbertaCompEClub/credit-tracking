@@ -2,16 +2,9 @@ import assert from 'assert';
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import { verifyToken } from '../../auth/auth';
+import controller from './controllerUtil';
 
 type middleware = (req: Request, res: Response, next: NextFunction) => void;
-
-function saySomething(): middleware  {
-    return (req: Request, res: Response, next: NextFunction) => {
-        res.status(200).json({
-            body: 'Hello from the server!'
-        });
-    };
-};
 
 function consoleDisplay(): middleware {
     return (req: Request, res: Response, next: NextFunction) => {
@@ -49,7 +42,9 @@ const secure = (f: any) => {
             verifyToken(token, key);
 
             //continues with remainder of route function call
-            await f.call(this, req, res, next)
+            controller(async (req: Request, res: Response, next: NextFunction) => {
+                f.call(this, req, res, next);
+            })
         } catch (e) {
             next(e);
         }
@@ -58,12 +53,8 @@ const secure = (f: any) => {
 
 
 export default {
-    saySomething,
     consoleDisplay,
     bodyParser,
-    cors_call
-};
-
-export {
+    cors_call,
     secure
-}
+};

@@ -10,9 +10,7 @@ import { Request, Response, NextFunction } from "express";
 const controller = (f: any) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
-            res.status(200).json({
-                body: await f.call(this, req, res, next)
-            });
+            f.call(this, req, res, next);
         } catch (e) {
             next(e);
         }
