@@ -5,8 +5,7 @@ import assert from 'assert';
 import * as baseRepo from '../../repositories/base';
 
 import type * as schema from 'zapatos/schema';
-import { verifyToken } from '../../auth/auth';
-import middleWare from '../util/controllerUtil';
+import { secureUser, secureExec } from '../util/middleware';
 import { transaction } from 'zapatos/db';
 
 require('dotenv').config({ path: './src/auth/secret-key.env' });
@@ -204,7 +203,7 @@ const club = controller(async (req: Request, res: Response) => {
     });
 });
 
-const createTransaction = controller(async (req: Request, res: Response) => {
+const createTransaction = secureExec(async (req: Request, res: Response) => {
     const params = req.body;
 
     new Promise<void>((resolve) => {
@@ -213,18 +212,6 @@ const createTransaction = controller(async (req: Request, res: Response) => {
     })
         .then(async () => {
             const params = req.body;
-            const token = params.token;
-            assert(token !== undefined && token !== null);
-
-            console.log('token', token);
-            console.log(params);
-
-            let key = process.env.SECRETKEY;
-            assert(key !== undefined && key !== null);
-
-            //checks if user is verified
-            verifyToken(token, key);
-
             if (params.hasOwnProperty('ccid')) {
                 const queryParams = {
                     ccid: params.ccid,
@@ -234,7 +221,6 @@ const createTransaction = controller(async (req: Request, res: Response) => {
                 };
                 await baseRepo.createTransaction(queryParams);
             }
-
         })
         .then(data =>
             res.status(200).json({

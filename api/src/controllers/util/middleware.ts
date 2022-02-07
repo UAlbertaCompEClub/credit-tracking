@@ -42,9 +42,11 @@ const secureExec = (f: any) => {
             verifyToken(token, key);
 
             //continues with remainder of route function call
-            controller(f.call(this, req, res, next));
+            f.call(this, req, res, next);
         } catch (e) {
-            next(e);
+            res.status(400).json({
+                status: -1
+            })
         }
     }
 }
@@ -68,9 +70,11 @@ const secureUser = (f: any) => {
             verifyUser(token, key);
 
             //continues with remainder of route function call
-            controller(f.call(this, req, res, next));
+            f.call(this, req, res, next);
         } catch (e) {
-            next(e);
+            res.status(400).json({
+                status: -1
+            })
         }
     }
 }

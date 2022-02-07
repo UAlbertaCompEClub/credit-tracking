@@ -6,7 +6,7 @@ import * as baseRepo from '../../repositories/base';
 import * as userRepo from '../../repositories/users';
 import * as auth from '../../auth/auth';
 import type * as schema from 'zapatos/schema';
-import { verifyToken, checkPass } from '../../auth/auth';
+import { secureUser, secureExec } from '../util/middleware';
 
 
 /**
@@ -85,24 +85,13 @@ const checkCcid = controller(async (req: Request, res: Response) => {
 });
 
 
-const createUser = controller(async (req: Request, res: Response) => {
+const createUser = secureExec(async (req: Request, res: Response) => {
     new Promise<void>((resolve) => {
         resolve();
         console.log('user creation process begin!')
     })
         .then(async () => {
             const params = req.body;
-            const token = params.token;
-            assert(token !== undefined && token !== null);
-
-            console.log('token', token);
-
-            let key = process.env.SECRETKEY;
-            assert(key !== undefined && key !== null);
-
-            //checks if user is verified
-            verifyToken(token, key);
-
             let foip = false;
             if (params.foip === true) {
                 foip = true;
@@ -140,7 +129,6 @@ const createUser = controller(async (req: Request, res: Response) => {
                 console.log("test point")
                 await userRepo.createUser(userParams);
             }
-
             if ((params.isexec === true && execExistsCheck.length !== 0) || userExistsCheck.length !== 0) {
                 res.status(200).json({ body: -1 });
                 return;
@@ -158,25 +146,13 @@ const createUser = controller(async (req: Request, res: Response) => {
         );
 });
 
-const setSubscribed = controller(async (req: Request, res: Response) => {
+const setSubscribed = secureUser(async (req: Request, res: Response) => {
     new Promise<void>((resolve) => {
         resolve();
         console.log('user subscription setting change begin!')
     })
         .then(async () => {
             const params = req.body;
-            const token = params.token;
-            assert(token !== undefined && token !== null);
-
-            console.log('token', token);
-
-            let key = process.env.SECRETKEY;
-            assert(key !== undefined && key !== null);
-            key = key || '';
-
-            //checks if user is verified
-            verifyToken(token, key);
-
             const userParams = {
                 ccid: params.ccid,
                 subscribed: params.subscribed
