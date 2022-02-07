@@ -1,17 +1,19 @@
-import express, { NextFunction, Request, Response } from 'express';
-import * as queries from '../../controllers/db/dbAuth';
-import * as regQueries from '../../controllers/db/dbQueries';
-import * as auth from '../../auth/auth';
+import { Request, Response } from 'express';
+import controller from '../util/controllerUtil';
 import jwt from 'jsonwebtoken';
 import assert from 'assert';
-import { Console } from 'console';
+import * as baseRepo from '../../repositories/base';
+import * as auth from '../../auth/auth';
 
-require('dotenv').config({ path: './src/auth/secret-key.env' });
 
 
-const router = express.Router();
-
-router.post('/login', async (req: Request, res: Response) => {
+/**
+ *  Logs a user into the system
+ *  @param req HTTP request.
+ *  @param res HTTP response.
+ *  @returns Array of all inventory items.
+*/
+const login = controller(async (req: Request, res: Response) => {
     console.log(req.body);
     const params = req.body;
     const userParams = {
@@ -19,7 +21,7 @@ router.post('/login', async (req: Request, res: Response) => {
     };
 
     const key = process.env.SECRETKEY;
-    const user = (await regQueries.getUser(userParams));
+    const user = (await baseRepo.getUser(userParams));
 
     //we need to ensure that the key has been supplied here!
     assert(key !== undefined && key !== null);
@@ -28,11 +30,11 @@ router.post('/login', async (req: Request, res: Response) => {
         const password = params.password;
         const hashedPass = user[0].password;
 
-        
+
         const passwordSame = await auth.checkPass(password, hashedPass);
-        const exec = (await regQueries.getExec(userParams))[0];
-        if (passwordSame === true && user[0].isexec===true) {
-            const club = (await regQueries.getClub({ clubid: exec.clubid}))[0];
+        const exec = (await baseRepo.getExec(userParams))[0];
+        if (passwordSame === true && user[0].isexec === true) {
+            const club = (await baseRepo.getClub({ clubid: exec.clubid }))[0];
             res.status(200).json({
                 clubid: exec.clubid,
                 ccid: exec.ccid,
@@ -62,4 +64,6 @@ router.post('/login', async (req: Request, res: Response) => {
 });
 
 
-export default router;
+export {
+    login
+}

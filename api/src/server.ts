@@ -5,17 +5,17 @@ import path from 'path';
 import dotenv from 'dotenv'
 
 import routes from './routes/routes';
-import userRoutes from './routes/auth/users';
-import authRoutes from './routes/auth/login';
-import transactionRoutes from './routes/auth/transaction';
-import forgotpassRoutes from './routes/forgotPassword/forgotPassword';
-import middleware from './controllers/middleware';
+import userRoutes from './routes/auth/usersRoutes';
+import authRoutes from './routes/auth/loginRoutes';
+import transactionRoutes from './routes/auth/transactionRoutes';
+import forgotPassRoutes from './routes/forgotPassword/passwordRoutes';
+import middleware from './controllers/util/middleware';
 
 import { computeActiveUsers, tick }  from './sync/queue';
 import { initializeState } from './sync/state';
 import { hourlyRun } from './sync/sync';
 
-import * as queries from './controllers/db/dbQueries';
+import * as queries from './repositories/base';
 
 require('dotenv').config({ path: 'api.env' });
 
@@ -51,7 +51,7 @@ router.use('/api/v1', routes);
 router.use('/api/v1', userRoutes);
 router.use('/api/v1', authRoutes);
 router.use('/api/v1', transactionRoutes);
-router.use('/api/v1', forgotpassRoutes);
+router.use('/api/v1', forgotPassRoutes);
 
 //set up server state
 initializeState();

@@ -1,4 +1,4 @@
-import * as stateQueries from '../controllers/db/dbState';
+import * as stateQueries from '../repositories/state';
 
 const initializeState = async () => {
     const checkInitialized = await stateQueries.getInitialized();

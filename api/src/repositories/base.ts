@@ -2,7 +2,7 @@ import { timeStamp } from 'console';
 import { Pool, Client } from 'pg';
 import * as db from 'zapatos/db';
 import type * as schema from 'zapatos/schema';
-import connection from './dbConnection';
+import connection from './connection';
 
 const createTransaction = (transactionParam: { ccid: string, clubid: number, amount: number, exec: string; }) => {
     const transaction: schema.transactions.Insertable = {
@@ -121,10 +121,8 @@ const getAllUsers = async () => {
     // console.log("club = " + userParam.club)
     const query = db.sql<schema.users.SQL | schema.transactions.SQL, schema.users.Selectable[]>`
         SELECT U.ccid, U.full_name, U.balance, U.subscribed
-        FROM ${"users"} U, ${"transactions"} T
-        WHERE U.ccid=T.ccid 
+        FROM ${"users"} U
         GROUP BY U.ccid, U.full_name
-        HAVING COUNT(T.clubid)>0
     `.run(connection);
     return query;
 };

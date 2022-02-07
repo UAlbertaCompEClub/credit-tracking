@@ -1,17 +1,10 @@
 import assert from 'assert';
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
-import { verifyToken } from '../auth/auth';
+import { verifyToken, verifyUser } from '../../auth/auth';
+import controller from './controllerUtil';
 
 type middleware = (req: Request, res: Response, next: NextFunction) => void;
-
-function saySomething(): middleware  {
-    return (req: Request, res: Response, next: NextFunction) => {
-        res.status(200).json({
-            body: 'Hello from the server!'
-        });
-    };
-};
 
 function consoleDisplay(): middleware {
     return (req: Request, res: Response, next: NextFunction) => {
@@ -31,11 +24,11 @@ function cors_call(): middleware {
 
 
 /**
- *  This is a wrapper that performs token checking for routes.
+ *  This is a wrapper that performs exec token checking for routes.
  *  @param Express handler to wrap with exception handling.
  *  @returns A Wrapped Express Handler.
 */
-const secure = (f: any) => {
+const secureExec = (f: any) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         const params = req.body;
         try {
@@ -49,21 +42,51 @@ const secure = (f: any) => {
             verifyToken(token, key);
 
             //continues with remainder of route function call
-            await f.call(this, req, res, next)
+            f.call(this, req, res, next);
         } catch (e) {
-            next(e);
+            res.status(400).json({
+                status: -1
+            })
+        }
+    }
+}
+
+/**
+ *  This is a wrapper that performs exec token checking for routes.
+ *  @param Express handler to wrap with exception handling.
+ *  @returns A Wrapped Express Handler.
+*/
+const secureUser = (f: any) => {
+    return async (req: Request, res: Response, next: NextFunction) => {
+        const params = req.body;
+        try {
+            const token = params.token;
+            assert(token !== undefined && token !== null);
+
+            let key = process.env.SECRETKEY;
+            assert(key !== undefined && key !== null);
+
+            //checks if user is verified
+            verifyUser(token, key);
+
+            //continues with remainder of route function call
+            f.call(this, req, res, next);
+        } catch (e) {
+            res.status(400).json({
+                status: -1
+            })
         }
     }
 }
 
 
 export default {
-    saySomething,
     consoleDisplay,
     bodyParser,
     cors_call
 };
 
 export {
-    secure
-}
+    secureExec,
+    secureUser
+};

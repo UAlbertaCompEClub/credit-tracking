@@ -1,6 +1,6 @@
 import sgMail from '@sendgrid/mail';
 import assert from 'assert';
-import * as queries from '../db/dbUsers';
+import * as queries from '../../repositories/users';
 import * as render from './renderInvoice';
 import type * as schema from 'zapatos/schema';
 require('dotenv').config({ path: './src/controllers/mail/sendgrid.env' });

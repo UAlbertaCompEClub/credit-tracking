@@ -1,8 +1,8 @@
 import { shipInvoice } from '../controllers/mail/sendgrid';
-import * as stateQueries from '../controllers/db/dbState';
-import * as userQueries from '../controllers/db/dbUsers';
-import * as basicQueries from '../controllers/db/dbQueries';
-import * as queueQueries from '../controllers/db/dbQueue';
+import * as stateQueries from '../repositories/state';
+import * as userQueries from '../repositories/users';
+import * as basicQueries from '../repositories/base';
+import * as queueQueries from '../repositories/queue';
 import type * as schema from 'zapatos/schema';
 
 /* 

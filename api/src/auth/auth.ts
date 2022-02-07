@@ -1,4 +1,4 @@
-import * as queries from '../controllers/db/dbQueries';
+import * as queries from '../repositories/base';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { assert } from 'console';
@@ -37,8 +37,25 @@ const verifyToken = (token: string, key: string) => {
     });
 }
 
+const verifyUser = (token: string, key: string) => {
+    jwt.verify(token, key, (err: any, data: any) => {
+        if (err) {
+            console.log("User not Verified!");
+            throw new Error("");
+        }
+    });
+    jwt.verify(token, key, async (err: any, data: any) => {
+        const tokenCcidCheck = await queries.getUser({ ccid: data.ccid });
+        if (tokenCcidCheck.length !== 1) {
+            console.log("User in Token does not Exist!");
+            throw new Error("");
+        }
+    });
+}
+
 export {
     encryptPass,
     checkPass,
-    verifyToken
+    verifyToken,
+    verifyUser
 };
