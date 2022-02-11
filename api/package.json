@@ -2,23 +2,22 @@
   "name": "credit-tracking-backend",
   "main": "src/server.ts",
   "scripts": {
-    "start": "tsnd src/server.ts",
+    "start": "ts-node --files src/server.ts",
     "start:dev": "npx nodemon --exec ts-node --files src/server.ts",
-    "start:dev1": "tsnd src/server.ts",
     "build": "npm run clean && tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/itsfeas/personal-website.git"
+    "url": "git+https://github.com/UAlbertaCompEClub/credit-tracking"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/itsfeas/personal-website/issues"
+    "url": "https://github.com/UAlbertaCompEClub/credit-tracking/issues"
   },
-  "homepage": "https://github.com/itsfeas/personal-website#readme",
+  "homepage": "https://github.com/UAlbertaCompEClub/credit-tracking#readme",
   "dependencies": {
     "@sendgrid/mail": "^7.6.0",
     "bcrypt": "^5.0.1",
