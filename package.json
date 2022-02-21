@@ -4,6 +4,6 @@
     "scripts": {
         "postinstall": "cd api && npm i && npm install typescript --save-dev",
         "build": "cd api && npm run build",
-        "deploy": "git add --all && git commit -m Heroku && git push heroku master"
+        "deploy": "git add --all && git commit -m Heroku && git push heroku main"
     }
 }
