@@ -2,8 +2,9 @@
     "name": "creddi",
     "version": "1.0.0",
     "scripts": {
-        "postinstall": "cd api && npm i && npm install typescript --save-dev",
+        "postinstall": "cd api && npm i",
         "build": "cd api && npm run build",
-        "deploy": "git add --all && git commit -m Heroku && git push heroku main"
+        "deploy": "git add --all && git commit -m Heroku && git push heroku main",
+        "web": "cd api && npm start"
     }
 }
