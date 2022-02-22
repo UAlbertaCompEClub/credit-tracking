@@ -11,6 +11,7 @@ import { Pool } from 'pg';
 const connection = ():Pool => {
     let connection = new Pool();
     if (process.env.DATABASE_URL) {
+        console.log('switching to URL based db connection');
         connection = new Pool({
             connectionString: process.env.DATABASE_URL,
             ssl: {
