@@ -18,14 +18,14 @@ function bodyParser(): middleware {
     return bodyParser;
 };
 
-// function cors_call(): middleware {
-//     const corsOptions = {
-//         origin: '*',
-//         credentials: true,            //access-control-allow-credentials:true
-//         optionSuccessStatus: 200
-//     }
-//     return cors(corsOptions);
-// };
+function cors_call(): middleware {
+    const corsOptions = {
+        origin: 'https://wonderful-clarke-09beec.netlify.app/',
+        credentials: true,            //access-control-allow-credentials:true
+        optionSuccessStatus: 200
+    }
+    return cors(corsOptions);
+};
 
 // Add headers before the routes are defined
 function cors_access(): middleware {
@@ -109,7 +109,7 @@ const secureUser = (f: any) => {
 export default {
     consoleDisplay,
     bodyParser,
-    cors_access
+    cors_call
 };
 
 export {

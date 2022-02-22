@@ -43,7 +43,7 @@ const port = process.env.PORT || "80";
 router.use(middleware.bodyParser());
 router.use(middleware.consoleDisplay());
 // router.use(middleware.cors_call());
-router.use(middleware.cors_access());
+router.use(middleware.cors_call());
 router.use(express.json());//parse requests as json objects
 
 
