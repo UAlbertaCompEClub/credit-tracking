@@ -86,7 +86,7 @@ const credentials = { key: privateKey, cert: certificate };
 /**
  * Server Activation
  */
-const httpsServer = https.createServer(credentials, router);
-httpsServer.listen(port, () => {
+const httpServer = http.createServer(router);
+httpServer.listen(port, () => {
     console.log(`HTTPS: Listening to requests on http://localhost:${port}`);
 });
