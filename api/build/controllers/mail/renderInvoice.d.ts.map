@@ -1,0 +1,1 @@
+{"version":3,"file":"renderInvoice.d.ts","sourceRoot":"","sources":["../../../src/controllers/mail/renderInvoice.ts"],"names":[],"mappings":"AAGA,QAAA,MAAM,cAAc,UAAgB,GAAG,QAAQ,MAAM,oBA2BpD,CAAA;AAED,QAAA,MAAM,kBAAkB,UAAiB,GAAG,QAAQ,MAAM,oBAoBzD,CAAA;AAED,OAAO,EACP,cAAc,EACd,kBAAkB,EACjB,CAAC"}
