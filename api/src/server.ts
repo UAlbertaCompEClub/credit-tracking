@@ -79,9 +79,9 @@ router.get('/test-db', async (req: Request, res: Response) => {
 /**
  * SSL Check
  */
-const privateKey = fs.readFileSync('sslcert/server.key', 'utf8');
-const certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
-const credentials = { key: privateKey, cert: certificate };
+// const privateKey = fs.readFileSync('sslcert/server.key', 'utf8');
+// const certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
+// const credentials = { key: privateKey, cert: certificate };
 
 /**
  * Server Activation
