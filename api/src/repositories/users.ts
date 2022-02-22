@@ -15,35 +15,35 @@ const setSubscribed = (param: { ccid: string, subscribed: boolean; }) => {
         subscribed: param.subscribed
     };
 
-    db.update('users', subStatus, user).run(connection);
+    db.update('users', subStatus, user).run(connection());
 };
 
 const deleteValidCode = (param: { code: string }) => {
     const entry: schema.forgot_password.Whereable = {
         code: param.code
     };
-    return db.deletes('forgot_password', entry).run(connection);
+    return db.deletes('forgot_password', entry).run(connection());
 };
 
 const checkValidCode = (param: { code: string }) => {
     const entry: schema.forgot_password.Whereable = {
         code: param.code
     };
-    return db.select('forgot_password', entry).run(connection);
+    return db.select('forgot_password', entry).run(connection());
 };
 
 const deletestaleResetCodes = () => {
     db.sql`   
         DELETE FROM forgot_password F
         WHERE F.created_at > now() - interval '1 day'
-    `.run(connection);
+    `.run(connection());
 };
 
 const checkUserForgot = (param: { ccid: string }) => {
     const entry: schema.forgot_password.Whereable = {
         ccid: param.ccid
     };
-    return db.select('forgot_password', entry).run(connection);
+    return db.select('forgot_password', entry).run(connection());
 };
 
 const createForgetPassCode = async (userParam: { ccid: string }) => {
@@ -52,7 +52,7 @@ const createForgetPassCode = async (userParam: { ccid: string }) => {
         ccid: userParam.ccid,
         code: code
     };
-    await db.insert('forgot_password', entry).run(connection);
+    await db.insert('forgot_password', entry).run(connection());
     return code;
 };
 
@@ -60,7 +60,7 @@ const getForgetPassCode = (userParam: { ccid: string }) => {
     const entry: schema.forgot_password.Whereable = {
         ccid: userParam.ccid
     };
-    return db.select('forgot_password', entry).run(connection);
+    return db.select('forgot_password', entry).run(connection());
 };
 
 const createUser = async (userParam: { ccid: string; full_name: string, foip: boolean, isexec: boolean, password: string; }) => {
@@ -74,7 +74,7 @@ const createUser = async (userParam: { ccid: string; full_name: string, foip: bo
         balance: 0,
         password: encryptedPass
     };
-    db.insert('users', user).run(connection);
+    db.insert('users', user).run(connection());
 };
 
 const createExec = async (execParam: { ccid: string, password: string, clubid: number; }) => {
@@ -82,7 +82,7 @@ const createExec = async (execParam: { ccid: string, password: string, clubid: n
     const userParam: schema.users.Whereable = {
         ccid: execParam.ccid
     };
-    const user = await db.select('users', userParam).run(connection);
+    const user = await db.select('users', userParam).run(connection());
     
     if (user.length === 0) {
         const encryptedPass = await encryptPass(execParam.password);
@@ -95,7 +95,7 @@ const createExec = async (execParam: { ccid: string, password: string, clubid: n
             balance: 0,
             password: encryptedPass
         };
-        db.insert('users', userNew).run(connection);
+        db.insert('users', userNew).run(connection());
     }
     if (user.length === 1 && user[0].isexec===false) {
         const userWhere: schema.users.Whereable = {
@@ -104,14 +104,14 @@ const createExec = async (execParam: { ccid: string, password: string, clubid: n
         const userUpdate: schema.users.Updatable = {
             isexec: true
         };
-        db.update('users', userUpdate, userWhere).run(connection);
+        db.update('users', userUpdate, userWhere).run(connection());
     }
     
     const exec: schema.execs.Insertable = {
         ccid: execParam.ccid,
         clubid: execParam.clubid
     };
-    db.insert('execs', exec).run(connection);
+    db.insert('execs', exec).run(connection());
 };
 
 const updatePass = async (userParam: { ccid: string, newPassword: string; }) => {
@@ -126,7 +126,7 @@ const updatePass = async (userParam: { ccid: string, newPassword: string; }) => 
         password: encryptedPass
     };
 
-    db.update('users', newPass, user).run(connection);
+    db.update('users', newPass, user).run(connection());
 };
 
 const getActiveUsers = () => {
@@ -135,7 +135,7 @@ const getActiveUsers = () => {
     FROM ${"users"} U
     WHERE U.active = True
     AND U.balance != 0
-    `.run(connection);
+    `.run(connection());
     return query;
 };
 
@@ -168,7 +168,7 @@ const updateActiveUsers = () => {
             SELECT U.ccid
             FROM users U
             WHERE U.balance != 0)
-    `.run(connection);
+    `.run(connection());
     return query;
 };
 

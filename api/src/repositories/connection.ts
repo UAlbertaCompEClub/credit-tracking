@@ -8,7 +8,7 @@ import { Pool } from 'pg';
 //     port: process.env.DBPORT as unknown as number
 // })
 
-const connection = () => {
+const connection = ():Pool => {
     let connection = new Pool();
     if (process.env.DATABASE_URL) {
         connection = new Pool({

@@ -12,12 +12,12 @@ const updateState = async (param: {var: string, val: string}) => {
         var: param.var,
         val: param.val
     };
-    return await db.update('state', update, where).run(connection);
+    return await db.update('state', update, where).run(connection());
 };
 
 const getInitialized = async () => {
     let query;
-    query = await (db.select('state', {}).run(connection));
+    query = await (db.select('state', {}).run(connection()));
     if (query.length !== 0) {
         return true;
     }
@@ -29,13 +29,13 @@ const getInitialized = async () => {
 const getState = async (param: { var: string}) => {
     let query;
     if (param.var === 'any') {
-        query = await(db.select('state', {}).run(connection));
+        query = await(db.select('state', {}).run(connection()));
     }
     else {
         const where: schema.state.Whereable = {
             var: param.var
         };
-        query = await (db.select('state', where).run(connection));
+        query = await (db.select('state', where).run(connection()));
     }
     return query[0].val;
 };
@@ -44,13 +44,13 @@ const createVar = async (param: { var: string, val: string }) => {
     const where: schema.state.Whereable = {
         var: param.var
     };
-    const query = await (db.select('state', where).run(connection));
+    const query = await (db.select('state', where).run(connection()));
     if (query.length===0) {
         const insert: schema.state.Insertable = {
             var: param.var,
             val: param.val
         };
-        await (db.insert('state', insert).run(connection));
+        await (db.insert('state', insert).run(connection()));
     }
 };
 
