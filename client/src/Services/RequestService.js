@@ -1,5 +1,11 @@
 let path = process.env.REACT_APP_SERVER
 
+function headerCorsSetup(headers) {
+  headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Origin';
+  headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS, PUT, PATCH, DELETE';
+  headers['Access-Control-Max-Age'] = '8640';
+}
+
 //Helper Functions
 function wait(time) {
   return new Promise(function(resolve, reject) {
@@ -70,6 +76,7 @@ export const RequestService = {
           //specific club
           headers = {ccid:ccid, clubid:clubid}
         }
+        headerCorsSetup(headers)
         console.log(headers)
         let rawTransactions
         await fetch(path + "/transactions",{headers:headers})
@@ -94,8 +101,10 @@ export const RequestService = {
     newTransaction: async (ccid, amount, clubid, token,execCcid)=>{
         //add transaction. Return balance for succ, null for fail
         let status
+        let headers = { "Content-type": "application/json" };
+        headerCorsSetup(headers);
         await fetch(path+"/transaction",
-                {method:"POST", headers:{"Content-type":"application/json"},body:JSON.stringify({
+                {method:"POST", headers:headers,body:JSON.stringify({
                     ccid:ccid,
                     clubid:clubid,
                     amount:amount,
@@ -119,11 +128,12 @@ export const RequestService = {
 
       let resp;
       let body;
-
+      let headers = { "Content-type": "application/json" };
+      headerCorsSetup(headers);
       await fetch(path+"/club",
       {
         method:"POST", 
-        headers: { "Content-type": "application/json" },
+        headers: headers,
         body:JSON.stringify({'clubid':clubid,'token':token})                          
       }).then((res)=>{ 
         console.log("Club request success.")
@@ -145,9 +155,11 @@ export const RequestService = {
     getUserCleaned: async (ccid)=>{
       //Returned a customer
       let response 
+      let headers = { "Content-type": "application/json" };
+      headerCorsSetup(headers);
       await fetch(path+"/get-user",{
         method: "POST",
-        headers: { "Content-type": "application/json" },
+        headers: headers,
         body:JSON.stringify({ccid:ccid})
       })
       .then((res)=>{
@@ -161,10 +173,12 @@ export const RequestService = {
     },
     setSubscribed: async (ccid, subscribed, token)=>{
       //Returned a customer
-      let response 
+      let response
+      let headers = { "Content-type": "application/json" };
+      headerCorsSetup(headers);
       await fetch(path+"/set-subscribed",{
         method: "POST",
-        headers: { "Content-type": "application/json" },
+        headers: headers,
         body:JSON.stringify({
             ccid: ccid,
             subscribed: subscribed,
@@ -184,11 +198,13 @@ export const RequestService = {
 
       let resp;
       let body;
+      let headers = { "Content-type": "application/json" };
+      headerCorsSetup(headers);
 
       await fetch(path+"/club",
       {
         method:"POST", 
-        headers: { "Content-type": "application/json" },
+        headers: headers,
         body:JSON.stringify({'clubid':-1,'token':token})                          
       }).then((res)=>{ 
         console.log("Club request success.")
@@ -211,7 +227,12 @@ export const RequestService = {
       //The method returns -1 for no user found
       // 1 for exec and 0 for customer
       let status 
-      await fetch(path+"/check-ccid", {headers:{ccid:ccid}})
+      let headers = {
+        "Content-type": "application/json",
+        "ccid": ccid
+      };
+      headerCorsSetup(headers);
+      await fetch(path+"/check-ccid", {headers:headers})
       .then((res)=>{
         status = res
         console.log("Ccid Check Success")
@@ -233,7 +254,13 @@ export const RequestService = {
     getExecClubs: async (ccid)=>{
       //The method returns clubs an exec is an exec for
       let status 
-      await fetch(path+"/check-ccid", {headers:{ccid:ccid}})
+      let headers = {
+        "Content-type": "application/json",
+        "ccid": ccid
+      };
+      headerCorsSetup(headers);
+
+      await fetch(path+"/check-ccid", {headers:headers})
       .then((res)=>{
         status = res
         console.log("Exec club get succ")
@@ -254,10 +281,14 @@ export const RequestService = {
 
       //Manual wait time to show we received their input
       await wait(1000)
+      let headers = {
+        "Content-type": "application/json"
+      };
+      headerCorsSetup(headers);
 
       let response
       await fetch(path+"/login", {method:'POST',
-                                    headers: { "Content-type": "application/json" },
+                                    headers: headers,
                                     body:JSON.stringify({ccid:ccid,password:pw})
       }).then((res)=>{
         response = res
@@ -303,8 +334,12 @@ export const RequestService = {
       //The method returns 0 if succ 1 if fail
 
       let status
+      let headers = {
+        "Content-type": "application/json"
+      };
+      headerCorsSetup(headers);
       await fetch(path+"/user",
-              {method:"POST", headers:{"Content-type":"application/json"},body:JSON.stringify({
+              {method:"POST", headers:headers,body:JSON.stringify({
                   ccid:ccid,
                   password:password,
                   full_name:full_name,
@@ -331,8 +366,12 @@ export const RequestService = {
       //The method returns 0 if succ -1 if fail
 
       let status
+      let headers = {
+        "Content-type": "application/json"
+      };
+      headerCorsSetup(headers);
       await fetch(path+"/user",
-              {method:"POST", headers:{"Content-type":"application/json"},body:JSON.stringify({
+              {method:"POST", headers:headers,body:JSON.stringify({
                   ccid:ccid,
                   password:password,
                   clubid:clubid,
@@ -357,8 +396,12 @@ export const RequestService = {
     },
     emailResetPassword: async (ccid) => {
       console.log("attempting to send email...")
+      let headers = {
+        "Content-type": "application/json"
+      };
+      headerCorsSetup(headers);
       let res = await fetch(path + "/forgot-password",
-          {headers:{"Content-type":"application/json"},
+          {headers:headers,
           method:"POST", 
             body: JSON.stringify({
                   ccid:ccid
@@ -367,8 +410,12 @@ export const RequestService = {
       return await getResponse(res)
     },
     resetPassword: async (code,newPass) =>{
+      let headers = {
+        "Content-type": "application/json"
+      };
+      headerCorsSetup(headers);
       let res = await fetch(path + "/email-reset",
-          {headers:{"Content-type":"application/json"},
+          {headers:headers,
           method:"POST", 
             body: JSON.stringify({
                   code:code,
