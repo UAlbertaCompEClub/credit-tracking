@@ -64,6 +64,7 @@ function App() {
 
   useEffect(()=>{
     checkLoggedIn()
+    console.log('backend at', process.env.REACT_APP_SERVER)
   },[]) //[] means run one time only on startup
 
 
