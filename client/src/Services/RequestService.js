@@ -1,10 +1,10 @@
 let path = process.env.REACT_APP_SERVER
 
 function headerCorsSetup(headers) {
-  headers['Access-Control-Allow-Origin'] = "*"
-  headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Origin';
-  headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS, PUT, PATCH, DELETE';
-  headers['Access-Control-Max-Age'] = '8640';
+  headers['Origin'] = 'http://localhost:3000'
+  // headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Origin';
+  // headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS, PUT, PATCH, DELETE';
+  // headers['Access-Control-Max-Age'] = '8640';
 }
 
 //Helper Functions
@@ -80,7 +80,9 @@ export const RequestService = {
         headerCorsSetup(headers)
         console.log(headers)
         let rawTransactions
-        await fetch(path + "/transactions",{headers:headers})
+        await fetch(path + "/transactions", {
+          mode: 'cors',
+          headers:headers})
         .then((res)=>{
           console.log("Server request Success.")
           rawTransactions = res
@@ -105,7 +107,8 @@ export const RequestService = {
         let headers = { "Content-type": "application/json" };
         headerCorsSetup(headers);
         await fetch(path+"/transaction",
-                {method:"POST", headers:headers,body:JSON.stringify({
+                {mode: 'cors',
+                    method:"POST", headers:headers,body:JSON.stringify({
                     ccid:ccid,
                     clubid:clubid,
                     amount:amount,
@@ -133,6 +136,7 @@ export const RequestService = {
       headerCorsSetup(headers);
       await fetch(path+"/club",
       {
+        mode: 'cors',
         method:"POST", 
         headers: headers,
         body:JSON.stringify({'clubid':clubid,'token':token})                          
@@ -159,6 +163,7 @@ export const RequestService = {
       let headers = { "Content-type": "application/json" };
       headerCorsSetup(headers);
       await fetch(path+"/get-user",{
+        mode: 'cors',
         method: "POST",
         headers: headers,
         body:JSON.stringify({ccid:ccid})
@@ -178,6 +183,7 @@ export const RequestService = {
       let headers = { "Content-type": "application/json" };
       headerCorsSetup(headers);
       await fetch(path+"/set-subscribed",{
+        mode: 'cors',
         method: "POST",
         headers: headers,
         body:JSON.stringify({
@@ -204,6 +210,7 @@ export const RequestService = {
 
       await fetch(path+"/club",
       {
+        mode: 'cors',
         method:"POST", 
         headers: headers,
         body:JSON.stringify({'clubid':-1,'token':token})                          
@@ -233,7 +240,10 @@ export const RequestService = {
         "ccid": ccid
       };
       headerCorsSetup(headers);
-      await fetch(path+"/check-ccid", {headers:headers})
+      await fetch(path+"/check-ccid", {
+        mode: 'cors',
+        headers:headers
+      })
       .then((res)=>{
         status = res
         console.log("Ccid Check Success")
@@ -261,7 +271,9 @@ export const RequestService = {
       };
       headerCorsSetup(headers);
 
-      await fetch(path+"/check-ccid", {headers:headers})
+      await fetch(path + "/check-ccid", {
+        mode: 'cors',
+        headers:headers})
       .then((res)=>{
         status = res
         console.log("Exec club get succ")
@@ -288,9 +300,11 @@ export const RequestService = {
       headerCorsSetup(headers);
 
       let response
-      await fetch(path+"/login", {method:'POST',
-                                    headers: headers,
-                                    body:JSON.stringify({ccid:ccid,password:pw})
+      await fetch(path+"/login", {
+        mode: 'cors',
+        method:'POST',
+        headers: headers,
+        body:JSON.stringify({ccid:ccid,password:pw})
       }).then((res)=>{
         response = res
         console.log("Ccid Check Success")
@@ -340,7 +354,9 @@ export const RequestService = {
       };
       headerCorsSetup(headers);
       await fetch(path+"/user",
-              {method:"POST", headers:headers,body:JSON.stringify({
+              {
+                  mode: 'cors',
+                  method:"POST", headers:headers,body:JSON.stringify({
                   ccid:ccid,
                   password:password,
                   full_name:full_name,
@@ -372,7 +388,9 @@ export const RequestService = {
       };
       headerCorsSetup(headers);
       await fetch(path+"/user",
-              {method:"POST", headers:headers,body:JSON.stringify({
+              {
+                  mode: 'cors',
+                  method:"POST", headers:headers,body:JSON.stringify({
                   ccid:ccid,
                   password:password,
                   clubid:clubid,
@@ -402,7 +420,9 @@ export const RequestService = {
       };
       headerCorsSetup(headers);
       let res = await fetch(path + "/forgot-password",
-          {headers:headers,
+        {
+          mode: 'cors',
+          headers:headers,
           method:"POST", 
             body: JSON.stringify({
                   ccid:ccid
@@ -416,8 +436,10 @@ export const RequestService = {
       };
       headerCorsSetup(headers);
       let res = await fetch(path + "/email-reset",
-          {headers:headers,
-          method:"POST", 
+          {
+            mode: 'cors',
+            headers:headers,
+            method:"POST", 
             body: JSON.stringify({
                   code:code,
                   password:newPass
