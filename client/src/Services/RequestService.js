@@ -1,6 +1,4 @@
-// temporary fix to env variable problem
-// TO-DO: USE ENVIRONMENT VARIABLES
-let path = 'https://creddi.herokuapp.com/api/v1'
+let path = process.env.REACT_APP_SERVER
 
 //Helper Functions
 function wait(time) {
