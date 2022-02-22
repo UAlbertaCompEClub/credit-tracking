@@ -14,7 +14,7 @@ function request() {
     }),
     token: JSON.stringify('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjY2lkIjoibWZpYXoiLCJpYXQiOjE2Mzg5MTQ2NDgsImV4cCI6MTY0MTUwNjY0OH0.Ikbba9WSkiryA9nMrtovniQYlcmSc1TWBjFNw89VXjA')
   };
-  fetch('http://localhost:8000/api/v1/user', requestOptions)
+  fetch(process.env.REACT_APP_SERVER+'/api/v1/user', requestOptions)
     .then(response => response.json())
     .then(data => console.log(data))
     .catch(data => console.log(data));
