@@ -4,7 +4,6 @@
     "scripts": {
         "postinstall": "cd api && npm i",
         "build": "cd api && npm run build",
-        "deploy": "git add --all && git commit -m Heroku && git push heroku main",
-        "web": "cd api && npm start"
+        "deploy": "git add --all && git commit -m Heroku && git push heroku main"
     }
 }
