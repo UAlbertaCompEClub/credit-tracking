@@ -99,5 +99,9 @@
   "include": [
     "./src/*",
     "./node_modules/zapatos/schema.d.ts"
+  ],
+  "exclude": [
+    "./node_modules",
+    "./build"
   ]
 }
