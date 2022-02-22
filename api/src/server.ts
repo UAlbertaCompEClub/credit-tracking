@@ -42,7 +42,7 @@ const port = process.env.PORT || "80";
 // router.use(express.static(path.join(__dirname, "public")));
 router.use(middleware.bodyParser());
 router.use(middleware.consoleDisplay());
-router.use(middleware.cors_call());
+// router.use(middleware.cors_call());
 router.use(middleware.cors_access());
 router.use(express.json());//parse requests as json objects
 
@@ -88,5 +88,5 @@ router.get('/test-db', async (req: Request, res: Response) => {
  */
 const httpServer = http.createServer(router);
 httpServer.listen(port, () => {
-    console.log(`HTTPS: Listening to requests on http://localhost:${port}`);
+    console.log(`HTTP: Listening to requests on http://localhost:${port}`);
 });
