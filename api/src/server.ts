@@ -1,8 +1,10 @@
 import express, { Request, Response } from 'express';
 import http from 'http';
+import https from 'https';
 import cors from 'cors';
 import path from 'path';
 import dotenv from 'dotenv'
+import fs from 'fs';
 
 import routes from './routes/routes';
 import userRoutes from './routes/auth/usersRoutes';
@@ -74,11 +76,17 @@ router.get('/test-db', async (req: Request, res: Response) => {
     // res.send('Hello World!')
 });
 
+/**
+ * SSL Check
+ */
+const privateKey = fs.readFileSync('sslcert/server.key', 'utf8');
+const certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
+const credentials = { key: privateKey, cert: certificate };
 
 /**
  * Server Activation
  */
-
-router.listen(port, () => {
-    console.log(`Listening to requests on http://localhost:${port}`);
+const httpsServer = https.createServer(credentials, router);
+httpsServer.listen(port, () => {
+    console.log(`HTTPS: Listening to requests on http://localhost:${port}`);
 });
