@@ -19,7 +19,12 @@ function bodyParser(): middleware {
 };
 
 function cors_call(): middleware {
-    return cors();
+    const corsOptions = {
+        origin: '*',
+        credentials: true,            //access-control-allow-credentials:true
+        optionSuccessStatus: 200,
+    }
+    return cors(corsOptions);
 };
 
 // Add headers before the routes are defined
