@@ -1,4 +1,4 @@
-import { Pool, Client } from 'pg';
+import { Pool } from 'pg';
 
 // const connection = new Pool({
 //     user: process.env.USER,
@@ -8,6 +8,17 @@ import { Pool, Client } from 'pg';
 //     port: process.env.DBPORT as unknown as number
 // })
 
-const connection = new Pool();
+const connection = () => {
+    let connection = new Pool();
+    if (process.env.DATABASE_URL) {
+        connection = new Pool({
+            connectionString: process.env.DATABASE_URL,
+            ssl: {
+                rejectUnauthorized: false
+            }
+        });
+    }
+    return connection;
+}
 
 export default connection;
