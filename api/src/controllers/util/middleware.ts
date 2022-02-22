@@ -20,7 +20,7 @@ function bodyParser(): middleware {
 
 function cors_call(): middleware {
     const corsOptions = {
-        origin: 'https://wonderful-clarke-09beec.netlify.app/',
+        origin: 'https://wonderful-clarke-09beec.netlify.app/*',
         credentials: true,            //access-control-allow-credentials:true
         optionSuccessStatus: 200
     }
