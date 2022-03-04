@@ -117,6 +117,8 @@ const createUser = secureExec(async (req: Request, res: Response) => {
                         password: params.password
                     };
                     await userRepo.createExec(execParams);
+                    res.status(200).json({ body: 0 });
+                    return;
                 }
                 else if (execExistsCheck.length !== 0) {
                     res.status(400).json({ body: -3 });
@@ -134,6 +136,8 @@ const createUser = secureExec(async (req: Request, res: Response) => {
                         password: params.password
                     };
                     await userRepo.createUser(userParams);
+                    res.status(200).json({ body: 1 });
+                    return;
                 }
                 else if (execExistsCheck.length !== 0) {
                     const execParams = {
