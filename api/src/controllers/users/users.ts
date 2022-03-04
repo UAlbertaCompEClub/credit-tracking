@@ -156,11 +156,11 @@ const createUser = secureExec(async (req: Request, res: Response) => {
                 body: 0
             })
         )
-        .catch(data =>
-            res.status(400).json({
-                body: -1
-            })
-        );
+        // .catch(data =>
+        //     res.status(400).json({
+        //         body: -1
+        //     })
+        // );
 });
 
 const setSubscribed = secureUser(async (req: Request, res: Response) => {
