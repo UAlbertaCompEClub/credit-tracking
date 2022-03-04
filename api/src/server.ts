@@ -65,17 +65,6 @@ setInterval(tick, 24*3600000);
 setInterval(computeActiveUsers, 24*3600000);
 setInterval(hourlyRun, 3600000);
 
-
-router.get('/test-db', async (req: Request, res: Response) => {
-    // const transactions = await transactionsUser({ club: 'CompE', ccid: 'mfiaz' });
-    const getUsers = await queries.getUsers({ clubid: 1 });
-    
-    res.status(200).json({
-        body: getUsers
-    });
-    // res.send('Hello World!')
-});
-
 /**
  * SSL Check
  */

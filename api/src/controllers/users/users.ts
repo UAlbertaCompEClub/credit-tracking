@@ -102,14 +102,15 @@ const createUser = secureExec(async (req: Request, res: Response) => {
             console.log("check if user exists");
             if (userExistsCheck.length !== 0) {
                 if (execExistsCheck.length !== 0) {
-                    console.error("User Already Exists!");
+                    console.error("User and Exec already exist!");
                 }
             }
 
             if (params.isexec === true) {
                 if (execExistsCheck.length !== 0) {
                     console.log("Exec Already Exists!");
-                    throw new Error();
+                    res.status(400).json({ body: -1 });
+                    return;
                 }
                 else {
                     const execParams = {
@@ -122,7 +123,8 @@ const createUser = secureExec(async (req: Request, res: Response) => {
             } else {
                 if (userExistsCheck.length !== 0) {
                     console.log("User Already Exists!");
-                    throw new Error();
+                    res.status(400).json({ body: -1 });
+                    return;
                 }
                 else {
                     const userParams = {
@@ -137,7 +139,7 @@ const createUser = secureExec(async (req: Request, res: Response) => {
                 }
             }
             if ((params.isexec === true && execExistsCheck.length !== 0) || userExistsCheck.length !== 0) {
-                res.status(200).json({ body: -1 });
+                res.status(400).json({ body: -1 });
                 return;
             }
         })
