@@ -1,7 +1,7 @@
 let path = process.env.REACT_APP_SERVER
 
 function headerCorsSetup(headers) {
-  headers['Origin'] = 'http://localhost:3000'
+  headers['Origin'] = path
   // headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Origin';
   // headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS, PUT, PATCH, DELETE';
   // headers['Access-Control-Max-Age'] = '8640';
