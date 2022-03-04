@@ -103,30 +103,28 @@ const createUser = secureExec(async (req: Request, res: Response) => {
             if (userExistsCheck.length !== 0) {
                 if (execExistsCheck.length !== 0) {
                     console.error("User and Exec already exist!");
+                    res.status(400).json({ body: -4 });
+                    return;
                 }
             }
 
             if (params.isexec === true) {
-                if (execExistsCheck.length !== 0) {
-                    console.log("Exec Already Exists!");
-                    res.status(400).json({ body: -1 });
-                    return;
-                }
-                else {
+                if (userExistsCheck.length === 0) {
                     const execParams = {
                         ccid: params.ccid,
-                        isexec: true,
-                        clubid: parseInt(params.clubid)
+                        name: params.full_name,
+                        clubid: params.clubid,
+                        password: params.password
                     };
-                    await userRepo.convertExec(execParams);
+                    await userRepo.createExec(execParams);
                 }
-            } else {
-                if (userExistsCheck.length !== 0) {
-                    console.log("User Already Exists!");
-                    res.status(400).json({ body: -1 });
+                else if (execExistsCheck.length !== 0) {
+                    res.status(400).json({ body: -3 });
                     return;
                 }
-                else {
+            }
+            else {
+                if (userExistsCheck.length === 0) {
                     const userParams = {
                         ccid: params.ccid,
                         isexec: params.isexec,
@@ -137,9 +135,19 @@ const createUser = secureExec(async (req: Request, res: Response) => {
                     };
                     await userRepo.createUser(userParams);
                 }
+                else if (execExistsCheck.length !== 0) {
+                    const execParams = {
+                        ccid: params.ccid
+                    };
+                    userRepo.deleteExec(execParams);
+                }
+                else {
+                    console.log("User Already Exists!");
+                    res.status(400).json({ body: -2 });
+                }
             }
             if ((params.isexec === true && execExistsCheck.length !== 0) || userExistsCheck.length !== 0) {
-                res.status(400).json({ body: -2 });
+                res.status(400).json({ body: -4 });
                 return;
             }
         })
@@ -150,7 +158,7 @@ const createUser = secureExec(async (req: Request, res: Response) => {
         )
         .catch(data =>
             res.status(400).json({
-                body: 0
+                body: -1
             })
         );
 });

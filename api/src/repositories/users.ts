@@ -6,7 +6,7 @@ import { encryptPass } from '../auth/auth';
 import crypto from 'crypto';
 import assert from 'assert';
 
-const deleteExec = async (param: { ccid: string, isexec: boolean, clubid: number; }) => {
+const deleteExec = async (param: { ccid: string; }) => {
     const exec: schema.execs.Whereable = {
         ccid: param.ccid
     };
@@ -100,7 +100,7 @@ const createUser = async (userParam: { ccid: string; full_name: string, foip: bo
     db.insert('users', user).run(connection());
 };
 
-const createExec = async (execParam: { ccid: string, password: string, clubid: number; }) => {
+const createExec = async (execParam: { ccid: string, password: string, clubid: number, name: string; }) => {
     /* Check if non-exec user with this ccid already exists */
     const userParam: schema.users.Whereable = {
         ccid: execParam.ccid
@@ -112,7 +112,7 @@ const createExec = async (execParam: { ccid: string, password: string, clubid: n
         assert(encryptedPass !== undefined && encryptedPass !== null);
         const userNew: schema.users.Insertable = {
             ccid: execParam.ccid,
-            full_name: execParam.ccid,
+            full_name: execParam.name,
             foip: true,
             isexec: true,
             balance: 0,
@@ -128,6 +128,12 @@ const createExec = async (execParam: { ccid: string, password: string, clubid: n
             isexec: true
         };
         db.update('users', userUpdate, userWhere).run(connection());
+
+        const exec: schema.execs.Insertable = {
+            ccid: execParam.ccid,
+            clubid: execParam.clubid
+        };
+        db.insert('execs', exec).run(connection());
     }
     
     const exec: schema.execs.Insertable = {
