@@ -24,15 +24,13 @@ CREATE TABLE IF NOT EXISTS execs (
     clubid INT NOT NULL REFERENCES clubs
 );
 
-
-
 /* transations table */
 CREATE TABLE IF NOT EXISTS transactions (
     id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
     clubid INT NOT NULL REFERENCES clubs, 
     ccid TEXT NOT NULL REFERENCES users,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    created_by TEXT NOT NULL REFERENCES execs,
+    created_by TEXT NOT NULL,
     amount REAL NOT NULL
 );
 

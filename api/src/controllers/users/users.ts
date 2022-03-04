@@ -109,25 +109,32 @@ const createUser = secureExec(async (req: Request, res: Response) => {
             if (params.isexec === true) {
                 if (execExistsCheck.length !== 0) {
                     console.log("Exec Already Exists!");
+                    throw new Error();
                 }
-
-                const execParams = {
-                    ccid: params.ccid,
-                    password: params.password,
-                    clubid: parseInt(params.clubid)
-                };
-                await userRepo.createExec(execParams);
+                else {
+                    const execParams = {
+                        ccid: params.ccid,
+                        isexec: true,
+                        clubid: parseInt(params.clubid)
+                    };
+                    await userRepo.convertExec(execParams);
+                }
             } else {
-                const userParams = {
-                    ccid: params.ccid,
-                    isexec: params.isexec,
-                    full_name: params.full_name,
-                    foip: foip,
-                    balance: 0,
-                    password: params.password
-                };
-                console.log("test point")
-                await userRepo.createUser(userParams);
+                if (userExistsCheck.length !== 0) {
+                    console.log("User Already Exists!");
+                    throw new Error();
+                }
+                else {
+                    const userParams = {
+                        ccid: params.ccid,
+                        isexec: params.isexec,
+                        full_name: params.full_name,
+                        foip: foip,
+                        balance: 0,
+                        password: params.password
+                    };
+                    await userRepo.createUser(userParams);
+                }
             }
             if ((params.isexec === true && execExistsCheck.length !== 0) || userExistsCheck.length !== 0) {
                 res.status(200).json({ body: -1 });
@@ -136,12 +143,12 @@ const createUser = secureExec(async (req: Request, res: Response) => {
         })
         .then(data =>
             res.status(200).json({
-                status: 0
+                body: 0
             })
         )
         .catch(data =>
             res.status(400).json({
-                status: -1
+                body: -1
             })
         );
 });

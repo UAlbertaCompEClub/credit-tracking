@@ -6,6 +6,29 @@ import { encryptPass } from '../auth/auth';
 import crypto from 'crypto';
 import assert from 'assert';
 
+const deleteExec = async (param: { ccid: string, isexec: boolean, clubid: number; }) => {
+    const exec: schema.execs.Whereable = {
+        ccid: param.ccid
+    };
+    await db.deletes('execs', exec).run(connection());
+};
+
+const convertExec = async (param: { ccid: string, isexec: boolean, clubid: number; }) => {
+    const user: schema.users.Whereable = {
+        ccid: param.ccid
+    };
+    const execStatus: schema.users.Updatable = {
+        isexec: param.isexec
+    };
+    await db.update('users', execStatus, user).run(connection());
+
+    const exec: schema.execs.Insertable = {
+        ccid: param.ccid,
+        clubid: param.clubid
+    };
+    await db.insert('execs', exec).run(connection());
+};
+
 const setSubscribed = (param: { ccid: string, subscribed: boolean; }) => {
     const user: schema.users.Whereable = {
         ccid: param.ccid
@@ -184,5 +207,7 @@ export {
     checkValidCode,
     deleteValidCode,
     checkUserForgot,
-    setSubscribed
+    setSubscribed,
+    convertExec,
+    deleteExec
 };
