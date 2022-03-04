@@ -162,19 +162,11 @@ const createUser = secureExec(async (req: Request, res: Response) => {
                 status: 0
             })
         )
-<<<<<<< HEAD
-        .catch(data =>
-            res.status(400).json({
-                status: -1
-            })
-        );
-=======
         // .catch(data =>
         //     res.status(400).json({
         //         body: -1
         //     })
         // );
->>>>>>> exec_creation
 });
 
 const setSubscribed = secureUser(async (req: Request, res: Response) => {
