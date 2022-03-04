@@ -103,7 +103,7 @@ const createUser = secureExec(async (req: Request, res: Response) => {
             if (userExistsCheck.length !== 0) {
                 if (execExistsCheck.length !== 0) {
                     console.error("User and Exec already exist!");
-                    res.status(400).json({ body: -4 });
+                    res.status(400).json({ status: -4 });
                     return;
                 }
             }
@@ -117,11 +117,11 @@ const createUser = secureExec(async (req: Request, res: Response) => {
                         password: params.password
                     };
                     await userRepo.createExec(execParams);
-                    res.status(200).json({ body: 0 });
+                    res.status(200).json({ status: 0 });
                     return;
                 }
                 else if (execExistsCheck.length !== 0) {
-                    res.status(400).json({ body: -3 });
+                    res.status(400).json({ status: -3 });
                     return;
                 }
             }
@@ -136,7 +136,7 @@ const createUser = secureExec(async (req: Request, res: Response) => {
                         password: params.password
                     };
                     await userRepo.createUser(userParams);
-                    res.status(200).json({ body: 1 });
+                    res.status(200).json({ status: 1 });
                     return;
                 }
                 else if (execExistsCheck.length !== 0) {
@@ -147,22 +147,22 @@ const createUser = secureExec(async (req: Request, res: Response) => {
                 }
                 else {
                     console.log("User Already Exists!");
-                    res.status(400).json({ body: -2 });
+                    res.status(400).json({ status: -2 });
                 }
             }
             if ((params.isexec === true && execExistsCheck.length !== 0) || userExistsCheck.length !== 0) {
-                res.status(400).json({ body: -4 });
+                res.status(400).json({ status: -4 });
                 return;
             }
         })
         .then(data =>
             res.status(200).json({
-                body: 0
+                status: 0
             })
         )
         .catch(data =>
             res.status(400).json({
-                body: -1
+                status: -1
             })
         );
 });
