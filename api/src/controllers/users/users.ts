@@ -139,7 +139,7 @@ const createUser = secureExec(async (req: Request, res: Response) => {
                 }
             }
             if ((params.isexec === true && execExistsCheck.length !== 0) || userExistsCheck.length !== 0) {
-                res.status(400).json({ body: -1 });
+                res.status(400).json({ body: -2 });
                 return;
             }
         })
@@ -150,7 +150,7 @@ const createUser = secureExec(async (req: Request, res: Response) => {
         )
         .catch(data =>
             res.status(400).json({
-                body: -1
+                body: 0
             })
         );
 });
