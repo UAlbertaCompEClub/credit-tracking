@@ -144,6 +144,8 @@ const createUser = secureExec(async (req: Request, res: Response) => {
                         ccid: params.ccid
                     };
                     userRepo.deleteExec(execParams);
+                    res.status(200).json({ status: 2 });
+                    return;
                 }
                 else {
                     console.log("User Already Exists!");
