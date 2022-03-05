@@ -85,7 +85,7 @@ const checkCcid = controller(async (req: Request, res: Response) => {
 });
 
 
-const createUser = async (req: Request, res: Response) => {
+const createUser = secureExec(async (req: Request, res: Response) => {
     new Promise<void>((resolve) => {
         resolve();
         console.log('user creation process begin!')
@@ -100,6 +100,7 @@ const createUser = async (req: Request, res: Response) => {
             console.log("check if user exists");
             const execExistsCheck = await baseRepo.getExec({ ccid: params.ccid });
             const userExistsCheck = await baseRepo.getUser({ ccid: params.ccid });
+
             if (params.isexec === true) {
                 if (userExistsCheck.length === 0) {
                     console.error("Attempt to add exec");
@@ -166,7 +167,7 @@ const createUser = async (req: Request, res: Response) => {
                 body: -1
             })
         );
-};
+});
 
 const setSubscribed = secureUser(async (req: Request, res: Response) => {
     new Promise<void>((resolve) => {

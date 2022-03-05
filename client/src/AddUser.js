@@ -40,38 +40,26 @@ export function AddUser(props) {
             return
         }
         
-        let ccidStatus
-        await RequestService.ccidCheckReq(ccid).then((res)=>{
-            ccidStatus = res
-        })
-        
-        if(ccidStatus !== -1 ){
-            //ccid is registered already
+        let status
+        if (isExec) {
+            status = await RequestService.addExec(ccid, name, password, props.user.clubid, props.user.token)
+        }
+        else {
+            status = await RequestService.addUser(ccid, name, password, props.user.token)
+        }
+
+        if (parseInt(status) >= 0) {
+            //req succeded
+            setShowAlert(true);
+            setAlertType("success")
+            setAlertText("User Added")
+            await RequestService.newTransaction(ccid, 0, props.user.clubid, props.user.token, props.user.ccid)
+            props.refresh()
+        } else {
+            //req failed
             setShowAlert(true);
             setAlertType("error")
-            setAlertText("User already exists")
-        }else{
-            let status
-            if(isExec){
-                status = await RequestService.addExec(ccid,name,password,props.user.clubid,props.user.token)
-            }
-            else{
-                status = await RequestService.addUser(ccid,name,password,props.user.token)
-            }
-            
-            if(parseInt(status) === 0){
-                //req succeded
-                setShowAlert(true);
-                setAlertType("success")
-                setAlertText("User Added")
-                await RequestService.newTransaction(ccid,0,props.user.clubid,props.user.token,props.user.ccid)
-                props.refresh()
-            }else{
-                //req failed
-                setShowAlert(true);
-                setAlertType("error")
-                setAlertText("User could not be added.")
-            }
+            setAlertText("User could not be added.")
         }
         setIsLoading(false)
     }
