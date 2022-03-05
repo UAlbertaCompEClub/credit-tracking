@@ -85,89 +85,89 @@ const checkCcid = controller(async (req: Request, res: Response) => {
 });
 
 
-const createUser = secureExec(async (req: Request, res: Response) => {
+const createUser = async (req: Request, res: Response) => {
     new Promise<void>((resolve) => {
         resolve();
         console.log('user creation process begin!')
     })
-        .then(async () => {
-            const params = req.body;
-            let foip = false;
-            if (params.foip === true) {
-                foip = true;
-            }
+    .then(async () => {
+        const params = req.body;
+        let foip = false;
+        if (params.foip === true) {
+            foip = true;
+        }
 
-            console.log("check if user exists");
-            const execExistsCheck = await baseRepo.getExec({ ccid: params.ccid });
-            const userExistsCheck = await baseRepo.getUser({ ccid: params.ccid });
+        console.log("check if user exists");
+        const execExistsCheck = await baseRepo.getExec({ ccid: params.ccid });
+        const userExistsCheck = await baseRepo.getUser({ ccid: params.ccid });
 
-            if (params.isexec === true) {
-                if (userExistsCheck.length === 0) {
-                    console.error("Attempt to add exec");
-                    const execParams = {
-                        ccid: params.ccid,
-                        name: params.full_name,
-                        clubid: params.clubid,
-                        password: params.password
-                    };
-                    await userRepo.createExec(execParams);
-                    res.status(200).json({ status: 0 });
-                    return;
-                }
-                else if (execExistsCheck.length !== 0) {
-                    console.error("Exec exists!");
-                    res.status(400).json({ status: -3 });
-                    return;
-                }
-            }
-            else {
-                if (userExistsCheck.length === 0) {
-                    console.error("Creating user!");
-                    const userParams = {
-                        ccid: params.ccid,
-                        isexec: params.isexec,
-                        full_name: params.full_name,
-                        foip: foip,
-                        balance: 0,
-                        password: params.password
-                    };
-                    await userRepo.createUser(userParams);
-                    res.status(200).json({ status: 1 });
-                    return;
-                }
-                else if (execExistsCheck.length !== 0) {
-                    console.error("Deleting exec!");
-                    const execParams = {
-                        ccid: params.ccid
-                    };
-                    userRepo.deleteExec(execParams);
-                    res.status(200).json({ status: 2 });
-                    return;
-                }
-                else {
-                    console.log("User Already Exists!");
-                    res.status(400).json({ status: -2 });
-                }
-            }
-            if ((params.isexec === true && execExistsCheck.length !== 0) || userExistsCheck.length !== 0) {
-                res.status(400).json({ status: -4 });
+        if (params.isexec === true) {
+            if (userExistsCheck.length === 0) {
+                console.error("Attempt to add exec");
+                const execParams = {
+                    ccid: params.ccid,
+                    name: params.full_name,
+                    clubid: params.clubid,
+                    password: params.password
+                };
+                await userRepo.createExec(execParams);
+                res.status(200).json({ status: 0 });
                 return;
             }
-            res.status(200).json({ status: 0 });
-            console.error("Nothing done!");
+            else if (execExistsCheck.length !== 0) {
+                console.error("Exec exists!");
+                res.status(400).json({ status: -3 });
+                return;
+            }
+        }
+        else {
+            if (userExistsCheck.length === 0) {
+                console.error("Creating user!");
+                const userParams = {
+                    ccid: params.ccid,
+                    isexec: params.isexec,
+                    full_name: params.full_name,
+                    foip: foip,
+                    balance: 0,
+                    password: params.password
+                };
+                await userRepo.createUser(userParams);
+                res.status(200).json({ status: 1 });
+                return;
+            }
+            else if (execExistsCheck.length !== 0) {
+                console.error("Deleting exec!");
+                const execParams = {
+                    ccid: params.ccid
+                };
+                userRepo.deleteExec(execParams);
+                res.status(200).json({ status: 2 });
+                return;
+            }
+            else {
+                console.log("User Already Exists!");
+                res.status(400).json({ status: -2 });
+            }
+        }
+        if ((params.isexec === true && execExistsCheck.length !== 0) || userExistsCheck.length !== 0) {
+            res.status(400).json({ status: -4 });
             return;
+        }
+        res.status(200).json({ status: 0 });
+        console.error("Nothing done!");
+        return;
+    })
+    .then(data =>
+        res.status(200).json({
+            status: 0
         })
-        .then(data =>
-            res.status(200).json({
-                status: 0
-            })
-        )
-        .catch(data =>
-            res.status(400).json({
-                body: -1
-            })
-        );
-});
+    )
+    .catch(data =>
+        res.status(400).json({
+            body: -1
+        })
+    );
+};
 
 const setSubscribed = secureUser(async (req: Request, res: Response) => {
     new Promise<void>((resolve) => {
