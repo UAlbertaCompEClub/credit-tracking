@@ -110,6 +110,7 @@ const createUser = secureExec(async (req: Request, res: Response) => {
 
             if (params.isexec === true) {
                 if (userExistsCheck.length === 0) {
+                    console.error("Attempt to add exec");
                     const execParams = {
                         ccid: params.ccid,
                         name: params.full_name,
@@ -121,12 +122,14 @@ const createUser = secureExec(async (req: Request, res: Response) => {
                     return;
                 }
                 else if (execExistsCheck.length !== 0) {
+                    console.error("Exec exists!");
                     res.status(400).json({ status: -3 });
                     return;
                 }
             }
             else {
                 if (userExistsCheck.length === 0) {
+                    console.error("Creating user!");
                     const userParams = {
                         ccid: params.ccid,
                         isexec: params.isexec,
@@ -140,6 +143,7 @@ const createUser = secureExec(async (req: Request, res: Response) => {
                     return;
                 }
                 else if (execExistsCheck.length !== 0) {
+                    console.error("Deleting exec!");
                     const execParams = {
                         ccid: params.ccid
                     };
@@ -156,12 +160,15 @@ const createUser = secureExec(async (req: Request, res: Response) => {
                 res.status(400).json({ status: -4 });
                 return;
             }
+            res.status(200).json({ status: 0 });
+            console.error("Nothing done!");
+            return;
         })
-        .then(data =>
-            res.status(200).json({
-                status: 0
-            })
-        )
+        // .then(data =>
+        //     res.status(200).json({
+        //         status: 0
+        //     })
+        // )
         // .catch(data =>
         //     res.status(400).json({
         //         body: -1
