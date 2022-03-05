@@ -1,4 +1,4 @@
-let path = process.env.REACT_APP_SERVER
+let path = process.env.REACT_APP_SERVER || 'http://localhost:8000/api/v1'
 
 function headerCorsSetup(headers) {
   headers['Origin'] = path

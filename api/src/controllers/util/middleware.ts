@@ -19,8 +19,10 @@ function bodyParser(): middleware {
 };
 
 function cors_call(): middleware {
+    let origin:string|string[] = '*';
+    process.env.NODE_ENV === "production" ? origin = ['https://wonderful-clarke-09beec.netlify.app/*', 'https://wonderful-clarke-09beec.netlify.app'] : console.log('NODE_ENV not in production.');
     const corsOptions = {
-        origin: ['https://wonderful-clarke-09beec.netlify.app/*', 'https://wonderful-clarke-09beec.netlify.app'], //https://wonderful-clarke-09beec.netlify.app/
+        origin: origin,
         credentials: true,            //access-control-allow-credentials:true
         optionSuccessStatus: 200
     }

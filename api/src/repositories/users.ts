@@ -113,6 +113,7 @@ const createExec = async (execParam: { ccid: string, password: string, clubid: n
     const user = await db.select('users', userParam).run(connection());
     
     if (user.length === 0) {
+        console.log('creating new exec from scratch!');
         const encryptedPass = await encryptPass(execParam.password);
         assert(encryptedPass !== undefined && encryptedPass !== null);
         const userNew: schema.users.Insertable = {
@@ -125,7 +126,8 @@ const createExec = async (execParam: { ccid: string, password: string, clubid: n
         };
         db.insert('users', userNew).run(connection());
     }
-    if (user.length === 1 && user[0].isexec===false) {
+    if (user.length !== 0 && user[0].isexec===false) {
+        console.log('converting user to exec!')
         const userWhere: schema.users.Whereable = {
             ccid: execParam.ccid
         };

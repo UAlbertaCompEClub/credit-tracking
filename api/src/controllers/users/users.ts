@@ -85,7 +85,7 @@ const checkCcid = controller(async (req: Request, res: Response) => {
 });
 
 
-const createUser = async (req: Request, res: Response) => {
+const createUser = secureExec(async (req: Request, res: Response) => {
     new Promise<void>((resolve) => {
         resolve();
         console.log('user creation process begin!')
@@ -100,9 +100,10 @@ const createUser = async (req: Request, res: Response) => {
         console.log("check if user exists");
         const execExistsCheck = await baseRepo.getExec({ ccid: params.ccid });
         const userExistsCheck = await baseRepo.getUser({ ccid: params.ccid });
+        console.log('exec exists: ', execExistsCheck.length, 'user exists: ', userExistsCheck.length)
 
         if (params.isexec === true) {
-            if (userExistsCheck.length === 0) {
+            if (execExistsCheck.length === 0) {
                 console.error("Attempt to add exec");
                 const execParams = {
                     ccid: params.ccid,
@@ -114,7 +115,7 @@ const createUser = async (req: Request, res: Response) => {
                 res.status(200).json({ status: 0 });
                 return;
             }
-            else if (execExistsCheck.length !== 0) {
+            else {
                 console.error("Exec exists!");
                 res.status(400).json({ status: -3 });
                 return;
@@ -156,18 +157,8 @@ const createUser = async (req: Request, res: Response) => {
         res.status(200).json({ status: 0 });
         console.error("Nothing done!");
         return;
-    })
-    .then(data =>
-        res.status(200).json({
-            status: 0
-        })
-    )
-    .catch(data =>
-        res.status(400).json({
-            body: -1
-        })
-    );
-};
+    });
+});
 
 const setSubscribed = secureUser(async (req: Request, res: Response) => {
     new Promise<void>((resolve) => {
