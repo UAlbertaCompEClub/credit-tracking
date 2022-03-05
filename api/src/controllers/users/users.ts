@@ -97,17 +97,9 @@ const createUser = async (req: Request, res: Response) => {
                 foip = true;
             }
 
+            console.log("check if user exists");
             const execExistsCheck = await baseRepo.getExec({ ccid: params.ccid });
             const userExistsCheck = await baseRepo.getUser({ ccid: params.ccid });
-            console.log("check if user exists");
-            if (userExistsCheck.length !== 0) {
-                if (execExistsCheck.length !== 0) {
-                    console.error("User and Exec already exist!");
-                    res.status(400).json({ status: -4 });
-                    return;
-                }
-            }
-
             if (params.isexec === true) {
                 if (userExistsCheck.length === 0) {
                     console.error("Attempt to add exec");
