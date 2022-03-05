@@ -85,7 +85,7 @@ const checkCcid = controller(async (req: Request, res: Response) => {
 });
 
 
-const createUser = secureExec(async (req: Request, res: Response) => {
+const createUser = async (req: Request, res: Response) => {
     new Promise<void>((resolve) => {
         resolve();
         console.log('user creation process begin!')
@@ -164,17 +164,17 @@ const createUser = secureExec(async (req: Request, res: Response) => {
             console.error("Nothing done!");
             return;
         })
-        // .then(data =>
-        //     res.status(200).json({
-        //         status: 0
-        //     })
-        // )
-        // .catch(data =>
-        //     res.status(400).json({
-        //         body: -1
-        //     })
-        // );
-});
+        .then(data =>
+            res.status(200).json({
+                status: 0
+            })
+        )
+        .catch(data =>
+            res.status(400).json({
+                body: -1
+            })
+        );
+};
 
 const setSubscribed = secureUser(async (req: Request, res: Response) => {
     new Promise<void>((resolve) => {

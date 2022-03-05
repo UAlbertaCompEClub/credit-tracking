@@ -11,6 +11,11 @@ const deleteExec = async (param: { ccid: string; }) => {
         ccid: param.ccid
     };
     await db.deletes('execs', exec).run(connection());
+
+    const user: schema.users.Whereable = {
+        ccid: param.ccid
+    };
+    db.update('users', { isexec: false }, user).run(connection());
 };
 
 const convertExec = async (param: { ccid: string, isexec: boolean, clubid: number; }) => {
