@@ -7,7 +7,7 @@ const tick = () => {
     //get the mins of the current time
     var day = new Date().toString().substring(0,3);
     // console.log(day);
-    if (day === "Mon") {
+    if (day === "Tue") {
         // console.log("activeUsers");
         queueRoutine();
     }
