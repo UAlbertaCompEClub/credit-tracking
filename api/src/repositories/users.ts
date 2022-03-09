@@ -175,7 +175,7 @@ const getActiveUsers = () => {
     return query;
 };
 
-const updateActiveUsers = () => {
+const updateActiveUsers = async () => {
     const query = db.sql<schema.users.SQL | schema.transactions.SQL>`
         UPDATE users
         SET active = True
@@ -205,7 +205,7 @@ const updateActiveUsers = () => {
             FROM users U
             WHERE U.balance != 0)
     `.run(connection());
-    return query;
+    return await query;
 };
 
 export {

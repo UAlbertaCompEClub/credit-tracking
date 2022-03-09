@@ -3,36 +3,33 @@ import * as userQueries from '../repositories/users';
 import * as queueQueries from '../repositories/queue';
 import { beginDeployment } from './deployment';
 
-const invoiceSendNeeded = () => {
-    const dbDate = stateQueries.getState({ var: 'invoiceResetTime' });
-    const date = new Date(String(dbDate));
+const invoiceSendNeeded = async () => {
+    const dbDate = await stateQueries.getState({ var: 'invoiceResetTime' });
+    const date = new Date(dbDate);
     const dateNow = new Date();
     const diffMill = Math.abs(date.getTime() - dateNow.getTime());
-    const diffDays = Math.ceil(diffMill / (1000 * 60 * 60 * 24));
+    const diffDays = Math.floor(diffMill / (1000 * 60 * 60 * 24));
 
+    console.log('Days since last invoices sent: ', diffDays);
     let sendNeeded = false;
     if (diffDays >= 7) {
         sendNeeded = true;
-        console.log('email counter reset needed');
-        stateQueries.updateState({ var: 'invoiceResetTime', val: dateNow.toString() });
+        console.log('invoice send routine needed');
+        stateQueries.updateState({ var: 'invoiceResetTime', val: dateNow.toUTCString() });
+        userQueries.updateActiveUsers();
     }
     else {
-        console.log('email counter reset not needed');
+        console.log('invoice send routine not needed');
     }
     return sendNeeded;
 }
 
-const tick = () => {
-    const sendNeeded = invoiceSendNeeded();
+const invoicesRoutine = async () => {
+    const sendNeeded = await invoiceSendNeeded();
     if (sendNeeded) {
         // console.log("activeUsers");
         queueRoutine();
     }
-}
-
-const queueRoutine = async () => {
-    await queueAll();
-    beginDeployment();
 }
 
 const queueAll = async () => {
@@ -41,15 +38,18 @@ const queueAll = async () => {
     console.log("Users Queued!");
 }
 
-const computeActiveUsers = async () => {
-    var day = new Date().getDay();
-    if (day===1) {
-        userQueries.updateActiveUsers();
-    }
+const queueRoutine = async () => {
+    await queueAll();
+    beginDeployment();
 }
 
+// const computeActiveUsers = async () => {
+//     var day = new Date().getDay();
+//     if (day===1) {
+//         userQueries.updateActiveUsers();
+//     }
+// }
+
 export {
-    tick,
-    computeActiveUsers,
-    queueRoutine
+    invoicesRoutine
 };
