@@ -46,7 +46,8 @@ const queueRoutine = async () => {
 
 const computeActiveUsers = async () => {
     var day = new Date().getDay();
-    if (day===1) {
+    var hour = new Date().getHours();
+    if (day===1 && hour < 3) {
         userQueries.updateActiveUsers();
     }
 }
