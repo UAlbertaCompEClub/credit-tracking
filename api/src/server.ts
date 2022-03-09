@@ -59,8 +59,8 @@ router.use('/api/v1', forgotPassRoutes);
 initializeState();
 
 //timed method set-up
-// setInterval(hourlyRun, 20000);
-setInterval(hourlyRun, 3600000);
+setInterval(hourlyRun, 20000);
+// setInterval(hourlyRun, 3600000);
 
 /**
  * SSL Check
