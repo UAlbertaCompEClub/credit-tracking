@@ -170,6 +170,7 @@ const getActiveUsers = () => {
     SELECT U.ccid
     FROM ${"users"} U
     WHERE U.active = True
+    AND U.subscribed = True
     AND U.balance != 0
     `.run(connection);
     return query;

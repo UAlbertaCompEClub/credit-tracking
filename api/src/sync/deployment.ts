@@ -11,6 +11,7 @@ import type * as schema from 'zapatos/schema';
 */
 const beginDeployment = async () => {
     const deploying = (await stateQueries.getState({ var: "deploying"}))[0];
+    console.log('deploying state:', deploying);
     if (deploying==='1') {
         return;
     }
@@ -21,6 +22,8 @@ const beginDeployment = async () => {
             stateQueries.updateState({ var: "deploying", val: "0" });
             return;
         }
+        
+        console.log(queued);
         var nEmailSent = parseInt((await stateQueries.getState({ var: 'nEmailSent'}))[0]);
         const clubs = (await basicQueries.getClubs());
     

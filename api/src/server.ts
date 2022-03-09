@@ -20,17 +20,19 @@ import * as queries from './repositories/base';
 
 require('dotenv').config({ path: 'api.env' });
 
-console.log("DB ACCESS\n",
-"USER:", process.env.PGUSER, "\n",
-"HOST:", process.env.PGHOST, "\n",
-"PASS:", process.env.PGPASSWORD, "\n",
-"DB_NAME:", process.env.PGDATABASE, "\n",
-"PORT:", process.env.PGPORT);
+console.log(
+    "DB ACCESS \n",
+    "USER:", process.env.PGUSER, "\n",
+    "HOST:", process.env.PGHOST, "\n",
+    "PASS:", process.env.PGPASSWORD, "\n",
+    "DB_NAME:", process.env.PGDATABASE, "\n",
+    "PORT:", process.env.PGPORT, "\n",
+    'DB URL: ', process.env.DATABASE_URL
+);
 
 
 const router = express();
 const port = process.env.PORT || "8000";
-console.log('DB URL: ', process.env.DATABASE_URL || undefined);
 
 /**
  *  App Configuration

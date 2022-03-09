@@ -26,6 +26,7 @@ const invoiceSendNeeded = async () => {
 
 const invoicesRoutine = async () => {
     const sendNeeded = await invoiceSendNeeded();
+    computeActiveUsers();
     if (sendNeeded) {
         // console.log("activeUsers");
         queueRoutine();
@@ -43,12 +44,12 @@ const queueRoutine = async () => {
     beginDeployment();
 }
 
-// const computeActiveUsers = async () => {
-//     var day = new Date().getDay();
-//     if (day===1) {
-//         userQueries.updateActiveUsers();
-//     }
-// }
+const computeActiveUsers = async () => {
+    var day = new Date().getDay();
+    if (day===1) {
+        userQueries.updateActiveUsers();
+    }
+}
 
 export {
     invoicesRoutine
