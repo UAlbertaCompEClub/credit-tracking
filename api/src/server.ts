@@ -13,7 +13,6 @@ import transactionRoutes from './routes/auth/transactionRoutes';
 import forgotPassRoutes from './routes/forgotPassword/passwordRoutes';
 import middleware from './controllers/util/middleware';
 
-import { computeActiveUsers, tick }  from './sync/queue';
 import { initializeState } from './sync/state';
 import { hourlyRun } from './sync/sync';
 
@@ -60,10 +59,8 @@ router.use('/api/v1', forgotPassRoutes);
 initializeState();
 
 //timed method set-up
-setInterval(tick, 24*3600000);
-// setInterval(tick, 20000);
-setInterval(computeActiveUsers, 24*3600000);
-setInterval(hourlyRun, 3600000);
+setInterval(hourlyRun, 20000);
+// setInterval(hourlyRun, 3600000);
 
 /**
  * SSL Check

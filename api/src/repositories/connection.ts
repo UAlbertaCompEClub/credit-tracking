@@ -1,25 +1,15 @@
 import { Pool } from 'pg';
 
 // const connection = new Pool({
-//     user: process.env.USER,
-//     host: process.env.HOST,
-//     database: process.env.DATABASE,
-//     password: process.env.PASSWORD,
-//     port: process.env.DBPORT as unknown as number
-// })
+//     connectionString: process.env.DATABASE_URL,
+//     ssl: {
+//         rejectUnauthorized: false
+//     }
+// });
 
-const connection = ():Pool => {
-    let connection = new Pool();
-    if (process.env.DATABASE_URL) {
-        console.log('switching to URL based db connection');
-        connection = new Pool({
-            connectionString: process.env.DATABASE_URL,
-            ssl: {
-                rejectUnauthorized: false
-            }
-        });
-    }
-    return connection;
-}
+const connection = new Pool({
+    connectionString: process.env.DATABASE_URL || undefined
+});
+
 
 export default connection;

@@ -14,7 +14,7 @@ const createTransaction = (transactionParam: { ccid: string, clubid: number, amo
         created_by: transactionParam.exec,
     };
     console.log("creating Transaction at the query level...")
-    return db.insert('transactions', transaction).run(connection());
+    return db.insert('transactions', transaction).run(connection);
 };
 
 const transactionsUser = (transaction: { clubid: number, ccid: string }) => {
@@ -31,7 +31,7 @@ const transactionsUser = (transaction: { clubid: number, ccid: string }) => {
         where.ccid = transaction.ccid;
         where.clubid = transaction.clubid;
     }
-    return db.select('transactions', where).run(connection());
+    return db.select('transactions', where).run(connection);
 };
 
 const transactionUserWeekly = (transactionParam: { clubid: number, ccid: string}) => {
@@ -48,25 +48,25 @@ const transactionUserWeekly = (transactionParam: { clubid: number, ccid: string}
         WHERE T.created_at > now() - interval '1 week'
         AND T.ccid=${db.param(transactionParam.ccid)}
         AND T.clubid=${db.param(transactionParam.clubid)}
-    `.run(connection());
+    `.run(connection);
     return query;
 };
 
 const transactionsAll = () => {
     const where: schema.transactions.Whereable = {};
-    return db.select('transactions', where).run(connection());
+    return db.select('transactions', where).run(connection);
 };
 
 const getClub = ( queryParams: {clubid: number}) => {
     const where: schema.clubs.Whereable = {
         clubid: queryParams.clubid
     };
-    return db.select('clubs', where).run(connection());
+    return db.select('clubs', where).run(connection);
 };
 
 const getClubs = () => {
     const where: schema.clubs.Whereable = {};
-    return db.select('clubs', where).run(connection());
+    return db.select('clubs', where).run(connection);
 };
 
 const clubBalance = (queryParams: { clubid: number }) => {
@@ -75,7 +75,7 @@ const clubBalance = (queryParams: { clubid: number }) => {
         where.clubid = queryParams.clubid;
     }
     
-    return db.select('clubs', where).run(connection());
+    return db.select('clubs', where).run(connection);
 };
 
 const getUser = (userParam: { ccid: string }) => {
@@ -83,8 +83,8 @@ const getUser = (userParam: { ccid: string }) => {
     if (userParam.ccid !== 'any') {
         where.ccid = userParam.ccid;
     }
-    // console.log(await db.select('transactions', where).run(connection()));
-    return db.select('users', where).run(connection());
+    // console.log(await db.select('transactions', where).run(connection));
+    return db.select('users', where).run(connection);
 };
 
 const getExec = (userParam: { ccid: string }) => {
@@ -92,7 +92,7 @@ const getExec = (userParam: { ccid: string }) => {
     if (userParam.ccid !== 'any') {
         where.ccid = userParam.ccid;
     }
-    return db.select('execs', where).run(connection());
+    return db.select('execs', where).run(connection);
 };
 
 const getUsers = (userParam: { clubid: number }) => {
@@ -102,7 +102,7 @@ const getUsers = (userParam: { clubid: number }) => {
         WHERE U.ccid=T.ccid AND T.clubid=${db.param(userParam.clubid)}
         GROUP BY U.ccid
         HAVING COUNT(T.clubid)>0
-    `.run(connection());
+    `.run(connection);
     return query;
 };
 const getUsersRobust = async (userParam: { clubid: string }) => {
@@ -113,7 +113,7 @@ const getUsersRobust = async (userParam: { clubid: string }) => {
         WHERE U.ccid=T.ccid AND T.clubid=${db.param(userParam.clubid)}
         GROUP BY U.ccid, U.full_name
         HAVING COUNT(T.clubid)>0
-    `.run(connection());
+    `.run(connection);
     return query;
 };
 
@@ -123,7 +123,7 @@ const getAllUsers = async () => {
         SELECT U.ccid, U.full_name, U.balance, U.subscribed
         FROM ${"users"} U
         GROUP BY U.ccid, U.full_name
-    `.run(connection());
+    `.run(connection);
     return query;
 };
 
