@@ -30,7 +30,7 @@ console.log("DB ACCESS\n",
 
 const router = express();
 const port = process.env.PORT || "8000";
-
+console.log('DB URL: ', process.env.DATABASE_URL || undefined);
 
 /**
  *  App Configuration
