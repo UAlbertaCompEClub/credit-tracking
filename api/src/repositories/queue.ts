@@ -4,8 +4,8 @@ import * as db from 'zapatos/db';
 import type * as schema from 'zapatos/schema';
 import connection from './connection';
 
-const queueUsers = (users: schema.users.JSONSelectable[]) => {
-    db.insert('invoice_queue', users).run(connection);
+const queueUsers = async (users: schema.users.JSONSelectable[]) => {
+    await db.insert('invoice_queue', users).run(connection);
 };
 
 const getQueue = () => {
