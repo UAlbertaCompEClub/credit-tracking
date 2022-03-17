@@ -14,7 +14,6 @@ import * as auth from '../../auth/auth';
  *  @returns Array of all inventory items.
 */
 const login = controller(async (req: Request, res: Response) => {
-    console.log(req.body);
     const params = req.body;
     const userParams = {
         ccid: params.ccid
