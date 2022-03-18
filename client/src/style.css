@@ -1,31 +1,109 @@
-.nothing {
-    color: tomato;
-    border: 2px solid blue;
-    margin: 20px;
-    padding: 20px;
-}
-
+/*-------------------------text--------------------------*/
 .normalText{
     color: white;
-    margin: 5px;
-    padding: 5px;
     background-color: transparent;
     border-color: transparent;
 }
 
 .redText{
     color: #ca0004;
-    margin: 5px;
-    padding: 5px;
     background-color: transparent;
-    border-color: transparent;
-    border-width: 0.5px;
 }
 
-.greenText{
+.cyanText{
     color: #00EEC7;
     background-color: transparent;
-    border-color: transparent;
-    margin: 5px;
+}
+/*-------------------------------------------------------*/
+
+/*----------------------------- Buttons -------------------*/
+/* basic cyan button */
+.btn { 
+    border: 0.6px solid;
+    background-color: transparent;
+    color: black;
+    text-overflow: ellipsis;
+    font-weight: 700;
+    cursor: pointer;
+    overflow: hidden;
+}
+.oval{
+    border-top-left-radius: 35px;
+    border-top-right-radius: 35px;
+    border-bottom-left-radius: 35px;
+    border-bottom-right-radius: 35px;
+}
+.cyanBtn{
+    color:#3ee4cf;
+    background-color: transparent;
+    border-color: grey;
+    height: 20px;
+    font-size: 12px;
+    text-overflow: ellipsis;
+}
+
+.cyanBtn:hover{
+    border-color: white;
+    color: black;
+    background-color:  #78ebdc;  
+}
+
+.whiteBtn{
+    border-color: grey;
+    background-color: transparent;  
+    color: white;  
+}
+.whiteBtn:hover{
+    border-color: grey;
+    color: black;
+    background-color:  white;  
+}
+/*------------------------------------------------*/
+
+/*------------------Tables------------------------*/
+.tbody tr{
+    background: #1a1a18;
+    border-bottom: 1.5px solid #242422;
+    border-top: 1.5px solid #242422;
+}
+
+.thead thead{
+    background: #1a1a18;
+    border-bottom: 1.5px solid white;
+} 
+
+/*------------------------------------------------*/
+
+/*------------------flex container---------------------*/
+/* decided not to use, saving this for later if needed
+@media(min-width: 768px){
+.container1{  
+    display: flex;
+    flex-direction: column;
+    flex-wrap:wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 200px;
+}
+.container2{
+    display:flex;
+}
+.container3{ 
+    display:flex;
+    
+}
+.fbox1{
+    display:flex;
+    flex:1;
+    flex-basis: 100%;
     padding: 5px;
 }
+.fbox2{
+    flex:1;
+}
+.fbox3{
+    flex:1;
+}
+}
+*/
+/*------------------------------------------------*/

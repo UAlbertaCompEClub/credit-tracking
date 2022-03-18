@@ -13,10 +13,10 @@ INSERT INTO clubs(clubid,clubname,amount)
 VALUES (0,'CompE',20);
 (1,'CompE',20);
 
-INSERT INTO transactions ( clubid, amount, ccid)
+INSERT INTO transactions ( clubid, amount, ccid,created_by)
 VALUES 
-('1',-20,'cstm'),
-('1',40,'cstm'),
-('1',-50,'cstm'),
-('1',20,'cstm'),
-('0',-40,'cstm');
+('1',-20,'xuyang4','jyw2'),
+('1',40,'xuyang4','jyw2'),
+('1',-50,'xuyang4','jyw2'),
+('1',20,'xuyang4','jyw2'),
+('0',-40,'xuyang4','jyw2');
