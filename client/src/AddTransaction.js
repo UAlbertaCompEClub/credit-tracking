@@ -2,6 +2,7 @@ import {Button, FormControl, LinearProgress, InputAdornment, Input,Alert, InputL
 import {useState} from 'react'
 import {RequestService} from './Services/RequestService'
 import './style.css'
+
 function AddTransaction(props){
     const [amount,setAmount] = useState("")
 
@@ -67,12 +68,12 @@ function AddTransaction(props){
 
 
     return(
-        <Stack>
+        <Stack spacing = {1.7} direction = "column">
             <Typography variant = "h2">Add a Transaction</Typography>
             <Stack direction = "row" justifyContent = "space-between">
-                <Button disabled = {isLoading} onClick = {(e)=>{ quickAddHandler(0.25)}}>+$0.25</Button>
-                <Button disabled = {isLoading} onClick = {(e)=>{ quickAddHandler(0.50)}}>+$0.50</Button>
-                <Button disabled = {isLoading} onClick = {(e)=>{ quickAddHandler(1)}}>+$1.00</Button>
+                <Button className ="btn whiteBtn" disabled = {isLoading} onClick = {(e)=>{ quickAddHandler(0.25)}}>+$0.25</Button>
+                <Button className ="btn whiteBtn" disabled = {isLoading} onClick = {(e)=>{ quickAddHandler(0.50)}}>+$0.50</Button>
+                <Button className ="btn whiteBtn" disabled = {isLoading} onClick = {(e)=>{ quickAddHandler(1)}}>+$1.00</Button>
             </Stack>
             <FormControl>
                 <InputLabel htmlFor = "amount">Amount</InputLabel>
@@ -84,9 +85,10 @@ function AddTransaction(props){
             {isLoading && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
               <LinearProgress color="inherit" />
             </Stack>}
-
-            <Button disabled = {isLoading} onClick = {(e)=>{ submitTransactionHandler("charge")}}>Charge</Button>
-            <Button disabled = {isLoading}  onClick = {(e)=>{ submitTransactionHandler("deposit")}}>Deposit</Button>
+            <Stack sx = {{my:2}} direction = 'row' justifyContent="space-evenly">
+            <Button className = "btn cyanBtn oval" disabled = {isLoading} onClick = {(e)=>{ submitTransactionHandler("charge")}}>Charge</Button>
+            <Button className = "btn cyanBtn oval" disabled = {isLoading}  onClick = {(e)=>{ submitTransactionHandler("deposit")}}>Deposit</Button>
+            </Stack>
         </Stack>
         
         
