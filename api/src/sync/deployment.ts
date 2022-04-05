@@ -12,16 +12,10 @@ import type * as schema from 'zapatos/schema';
 const beginDeployment = async () => {
     const deploying = (await stateQueries.getState({ var: "deploying"}))[0];
     console.log('deploying state:', deploying);
-    if (deploying==='1') {
-        return;
-    }
+
     while (true) {
         stateQueries.updateState({ var: "deploying", val: "1"});
         const queued = await queueQueries.getQueue();
-        if (queued.length===0) {
-            stateQueries.updateState({ var: "deploying", val: "0" });
-            return;
-        }
         
         console.log(queued);
         var nEmailSent = parseInt((await stateQueries.getState({ var: 'nEmailSent'}))[0]);
@@ -54,8 +48,9 @@ const beginDeployment = async () => {
             stateQueries.updateState({ var: "deploying", val: "0" });
             return;
         }
-
-        setTimeout(function () { console.log("Will try to continue sending emails tomorrow!"); }, 24*3600000);
+        else {
+            console.log("Will try to continue sending emails tomorrow!");
+        }
     }
 }
 
