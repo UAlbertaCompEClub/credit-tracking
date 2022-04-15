@@ -2,7 +2,7 @@ import { FormControlLabel, Checkbox, Button, FormControl, Input, Select, LinearP
 import { useState, useEffect } from 'react'
 import { RequestService } from "./Services/RequestService"
 import { AddUser } from './AddUser'
-
+import './style.css'
 
 function ClubDashboard(props) {
   const [ccid, setCcid] = useState("")

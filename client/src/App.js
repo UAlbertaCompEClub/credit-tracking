@@ -6,7 +6,7 @@ import UserProfile from './UserProfile';
 import { mainTheme } from './theme';
 import ResetPassword from './ResetPassword'
 import TermsDialog from './TermsDialog.js'
-
+import './style.css'
 
 function App() {
 
