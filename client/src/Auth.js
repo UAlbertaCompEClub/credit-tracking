@@ -1,7 +1,7 @@
 import {Button, FormControl, Input, LinearProgress, InputLabel, FormHelperText,Stack, Typography, Alert} from '@mui/material/'
 import {useState} from 'react'
 import {RequestService} from './Services/RequestService'
-import './style.css'
+import "./style.css"
 
 function Auth(props){
 
@@ -65,7 +65,7 @@ function Auth(props){
 
         <Stack justifyContent = "center" spacing = {4}  height = "100vh">
 
-            <Typography variant = "h1" >Login</Typography>
+            <Typography variant = "h1" className ="whiteText">Login</Typography>
 
             {/* show alert if showAlert is true */}
             {showAlert && <Alert severity = {alertType}> {alertText}!</Alert>} 
