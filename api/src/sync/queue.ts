@@ -34,9 +34,13 @@ const invoicesRoutine = async () => {
 }
 
 const queueAll = async () => {
-    const activeUsers = await userQueries.getActiveUsers();
-    queueQueries.queueUsers(activeUsers);
-    console.log("Users Queued!");
+    const deploying = (await stateQueries.getState({ var: "deploying" }))[0];
+    console.log('deploying state:', deploying);
+    if (deploying === '0') {
+        const activeUsers = await userQueries.getActiveUsers();
+        queueQueries.queueUsers(activeUsers);
+        console.log("Users Queued!");
+    }
 }
 
 const queueRoutine = async () => {
