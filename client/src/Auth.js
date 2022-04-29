@@ -1,8 +1,8 @@
 import {Button, FormControl, Input, LinearProgress, InputLabel, FormHelperText,Stack, Typography, Alert} from '@mui/material/'
 import {useState} from 'react'
 import {RequestService} from './Services/RequestService'
-import { CustomButton } from './style'
-import "./style.css"
+import {CyanButton,WhiteButton} from './style'
+
 
 function Auth(props){
 
@@ -93,8 +93,8 @@ function Auth(props){
             </Stack>}
 
             <Stack direction = 'row' justifyContent="space-evenly"> 
-                <CustomButton className = "btn whiteBtn oval" disabled = {isLoading} type = "submit" >Submit</CustomButton>
-                <CustomButton className = "btn cyanBtn oval" onClick={switchToResetPassword}>Forgot password</CustomButton>
+                <CyanButton disabled = {isLoading} type = "submit" >Submit</CyanButton>
+                <CyanButton onClick={switchToResetPassword}>Forgot password</CyanButton>
             </Stack>
         </Stack>
 

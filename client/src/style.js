@@ -4,17 +4,22 @@ import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 
 //to be tested
-export const CustomButton = withStyles({
+export const CyanButton = withStyles({
     root: {
-      background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
-      borderRadius: 3,
-      border: 0,
-      color: "white",
-      height: 48,
+      background: "transparent",
+      border: "1px white solid",
+      borderRadius: 100,
+      color: "#3ee4cf",
+      width: 200,
+      height: 50,
       padding: "0 30px",
-      boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)"
+      boxShadow: "0 3px 5px 2px rgba(255, 255, 255, 0.1)",
+      '&:hover':{
+        background:  "#3ee4cf",
+        color: 'black'
+      }
     },
     label: {
       textTransform: "capitalize"
-    }
-  })(props => <Button {...props} />);
+    },
+  })(props => <Button {...props} />)
