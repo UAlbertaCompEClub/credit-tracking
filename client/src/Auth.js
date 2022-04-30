@@ -94,7 +94,7 @@ function Auth(props){
 
             <Stack direction = 'row' justifyContent="space-evenly"> 
                 <CyanButton disabled = {isLoading} type = "submit" >Submit</CyanButton>
-                <CyanButton onClick={switchToResetPassword}>Forgot password</CyanButton>
+                <WhiteButton onClick={switchToResetPassword}>Forgot password</WhiteButton>
             </Stack>
         </Stack>
 
