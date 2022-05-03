@@ -1,7 +1,7 @@
 import {Button, FormControl,Checkbox,Alert, Input, InputLabel,Stack,Typography,FormControlLabel,LinearProgress} from '@mui/material'
 import {useState} from 'react'
 import {RequestService} from "./Services/RequestService"
-import './style.css'
+import {CyanButton,WhiteButton} from './style'
 
 export function AddUser(props) {
     const[ccid,setCcid] = useState("")

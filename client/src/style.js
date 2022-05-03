@@ -42,3 +42,21 @@ export const WhiteButton = withStyles({
     textTransform: "capitalize"
   },
 })(props => <Button {...props} />)
+
+export const WhiteButtonnb = withStyles({
+  root: {
+    background: "transparent",
+    border: "transparent",
+    color: "white",
+    width: 200,
+    height: 50,
+    padding: "0 30px",
+    '&:hover':{
+      background:  "white",
+      color: 'black'
+    }
+  },
+  label: {
+    textTransform: "capitalize"
+  },
+})(props => <Button {...props} />)

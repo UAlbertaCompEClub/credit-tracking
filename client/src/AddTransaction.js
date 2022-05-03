@@ -1,7 +1,7 @@
 import {Button, FormControl, LinearProgress, InputAdornment, Input,Alert, InputLabel, FormHelperText,Stack,Typography} from '@mui/material'
 import {useState} from 'react'
 import {RequestService} from './Services/RequestService'
-import './style.css'
+import {CyanButton,WhiteButton} from './style'
 
 function AddTransaction(props){
     const [amount,setAmount] = useState("")

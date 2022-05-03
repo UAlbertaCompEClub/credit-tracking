@@ -2,7 +2,8 @@ import { FormControlLabel, Checkbox, Button, FormControl, Input, Select, LinearP
 import { useState, useEffect } from 'react'
 import { RequestService } from "./Services/RequestService"
 import { AddUser } from './AddUser'
-import './style.css'
+import {CyanButton,WhiteButtonnb} from './style'
+import {borders} from '@mui/system';
 
 function ClubDashboard(props) {
   const [ccid, setCcid] = useState("")
@@ -177,8 +178,8 @@ function ClubDashboard(props) {
   return(
       <Stack>
           <Stack direction = 'row' justifyContent="space-evenly">
-            <Button onClick = {props.logout} >Logout</Button>
-            <Button onClick = {(e)=>{selectUser(props.user.ccid)}} >My Profile</Button>
+            <WhiteButtonnb onClick = {props.logout}>Logout</WhiteButtonnb>
+            <WhiteButtonnb onClick = {(e)=>{selectUser(props.user.ccid)}} >My Profile</WhiteButtonnb>
           </Stack>
           
           <Typography variant = "h1">{props.user.club}</Typography>
@@ -203,7 +204,7 @@ function ClubDashboard(props) {
                 </FormControl>
             </Stack>
               
-              <Button onClick = {(e)=>{toggleAddPerson()}}> Add User to Club</Button>
+              <CyanButton onClick = {(e)=>{toggleAddPerson()}} > Add User to Club</CyanButton>
           </Stack>
 
           {showAddUser && <AddUser  toggleDialog={props.toggleDialog} user = {props.user} setShowAddUser ={setShowAddUser} refresh = {refresh} />}

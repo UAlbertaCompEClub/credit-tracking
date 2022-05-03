@@ -3,7 +3,7 @@ import { Button, FormControl, Alert, Input, InputLabel, Stack, Typography, Check
 import {useState} from 'react'
 import { AddUser } from './AddUser'
 import {RequestService} from "./Services/RequestService"
-import "./style.css"
+import {CyanButton,WhiteButton} from './style'
 import ButtonUnstyled, { buttonUnstyledClasses } from '@mui/core/ButtonUnstyled';
 import { styled } from '@mui/system';
 
