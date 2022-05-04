@@ -2,8 +2,8 @@ import { FormControlLabel, Checkbox, Button, FormControl, Input, Select, LinearP
 import { useState, useEffect } from 'react'
 import { RequestService } from "./Services/RequestService"
 import { AddUser } from './AddUser'
-import {CyanButton,WhiteButtonnb} from './style'
-import {borders} from '@mui/system';
+import {CyanButton,WhiteButton} from './style'
+
 
 function ClubDashboard(props) {
   const [ccid, setCcid] = useState("")
@@ -176,10 +176,18 @@ function ClubDashboard(props) {
   }
   
   return(
-      <Stack>
-          <Stack direction = 'row' justifyContent="space-evenly">
-            <WhiteButtonnb onClick = {props.logout}>Logout</WhiteButtonnb>
-            <WhiteButtonnb onClick = {(e)=>{selectUser(props.user.ccid)}} >My Profile</WhiteButtonnb>
+      <Stack spacing ={1}>
+          <Stack direction = 'row' justifyContent="space-evenly" sx={{pt: 2}} >
+            <WhiteButton 
+              style={{
+                border:"transparent", boxShadow:"none"
+              }} 
+              onClick = {props.logout}>Logout</WhiteButton>
+            <WhiteButton 
+             style={{
+              border:"transparent", boxShadow:"none"
+              }} 
+            onClick = {(e)=>{selectUser(props.user.ccid)}} >My Profile</WhiteButton>
           </Stack>
           
           <Typography variant = "h1">{props.user.club}</Typography>
@@ -197,14 +205,18 @@ function ClubDashboard(props) {
 
           <Stack direction = "row" justifyContent = "space-between" width = "100%">
             <Stack>
-            <FormControlLabel  control={<Checkbox onClick = {toggleAllUsers}/>} label="show users from all clubs" />
+            <FormControlLabel sx={{ pb: 2 }} control={<Checkbox onClick = {toggleAllUsers}/>} label="show users from all clubs" />
               <FormControl>
-                    <InputLabel htmlFor = "ccid">ccid or name</InputLabel>
+                    <InputLabel  htmlFor = "ccid">ccid or name</InputLabel>
                     <Input autoComplete="off" id = "ccid" value = {ccid} onChange= {(e) => {setCcid(e.target.value); searchUsers(e.target.value)}} />
                 </FormControl>
             </Stack>
               
-              <CyanButton onClick = {(e)=>{toggleAddPerson()}} > Add User to Club</CyanButton>
+              <CyanButton
+                style ={{
+                  height: "50px"         
+                }}
+              onClick = {(e)=>{toggleAddPerson()}} > Add User to Club</CyanButton>
           </Stack>
 
           {showAddUser && <AddUser  toggleDialog={props.toggleDialog} user = {props.user} setShowAddUser ={setShowAddUser} refresh = {refresh} />}

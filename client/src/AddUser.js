@@ -1,4 +1,4 @@
-import {Button, FormControl,Checkbox,Alert, Input, InputLabel,Stack,Typography,FormControlLabel,LinearProgress} from '@mui/material'
+import {Link, Button, FormControl,Checkbox,Alert, Input, InputLabel,Stack,Typography,FormControlLabel,LinearProgress} from '@mui/material'
 import {useState} from 'react'
 import {RequestService} from "./Services/RequestService"
 import {CyanButton,WhiteButton} from './style'
@@ -79,7 +79,7 @@ export function AddUser(props) {
 
     return (
         <form onSubmit = {submitHandler}>
-        <Stack>
+        <Stack justifyContent={"center"}>
             <Typography variant = "h3" >Add User</Typography>
 
             <Stack direction="row">
@@ -90,34 +90,39 @@ export function AddUser(props) {
 
              {/* show alert if showAlert is true */}
              {showAlert && <Alert severity = {alertType}> {alertText}!</Alert>} 
-            <FormControl>
-              {/*ccid */}
-              <InputLabel htmlFor = "ccid">ccid</InputLabel>
-                <Input autoComplete="off" id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
-            </FormControl>
-            <FormControl>
-                {/* name */}
-                <InputLabel htmlFor = "name">Name</InputLabel>
-                <Input autoComplete="off" disabled = {isLoading} id = "name" onChange = {(e) => setName(e.target.value)}/>
-            </FormControl>
-            <FormControl>
-                {/* password */}
-                <InputLabel htmlFor = "password">Password</InputLabel>
-                <Input autoComplete="off" disabled = {isLoading} id = "password" onChange = {(e) => setPassword(e.target.value)}/>
-                
-                <Button onClick={props.toggleDialog} sx = {{'margin': '2vh 0 0 2vw'}}
-                    variant="p" >View the Terms of Service Here</Button>
-                <FormControlLabel id = 'foip' control={<Checkbox/>} onChange = {(e) => setAcceptFOIP(e.target.checked)}
-                label="I, the user, accept the terms of service" />        
-            </FormControl>
-
+            <Stack spacing = {2} sx={{pt:2}}>
+                <FormControl>
+                {/*ccid */}
+                <InputLabel htmlFor = "ccid">ccid</InputLabel>
+                    <Input autoComplete="off" id = "ccid" value = {ccid} onChange = {(e) => setCcid(e.target.value)} />
+                </FormControl>
+                <FormControl>
+                    {/* name */}
+                    <InputLabel htmlFor = "name">Name</InputLabel>
+                    <Input autoComplete="off" disabled = {isLoading} id = "name" onChange = {(e) => setName(e.target.value)}/>
+                </FormControl>
+                <FormControl>
+                    {/* password */}
+                    <InputLabel htmlFor = "password">Password</InputLabel>
+                    <Input autoComplete="off" disabled = {isLoading} id = "password" onChange = {(e) => setPassword(e.target.value)}/>
+                </FormControl>
+            </Stack>
+            <Stack sx={{pt:1}}>
+                <FormControl>
+                    <WhiteButton style={{width:"autofit"}} onClick={props.toggleDialog}  sx = {{m:"2vh 0 0 2vw", p:'2px'}}
+                        variant="p">
+                            View the Terms of Service Here</WhiteButton>
+                    <FormControlLabel id = 'foip' control={<Checkbox/>} onChange = {(e) => setAcceptFOIP(e.target.checked)}
+                    label="I, the user, accept the terms of service" />        
+                </FormControl>
+            </Stack>
             {isLoading && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
               <LinearProgress color="inherit" />
             </Stack>}
 
-            <Stack direction = 'row' justifyContent="space-evenly">
-                <Button  disabled = {isLoading} type = "submit">Add</Button>
-                <Button  disabled = {isLoading} onClick = {(e)=>{props.setShowAddUser(false)}}>Close</Button>
+            <Stack direction = 'row' justifyContent="space-evenly" sx={{p:1}}>
+                <CyanButton  disabled = {isLoading} type = "submit">Add</CyanButton>
+                <CyanButton  disabled = {isLoading} onClick = {(e)=>{props.setShowAddUser(false)}}>Close</CyanButton>
             </Stack>
 
         </Stack>
