@@ -13,7 +13,7 @@ export const CyanButton = withStyles({
       height: 25,  
       padding: "0 30px",
       boxShadow: "0 3px 5px 2px rgba(255, 255, 255, 0.1)",
-      textUnderline: "always" ,
+      
       '&:hover':{
         background:  "#3ee4cf",
         color: 'black'

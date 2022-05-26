@@ -68,12 +68,12 @@ function AddTransaction(props){
 
 
     return(
-        <Stack spacing = {1.7} direction = "column">
+        <Stack spacing = {2} direction = "column">
             <Typography variant = "h2">Add a Transaction</Typography>
             <Stack direction = "row" justifyContent = "space-between">
-                <Button className ="btn whiteBtn" disabled = {isLoading} onClick = {(e)=>{ quickAddHandler(0.25)}}>+$0.25</Button>
-                <Button className ="btn whiteBtn" disabled = {isLoading} onClick = {(e)=>{ quickAddHandler(0.50)}}>+$0.50</Button>
-                <Button className ="btn whiteBtn" disabled = {isLoading} onClick = {(e)=>{ quickAddHandler(1)}}>+$1.00</Button>
+                <WhiteButton disabled = {isLoading} onClick = {(e)=>{ quickAddHandler(0.25)}}>+$0.25</WhiteButton>
+                <WhiteButton disabled = {isLoading} onClick = {(e)=>{ quickAddHandler(0.50)}}>+$0.50</WhiteButton>
+                <WhiteButton disabled = {isLoading} onClick = {(e)=>{ quickAddHandler(1)}}>+$1.00</WhiteButton>
             </Stack>
             <FormControl>
                 <InputLabel htmlFor = "amount">Amount</InputLabel>
@@ -86,8 +86,8 @@ function AddTransaction(props){
               <LinearProgress color="inherit" />
             </Stack>}
             <Stack sx = {{my:2}} direction = 'row' justifyContent="space-evenly">
-            <Button className = "btn cyanBtn oval" disabled = {isLoading} onClick = {(e)=>{ submitTransactionHandler("charge")}}>Charge</Button>
-            <Button className = "btn cyanBtn oval" disabled = {isLoading}  onClick = {(e)=>{ submitTransactionHandler("deposit")}}>Deposit</Button>
+            <CyanButton disabled = {isLoading} onClick = {(e)=>{ submitTransactionHandler("charge")}}>Charge</CyanButton>
+            <CyanButton disabled = {isLoading}  onClick = {(e)=>{ submitTransactionHandler("deposit")}}>Deposit</CyanButton>
             </Stack>
         </Stack>
         

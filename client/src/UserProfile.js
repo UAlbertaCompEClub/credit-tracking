@@ -2,7 +2,7 @@ import AddTransaction from './AddTransaction'
 import { useState, useEffect } from 'react'
 import { Button, FormControlLabel, FormControl, MenuItem, LinearProgress, Select, InputLabel, Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography, Checkbox} from '@mui/material'
 import { RequestService } from "./Services/RequestService"
-
+import {CyanButton,WhiteButton} from './style'
 
 function UserProfile(props){
     // Show user information and allows transaction adding if the user is logged in
@@ -224,12 +224,22 @@ function UserProfile(props){
 
     return (
         <Stack >
-          <Stack direction='row' justifyContent="space-evenly">
-            { viewMode !== 0 && <Button onClick={baseMode} >History</Button>}
-            { viewMode !== 1 && <Button onClick={creditMode} >Summary</Button>}
-            { viewMode !== 2 && props.isExec && <Button onClick={transactionMode} >New Transaction</Button>}
-            { !props.isExec && <Button onClick = {props.logout} >Logout</Button> }
-            { props.isExec && <Button onClick = {closeUser} >Close</Button>}
+          <Stack direction='row' justifyContent="space-evenly" sx={{pt: 1}}>
+            { viewMode !== 0 && <CyanButton style={{
+                border:"transparent", boxShadow:"none"
+              }}  onClick={baseMode} >History</CyanButton>}
+            { viewMode !== 1 && <CyanButton style={{
+                border:"transparent", boxShadow:"none"
+              }} onClick={creditMode} >Summary</CyanButton>}
+            { viewMode !== 2 && props.isExec && <CyanButton style={{
+                border:"transparent", boxShadow:"none"
+              }} onClick={transactionMode} >New Transaction</CyanButton>}
+            { !props.isExec && <WhiteButton style={{
+                border:"transparent", boxShadow:"none"
+              }} onClick = {props.logout} >Logout</WhiteButton> }
+            { props.isExec && <WhiteButton style={{
+                border:"transparent", boxShadow:"none"
+              }} onClick = {closeUser} >Close</WhiteButton>}
           </Stack>
             <Typography variant = "h1">{userState.user.name}</Typography>
             { !userState.isLoading &&

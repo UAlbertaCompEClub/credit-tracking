@@ -90,7 +90,7 @@ export function AddUser(props) {
 
              {/* show alert if showAlert is true */}
              {showAlert && <Alert severity = {alertType}> {alertText}!</Alert>} 
-            <Stack spacing = {2} sx={{pt:2}}>
+            <Stack spacing = {3} sx={{pt:2}}>
                 <FormControl>
                 {/*ccid */}
                 <InputLabel htmlFor = "ccid">ccid</InputLabel>
@@ -107,7 +107,7 @@ export function AddUser(props) {
                     <Input autoComplete="off" disabled = {isLoading} id = "password" onChange = {(e) => setPassword(e.target.value)}/>
                 </FormControl>
             </Stack>
-            <Stack sx={{pt:1}}>
+            <Stack sx={{pt:3}}>
                 <FormControl>
                     <WhiteButton style={{width:"autofit"}} onClick={props.toggleDialog}  sx = {{m:"2vh 0 0 2vw", p:'2px'}}
                         variant="p">
