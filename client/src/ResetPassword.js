@@ -1,7 +1,7 @@
 import {Button, FormControl, Input, LinearProgress, InputLabel, FormHelperText,Stack, Typography, Alert} from '@mui/material/'
 import {useState} from 'react'
 import {RequestService} from './Services/RequestService'
-
+import {CyanButton,WhiteButton} from './style'
 
 function ResetPassword(props){
 
@@ -121,9 +121,9 @@ function ResetPassword(props){
             </Stack>}
 
             <Stack direction = 'row' justifyContent="space-evenly">
-                {!resetMode && <Button onClick={toggleResetMode} type="submit">I've got my Code</Button>}
-                <Button  disabled = {isLoading} type = "submit">Submit</Button>
-                <Button onClick = {backHandler}>Back</Button>
+                {!resetMode && <CyanButton onClick={toggleResetMode} type="submit">I've got my Code</CyanButton>}
+                <CyanButton  disabled = {isLoading} type = "submit">Submit</CyanButton>
+                <CyanButton onClick = {backHandler}>Back</CyanButton>
             </Stack>
         </Stack>
 

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { Button, FormControlLabel, FormControl, MenuItem, LinearProgress, Select, InputLabel, Stack, Table, TableBody, TableCell,TableContainer,TableHead,TableRow,Paper,Typography, Checkbox} from '@mui/material'
 import { RequestService } from "./Services/RequestService"
 import {CyanButton,WhiteButton} from './style'
+import "./style.css"
 
 function UserProfile(props){
     // Show user information and allows transaction adding if the user is logged in
@@ -100,18 +101,19 @@ function UserProfile(props){
       console.log("club is :" + club.toString());
       const table = 
       (<TableContainer component={Paper}>
-        <Table  aria-label="simple table">
+        <Table aria-label="simple table">
             <TableHead>
-              <TableRow>
+              <TableRow  style ={{ background : "#1a1a18", borderBottom: "1.5px solid white"}}>
                 <TableCell>Date</TableCell>
-                <TableCell >Amount</TableCell>
-                <TableCell >Approved by</TableCell>
+                <TableCell>Amount</TableCell>
+                <TableCell>Approved by</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody >
               {/* This was added here to allow for displaying users with no transactions in any clubs */}
               {!(Object.keys(info.clubs[club]).length === 0) && info.clubs[club].transactions.map((row) => (
-                <TableRow key={row.date+row.amount+keyHelper++} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableRow key={row.date+row.amount+keyHelper++} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} 
+                style ={{ background : "#1a1a18", borderBottom: "1.5px solid #242422", borderTop:"1.5px solid #242422"}}>
                   <TableCell component="th" scope="row"> {row.date} </TableCell>
                   <TableCell >{row.amount}</TableCell>
                   <TableCell >{row.approver}</TableCell>

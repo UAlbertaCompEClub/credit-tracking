@@ -17,7 +17,7 @@ function ClubDashboard(props) {
     return (<TableContainer component={Paper}>
       <Table aria-label="simple table">
         <TableHead>
-          <TableRow>
+          <TableRow style ={{ background : "#1a1a18", borderBottom: "1.5px solid white"}}>
             <TableCell>Name</TableCell>
             <TableCell align="right">ccid</TableCell>
             <TableCell align="right">Transactions</TableCell>
@@ -30,7 +30,7 @@ function ClubDashboard(props) {
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               onClick={(e) => {
                 selectUser(row.ccid)
-              }}
+              }} style ={{ background : "#1a1a18", borderBottom: "1.5px solid #242422", borderTop:"1.5px solid #242422"}}
             >
               <TableCell component="th" scope="row" >
                 {row.name}
